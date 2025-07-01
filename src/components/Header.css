@@ -1,0 +1,161 @@
+/* Estilos del Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.logo-container {
+  height: 40px;
+}
+
+.logo {
+  height: 100%;
+  width: auto;
+  max-width: 150px;
+}
+
+/* Botón del menú */
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001;
+}
+
+.menu-icon {
+  width: 30px;
+  height: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu-icon span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #333;
+  transition: all 0.3s ease;
+}
+
+.menu-button.open .menu-icon span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-button.open .menu-icon span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-button.open .menu-icon span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Menú lateral */
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 300px;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1002;
+  transition: right 0.3s ease-out;
+  overflow-y: auto;
+}
+
+.side-menu.open {
+  right: 0;
+}
+
+.close-menu-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1003;
+}
+
+.close-menu-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.menu-content {
+  padding: 4rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  padding: 1rem 0;
+  text-decoration: none;
+  color: #333;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eee;
+  transition: color 0.2s;
+}
+
+.menu-item:hover {
+  color: #c0a439;
+}
+
+/* Overlay */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Desktop - 10% de ancho */
+@media (min-width: 1024px) {
+  .side-menu {
+    width: 10%;
+    right: -10%;
+    max-width: none;
+  }
+
+  .menu-content {
+    padding: 5rem 1rem 1rem;
+  }
+
+  .menu-item {
+    padding: 0.8rem 0;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .side-menu {
+    width: 30%;
+    right: -30%;
+  }
+}
