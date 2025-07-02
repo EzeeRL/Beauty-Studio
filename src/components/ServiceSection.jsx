@@ -1,96 +1,71 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ IMPORTANTE
 import "./ServiceSection.css";
+import useServicioStore from "../store/servicioStore";
 
-const ServiceSection = ({ title, services }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSticky, setIsSticky] = useState(false);
-  const sectionRef = useRef(null);
-  const titleRef = useRef(null);
-  const sentinelRef = useRef(null);
+const ServiceSection = ({ title, services, isOpen }) => {
+  const setServicio = useServicioStore((state) => state.setServicio);
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
+  const navigate = useNavigate(); // ✅ NECESARIO para que funcione el botón
 
-  useEffect(() => {
-    if (!isOpen) {
-      setIsSticky(false);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsSticky(!entry.isIntersecting);
-      },
-      { threshold: [0] }
-    );
-
-    if (sentinelRef.current) {
-      observer.observe(sentinelRef.current);
-    }
-
-    return () => {
-      if (sentinelRef.current) {
-        observer.unobserve(sentinelRef.current);
-      }
-    };
-  }, [isOpen]);
+  const toggleDescription = (id) => {
+    setExpandedDescriptions((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   return (
-    <div className="section" ref={sectionRef}>
-      {/* Elemento centinela para detectar cuando el título sale de la vista */}
-      <div ref={sentinelRef} className="sentinel" />
-
-      <button
-        className={`section-title ${isSticky ? "sticky" : ""}`}
-        onClick={() => setIsOpen(!isOpen)}
-        ref={titleRef}
-      >
+    <div className="section">
+      <button className="section-title">
         <span>{title}</span>
-        {isOpen ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="icon"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M6 15l6 -6l6 6" />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="icon"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M6 9l6 6l6 -6" />
-          </svg>
-        )}
       </button>
 
       {isOpen && (
         <div className="services-container">
-          {services.map((service, idx) => (
-            <div key={idx} className="service-card">
-              <h3 className="service-name">{service.name}</h3>
-              <p className="details-service">{service.duration}</p>
-              <p className="details-service">${service.price}</p>
-              <p className="note">{service.note}</p>
-              <div className="container-button">
-                <button className="book-button">Agendar</button>
+          {services.map((service, idx) => {
+            const isExpanded = expandedDescriptions[service.id];
+            return (
+              <div
+                key={service.id}
+                className="service-card"
+                style={{ animationDelay: `${idx * 0.05}s` }}
+              >
+                <h3 className="service-name">{service.name}</h3>
+                <p className="details-service">{service.duration} min</p>
+                <p className="details-service">${service.price}</p>
+
+                <p
+                  className={`description ${
+                    isExpanded ? "expanded" : "collapsed"
+                  }`}
+                >
+                  {service.description}
+                </p>
+
+                {service.description.length > 100 && (
+                  <button
+                    className="toggle-description"
+                    onClick={() => toggleDescription(service.id)}
+                  >
+                    {isExpanded ? "Ver menos" : "Ver más"}
+                  </button>
+                )}
+
+                <div className="container-button">
+                  <button
+                    className="book-button"
+                    onClick={() => {
+                      setServicio(service);
+                      navigate(`/expertos/${encodeURIComponent(service.name.toLowerCase())}`);
+                    }}
+                  >
+                    Agendar
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

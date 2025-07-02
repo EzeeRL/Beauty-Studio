@@ -1,0 +1,122 @@
+.fecha-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid #d4af37;
+  border-radius: 1rem;
+  color: rgb(0, 0, 0);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.fecha-container h2 {
+  font-size: 1.5rem;
+  color: #d4af37;
+  margin-bottom: 0.5rem;
+}
+
+.fecha-container p {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #000000;
+  font-weight: bold;
+}
+
+.horarios-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.horario-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid #d4af37;
+  border-radius: 0.5rem;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.horario-btn:hover {
+  background: rgba(255, 215, 0, 0.2);
+}
+
+.horario-btn.activo {
+  background: #d4af37;
+  color: #000;
+  font-weight: bold;
+}
+
+.continue-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #d4af37;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.continue-button:hover {
+  background: #b9972f;
+}
+
+/* Calendario (react-day-picker) */
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #d4af37;
+  --rdp-background-color: rgba(255, 255, 255, 0.08);
+  background: transparent;
+  border-radius: 0.5rem;
+  padding: 1rem 0;
+}
+
+.rdp-day_selected,
+.rdp-day_selected:focus-visible {
+  background-color: #d4af37;
+  color: black;
+  font-weight: bold;
+}
+
+.rdp-day_today {
+  border: 1px solid #d4af37;
+}
+
+
+/* 🔧 RESPONSIVE */
+@media (max-width: 768px) {
+  .fecha-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .fecha-container h2 {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .horarios-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .horario-btn {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .continue-button {
+    font-size: 1rem;
+    padding: 0.9rem;
+  }
+}

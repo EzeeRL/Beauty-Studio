@@ -1,0 +1,87 @@
+.search-and-filter-container {
+  width: 85%;
+  margin-top: 20px;
+  position: fixed;
+  top: 80px;
+  border: 1px solid #c0a439;
+  border-radius: 10px;
+  background-color: #fff;
+  z-index: 999;
+  padding: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+  width: 90%;
+  margin: 0 auto 15px;
+}
+
+.search-input {
+  width: 90%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  border-color: #c0a439;
+}
+
+.filters-container {
+  display: flex;
+  gap: 10px;
+  padding: 0 5%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 5%;
+  scrollbar-width: none; /* Para Firefox */
+  -ms-overflow-style: none; /* Para IE y Edge */
+}
+
+.filters-container::-webkit-scrollbar {
+  display: none; /* Para Chrome, Safari y Opera */
+}
+
+.filter-card {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  padding: 8px 20px;
+  border-radius: 20px;
+  background-color: white;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.filter-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-card.selected {
+  background-color: #c0a439;
+  color: white;
+  border-color: #c0a439;
+}
+
+/* Estilos para móviles */
+@media (max-width: 768px) {
+  .search-and-filter-container {
+    top: 60px;
+  }
+
+  .search-input {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  .filter-card {
+    padding: 6px 15px;
+    font-size: 13px;
+  }
+}

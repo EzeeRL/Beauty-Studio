@@ -18,12 +18,11 @@
 }
 
 .logo {
-  height: 100%;
   width: auto;
   max-width: 150px;
+  height: 100%;
 }
 
-/* Botón del menú */
 .menu-button {
   background: none;
   border: none;

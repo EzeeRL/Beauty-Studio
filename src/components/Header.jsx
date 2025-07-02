@@ -3,6 +3,8 @@ import "./Header.css";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // En tu Header.jsx
+  // const { servicio, experto, fecha, datosCliente } = useServicioStore();
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -26,7 +28,7 @@ const Header = () => {
             className="logo"
             onError={(e) => {
               e.target.onerror = null;
-              //   e.target.src = "https://via.placeholder.com/150x50?text=Logo+Salon";
+              e.target.src = "/public/logo.png"; // Ruta alternativa en caso de error
             }}
           />
         </div>
