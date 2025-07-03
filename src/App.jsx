@@ -11,6 +11,9 @@ import Datos from "./pages/Datos";
 import Pago from "./pages/Pago";
 import Layout from "./components/Layout";
 import Perfil from "./pages/Mi perfil";
+import Login from "./pages/loguin";
+import Ubicacion from "./pages/Ubicacion";
+import AdminPanel from "./pages/Admin";
 
 function App() {
   const [services, setServices] = useState({});
@@ -112,6 +115,9 @@ function App() {
             <Route path="/Datos" element={<Datos />} />
             <Route path="/Pago" element={<Pago />} />
             <Route path="/Perfil" element={<Perfil />} />
+            <Route path="/login" element={<Login />} />
+             <Route path="/ubicacion" element={<Ubicacion />} />
+             <Route path="/admin" element={<AdminPanel />} />
           </Routes>
         </main>
       </div>

@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState,useEffect  } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ IMPORTANTE
 import "./ServiceSection.css";
 import useServicioStore from "../store/servicioStore";
+import axios from "axios";
+
+
 
 const ServiceSection = ({ title, services, isOpen }) => {
   const setServicio = useServicioStore((state) => state.setServicio);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
   const navigate = useNavigate(); // ✅ NECESARIO para que funcione el botón
+  const { datosCliente, setDatosCliente } = useServicioStore();
 
   const toggleDescription = (id) => {
     setExpandedDescriptions((prev) => ({
@@ -14,6 +18,33 @@ const ServiceSection = ({ title, services, isOpen }) => {
       [id]: !prev[id],
     }));
   };
+
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+
+    if (
+      userId &&
+      (!datosCliente?.nombre || !datosCliente?.email || !datosCliente?.telefono)
+    ) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`https://eve-back.vercel.app/users/${userId}`);
+          const user = response.data;
+          setDatosCliente({
+            nombre: user.name,
+            email: user.email,
+            telefono: user.phone,
+          });
+          console.log("🟢 Usuario cargado desde localStorage:", user);
+        } catch (error) {
+          console.error("❌ Error al cargar usuario desde localStorage:", error);
+        }
+      };
+
+      fetchUser();
+    }
+  }, [datosCliente, setDatosCliente]);
 
   return (
     <div className="section">

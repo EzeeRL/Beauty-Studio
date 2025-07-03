@@ -1,18 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import useServicioStore from "../store/servicioStore";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import "./Datos.css";
 
 const Datos = () => {
   const navigate = useNavigate();
-  const { servicio, experto, fecha, setDatosCliente } = useServicioStore();
+  const { servicio, experto, fecha, setDatosCliente, datosCliente } = useServicioStore();
 
-  const [formData, setFormData] = useState({
-    nombre: "",
-    email: "",
-    telefono: "",
+const [formData, setFormData] = useState({
+  nombre: datosCliente?.nombre || "",
+  email: datosCliente?.email || "",
+  telefono: datosCliente?.telefono || "",
+});
+
+/*   useEffect(() => {
+  setFormData({
+    nombre: datosCliente.nombre || "",
+    email: datosCliente.email || "",
+    telefono: datosCliente.telefono || "",
   });
+}, []); */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +40,7 @@ const Datos = () => {
 
       const userId = userRes.data.user.id;
       console.log("✅ Usuario creado con ID:", userId);
-
+      localStorage.setItem("userId", userId);
       // 2️⃣ Crear turno
       console.log("📆 Creando turno...");
       const appointmentRes = await axios.post("https://eve-back.vercel.app/appointments", {
@@ -86,6 +94,7 @@ const Datos = () => {
           placeholder="Nombre completo"
           required
           onChange={handleChange}
+          value={formData.nombre}
         />
         <input
           type="email"
@@ -93,12 +102,14 @@ const Datos = () => {
           placeholder="Correo electrónico"
           required
           onChange={handleChange}
+           value={formData.email}
         />
         <input
           type="tel"
           name="telefono"
           placeholder="Teléfono"
           required
+          value={formData.telefono}
           onChange={handleChange}
         />
         <p className="info-form">

@@ -5,6 +5,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // En tu Header.jsx
   // const { servicio, experto, fecha, datosCliente } = useServicioStore();
+const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -75,6 +76,13 @@ const Header = () => {
         </button>
 
         <div className="menu-content">
+            <a
+            href="/"
+            className="menu-item"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Inicio
+          </a>
           <a
             href="#payment-methods"
             className="menu-item"
@@ -83,19 +91,30 @@ const Header = () => {
             Métodos de Pago
           </a>
           <a
-            href="#location"
+            href="/ubicacion"
             className="menu-item"
             onClick={() => setIsMenuOpen(false)}
           >
             Dónde nos ubicamos
           </a>
-          <a
-            href="/"
-            className="menu-item"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Mi perfil
-          </a>
+       {userId ? (
+  <a
+    href="/Perfil"
+    className="menu-item"
+    onClick={() => setIsMenuOpen(false)}
+  >
+    Mi perfil
+  </a>
+) : (
+  <a
+    href="/login"
+    className="menu-item"
+    onClick={() => setIsMenuOpen(false)}
+  >
+    Iniciar sesión
+  </a>
+)}
+
         </div>
       </nav>
     </>
