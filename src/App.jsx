@@ -10,6 +10,7 @@ import Fecha from "./pages/Fecha";
 import Datos from "./pages/Datos";
 import Pago from "./pages/Pago";
 import Layout from "./components/Layout";
+import Perfil from "./pages/Mi perfil";
 
 function App() {
   const [services, setServices] = useState({});
@@ -110,6 +111,7 @@ function App() {
             <Route path="/Fecha/:expertId" element={<Fecha />} />
             <Route path="/Datos" element={<Datos />} />
             <Route path="/Pago" element={<Pago />} />
+            <Route path="/Perfil" element={<Perfil />} />
           </Routes>
         </main>
       </div>

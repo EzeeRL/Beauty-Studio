@@ -1,0 +1,85 @@
+.container-general-expertos {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h2,
+p {
+  text-align: center;
+}
+
+.title-pagina-expertos {
+  text-align: center;
+  margin-top: -90px;
+}
+
+.experts-container {
+  width: 80%;
+  padding: 20px;
+}
+
+.expert-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ffff;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 50px;
+}
+
+.img-experto {
+  width: 130px;
+  height: 130px;
+  border-radius: 100%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.text-especialidad {
+  font-size: 17px;
+  color: #584f4f;
+}
+
+.select-button {
+  font-size: 18px;
+  font-weight: bold;
+  width: 80%;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f2ece8;
+  outline: none;
+  color: #584f4f;
+}
+
+.container-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-option {
+  margin-top: 0px;
+  color: #584f4f;
+}
+
+.button-option {
+  font-size: 18px;
+  font-weight: bold;
+  width: 80%;
+  height: 60px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f2ece8;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+  color: #584f4f;
+  outline: none;
+}

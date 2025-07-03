@@ -39,6 +39,6 @@ body {
 
 @media (max-width: 768px) {
   .main-content {
-    margin: 140px auto 20px;
+    margin: 180px auto;
   }
 }

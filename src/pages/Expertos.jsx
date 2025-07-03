@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useServicioStore from "../store/servicioStore";
+import "./Expertos.css";
 
 const Expertos = () => {
   const { serviceId } = useParams();
@@ -29,14 +30,21 @@ const Expertos = () => {
   };
 
   return (
-    <div className="expertos-container">
-      <h2>Selecciona un experto para {servicio?.name}</h2>
-      <div className="experts-grid">
+    <div className="container-general-expertos">
+      <h2 className="title-pagina-expertos">
+        Selecciona un Profesional para {servicio?.name}
+      </h2>
+      <div className="experts-container">
         {expertos.map((expert) => (
           <div key={expert.id} className="expert-card">
-            <img src={expert.imageUrl} alt={expert.name} />
-            <h3>{expert.name}</h3>
-            <p>{expert.specialty}</p>
+            <img
+              // src={expert.imageUrl}
+              src="/public/Expertos/experto-1.jpg"
+              alt={expert.name}
+              className="img-experto"
+            />
+            <h2>{expert.name}</h2>
+            <p className="text-especialidad">{expert.specialty}</p>
             <button
               onClick={() => handleSelectExpert(expert)}
               className="select-button"
@@ -45,6 +53,14 @@ const Expertos = () => {
             </button>
           </div>
         ))}
+      </div>
+      <div className="container-option">
+        <h2>¿No sabés a quién elegir?</h2>
+        <p className="text-option">
+          Podés simplemente saltear este paso y te asignaremos un profesional
+          nosotros mismos
+        </p>
+        <button className="button-option">Omitir Elección</button>
       </div>
     </div>
   );

@@ -89,6 +89,13 @@ const Header = () => {
           >
             Dónde nos ubicamos
           </a>
+          <a
+            href="/"
+            className="menu-item"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Mi perfil
+          </a>
         </div>
       </nav>
     </>
