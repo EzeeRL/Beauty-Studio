@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./perfil.css"
 
 const Perfil = () => {
   const [appointments, setAppointments] = useState([]);
@@ -36,53 +37,33 @@ const Perfil = () => {
   if (!userId) return <p className="p-4 text-center text-red-500">No se encontró usuario logueado.</p>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto min-h-screen
-      bg-white/30 backdrop-blur-md border border-yellow-400 rounded-xl shadow-lg
-      text-gray-900 font-sans"
-    >
-      {/* Datos del usuario */}
-      {userData && (
-        <div className="mb-8 p-6 rounded-xl
-          bg-white/40 backdrop-blur-sm border border-yellow-300
-          shadow-md"
-        >
-          <h2 className="text-3xl font-extrabold mb-5 text-yellow-600 drop-shadow-md">
-            Perfil de usuario
-          </h2>
-          <p className="mb-2 text-lg"><strong>Nombre:</strong> {userData.name}</p>
-          <p className="mb-2 text-lg"><strong>Email:</strong> {userData.email}</p>
-          <p className="mb-2 text-lg"><strong>Teléfono:</strong> {userData.phone || "No disponible"}</p>
-        </div>
-      )}
+<div className="perfil-container">
 
-      {/* Turnos */}
-      <h2 className="text-2xl font-semibold mb-6 text-yellow-600 drop-shadow-md">Mis turnos</h2>
-      {appointments.length === 0 ? (
-        <p className="text-gray-700 italic">No tenés turnos reservados.</p>
-      ) : (
-        <div className="grid gap-6">
-          {appointments.map((appt) => (
-            <div
-              key={appt.id}
-              className="border border-yellow-300 rounded-xl p-5
-                bg-white/40 backdrop-blur-sm
-                shadow-md hover:shadow-xl transition-shadow duration-300"
-            >
-              <p className="mb-1 text-lg"><strong>Servicio:</strong> {appt.Service.name}</p>
-              <p className="mb-1 text-lg"><strong>Especialista:</strong> {appt.Expert.name}</p>
-              <p className="mb-1 text-lg">
-                <strong>Fecha:</strong>{" "}
-                {new Date(appt.date).toLocaleString("es-AR", {
-                  dateStyle: "full",
-                  timeStyle: "short",
-                })}
-              </p>
-              <p className="mb-1 text-lg"><strong>Estado de pago:</strong> {appt.payStatus}</p>
-            </div>
-          ))}
-        </div>
-      )}
+  <div className="perfil-card">
+    <h2>Perfil de usuario</h2>
+    <div className="perfil-datos">
+      <p><span>Nombre:</span> {userData.name}</p>
+      <p><span>Email:</span> {userData.email}</p>
+      <p><span>Teléfono:</span> {userData.phone}</p>
     </div>
+  </div>
+
+  <h2 className="turnos-title">Mis turnos</h2>
+
+  {appointments.length === 0 ? (
+    <p className="mensaje-vacio">No tenés turnos reservados.</p>
+  ) : (
+    appointments.map((appt) => (
+      <div key={appt.id} className="turno-card">
+        <p><span>Servicio:</span> {appt.Service.name}</p>
+        <p><span>Especialista:</span> {appt.Expert.name}</p>
+        <p><span>Fecha:</span> {new Date(appt.date).toLocaleString("es-AR", { dateStyle: "full", timeStyle: "short" })}</p>
+        <p><span>Estado de pago:</span> {appt.payStatus}</p>
+      </div>
+    ))
+  )}
+</div>
+
   );
 };
 

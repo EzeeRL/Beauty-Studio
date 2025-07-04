@@ -1,0 +1,315 @@
+/* AdminPanel.css */
+
+.admin-container {
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+ 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #f0eae1;
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+}
+
+tbody tr.upcoming {
+  background-color: #fff9e6;
+  font-weight: 600;
+}
+
+button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  margin: 2px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button.edit {
+  background-color: #ccc;
+  color: #333;
+}
+
+button.save {
+  background-color: #4caf50;
+  color: white;
+}
+
+button.cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+button.whatsapp {
+  background-color: #25D366;
+  color: white;
+}
+
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status-sent {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.calendar-section, .config-section, .chart-section {
+  margin: 2rem 0;
+}
+
+/* 📱 Mobile */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: white;
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #555;
+  }
+
+  td:last-child {
+    border-bottom: none;
+  }
+}
+
+
+.schedule-config {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.schedule-config h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.inputs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.875rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.input-group input {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #f8f4f2;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+}
+
+.btn-save {
+  padding: 0.6rem 1.5rem;
+  background-color: #d4c2b8;
+  color: #333;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-save:hover {
+  background-color: #c6b3a9;
+}
+
+.horario-text {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .inputs-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+
+
+/* Contenedor principal del calendario */
+.admin-panel .react-calendar {
+  width: 100%;
+  max-width: 350px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: none;
+  padding: 1rem;
+  user-select: none;
+  margin-bottom: 1.5rem;
+  
+}
+
+/* Cabecera (mes y botones) */
+.admin-panel .react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.admin-panel .react-calendar__navigation button {
+  background: none;
+  border: none;
+  color: #c4b50f;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.25s ease;
+}
+
+.admin-panel .react-calendar__navigation button:hover {
+  background-color: #e0e7ff;
+}
+
+.admin-panel .react-calendar__navigation button:disabled {
+  color: #a1a1aa;
+  cursor: default;
+}
+
+/* Días de la semana */
+.admin-panel .react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-panel .react-calendar__month-view__weekdays li {
+  width: 14.28%;
+}
+
+/* Días */
+.admin-panel .react-calendar__tile {
+  max-width: 100%;
+  padding: 0.6rem 0.2rem;
+  background: none;
+  text-align: center;
+  line-height: 1.4;
+  color: #374151;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border: none;
+  font-weight: 500;
+}
+
+.admin-panel .react-calendar__tile:disabled {
+  color: #d1d5db;
+  cursor: default;
+}
+
+.admin-panel .react-calendar__tile:hover:not(:disabled) {
+  background-color: #e0e7ff;
+  color: #cbcb1c;
+}
+
+/* Día seleccionado */
+.admin-panel .react-calendar__tile--active {
+  background: #b9a613;
+  color: white;
+  font-weight: 700;
+  border-radius: 12px;
+}
+
+/* Día de hoy */
+.admin-panel .react-calendar__tile--now {
+  background: #e0e7ff;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+/* Botones de cambio de mes más grandes */
+.admin-panel .react-calendar__navigation button {
+  font-size: 1.3rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Eliminar focus ring por defecto y personalizarlo */
+.admin-panel .react-calendar__tile:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #c9b51b;
+}
+
+.admin-panel .calendar-section > .react-calendar {
+  margin-left: auto;
+  margin-right: auto;
+  display: block; /* Asegura que el margin auto funcione */
+}
