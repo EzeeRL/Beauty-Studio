@@ -55,17 +55,23 @@
   font-weight: bold;
 }
 
+.container-continue-button {
+  display: flex;
+  justify-content: center;
+}
+
 .continue-button {
   width: 100%;
   padding: 0.75rem;
   background: #d4af37;
   color: #fff;
+  margin: 0 auto;
   border: none;
   border-radius: 0.5rem;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: 0.3s;
 }
 
 .continue-button:hover {
@@ -93,30 +99,95 @@
   border: 1px solid #d4af37;
 }
 
+/* Aplica el borde circular dorado al botón dentro del día de hoy */
+td.today-day > button.rdp-day_button {
+  border: 2px solid rgb(225, 196, 29) !important;
+  border-radius: 30% !important;
+  font-weight:800;
+  color: black;
+}
 
-/* 🔧 RESPONSIVE */
-@media (max-width: 768px) {
+.rdp-chevron {
+    display: inline-block;
+    fill: #000;
+}
+
+
+/* 🔧 Fix tabla vertical en mobile */
+.rdp-table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.rdp-head,
+.rdp-row {
+  display: table-row;
+}
+
+.rdp-head_cell,
+.rdp-cell {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0.25rem;
+}
+
+.rdp-day_button {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+  border-radius: 50% !important;
+  line-height: 2.5rem;
+}
+
+/* Ajustes para react-calendar */
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  line-height: 1.2em;
+  margin-bottom: 1rem;
+}
+
+.react-calendar__tile {
+  padding: 0.5em;
+  border-radius: 50%;
+  border: none;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.react-calendar__tile--active {
+  background: #d4af37;
+  color: black;
+  font-weight: bold;
+}
+
+.react-calendar__tile--now {
+  border: 2px solid #d4af37;
+  color: black;
+}
+
+@media (max-width: 480px) {
   .fecha-container {
     margin: 1rem;
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
-  .fecha-container h2 {
-    font-size: 1.25rem;
-    text-align: center;
+  .react-calendar__month-view__days {
+    grid-template-columns: repeat(7, 1fr);
   }
 
   .horarios-grid {
-    grid-template-columns: repeat(2, 1fr);
+    flex-direction: column;
+    gap: 0.4rem;
   }
 
   .horario-btn {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
-
-  .continue-button {
-    font-size: 1rem;
-    padding: 0.9rem;
+    width: 100%;
   }
 }

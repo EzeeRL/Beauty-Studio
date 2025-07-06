@@ -14,24 +14,54 @@ import Perfil from "./pages/Mi perfil";
 import Login from "./pages/loguin";
 import Ubicacion from "./pages/Ubicacion";
 import AdminPanel from "./pages/Admin";
+import Footer from "./pages/Footer";
 
 function App() {
   const [services, setServices] = useState({});
   const [filteredServices, setFilteredServices] = useState({});
   const [activeFilter, setActiveFilter] = useState("Todos");
-  const [openedSection, setOpenedSection] = useState(null);
+  const [openedSections, setOpenedSections] = useState(new Set());
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // ✅ Usar Axios para traer los servicios
+ 
+const handleSearchChange = (term) => {
+  setSearchTerm(term);
+  console.log("Buscando:", term);
+
+  if (term.trim() === "") {
+    handleFilter(activeFilter);
+    return;
+  }
+
+  const filtered = {};
+
+  Object.entries(services).forEach(([category, items]) => {
+    const matched = items.filter((service) =>
+      service.name.toLowerCase().includes(term.toLowerCase())
+    );
+    if (matched.length > 0) {
+      filtered[category] = matched;
+    }
+  });
+
+  setFilteredServices(filtered);
+  setOpenedSections(new Set(Object.keys(filtered)));
+};
+
+
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const response = await axios.get("https://eve-back.vercel.app/services");
         const data = response.data;
 
-        // Agrupar los servicios en una categoría genérica (por ahora)
-        const grouped = {
-          Servicios: data,
-        };
+        const grouped = {};
+        data.forEach((service) => {
+          const cat = service.category || "Sin categoría";
+          if (!grouped[cat]) grouped[cat] = [];
+          grouped[cat].push(service);
+        });
 
         setServices(grouped);
         setFilteredServices(grouped);
@@ -43,34 +73,28 @@ function App() {
     fetchServices();
   }, []);
 
-  const handleSearch = (term) => {
-    if (term === "") {
-      setFilteredServices(services);
-      return;
-    }
-
-    const filtered = {};
-    Object.entries(services).forEach(([section, items]) => {
-      const filteredItems = items.filter((service) =>
-        service.name.toLowerCase().includes(term.toLowerCase())
-      );
-      if (filteredItems.length > 0) {
-        filtered[section] = filteredItems;
+  const toggleSection = (section) => {
+    setOpenedSections((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(section)) {
+        newSet.delete(section);
+      } else {
+        newSet.add(section);
       }
+      return newSet;
     });
-
-    setFilteredServices(filtered);
   };
 
   const handleFilter = (filter) => {
     setActiveFilter(filter);
-    setOpenedSection(filter === "Todos" ? null : filter);
 
     if (filter === "Todos") {
       setFilteredServices(services);
+      setOpenedSections(new Set());
     } else {
       const filtered = { [filter]: services[filter] };
       setFilteredServices(filtered);
+      setOpenedSections(new Set([filter]));
 
       setTimeout(() => {
         const sectionElement = document.getElementById(filter);
@@ -81,13 +105,14 @@ function App() {
     }
   };
 
+  
   const Home = () => (
     <>
       <SearchAndFilter
         servicesData={services}
-        onSearch={handleSearch}
         onFilter={handleFilter}
         activeFilter={activeFilter}
+        onSearchChange={handleSearchChange} 
       />
 
       {Object.entries(filteredServices).map(([section, items]) => (
@@ -95,18 +120,21 @@ function App() {
           <ServiceSection
             title={section}
             services={items}
-            isOpen={openedSection === section || activeFilter === "Todos"}
+            isOpen={openedSections.has(section) || activeFilter !== "Todos"}
+            onToggle={() => toggleSection(section)}
           />
+         
         </div>
       ))}
+      <Footer />
     </>
   );
 
   return (
     <Router>
       <div className="app">
+        <div class="fixed-circle"></div>
         <Header />
-
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -116,8 +144,8 @@ function App() {
             <Route path="/Pago" element={<Pago />} />
             <Route path="/Perfil" element={<Perfil />} />
             <Route path="/login" element={<Login />} />
-             <Route path="/ubicacion" element={<Ubicacion />} />
-             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/ubicacion" element={<Ubicacion />} />
+            <Route path="/admin" element={<AdminPanel />} />
           </Routes>
         </main>
       </div>
@@ -125,4 +153,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 

@@ -9,6 +9,21 @@ body {
   background-color: #f4f4f4;
 }
 
+.fixed-circle {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background-color: #c0a439;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(80px); /* este es el efecto estilo Figma */
+  opacity: 0.7; /* opcional: para hacerlo más sutil */
+}
+
 /* src/App.css */
 .app {
   min-height: 100vh;
@@ -39,6 +54,6 @@ body {
 
 @media (max-width: 768px) {
   .main-content {
-    margin: 180px auto;
+    margin: 90px auto;
   }
 }

@@ -1,15 +1,13 @@
-import { useState,useEffect  } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // ✅ IMPORTANTE
 import "./ServiceSection.css";
 import useServicioStore from "../store/servicioStore";
 import axios from "axios";
 
-
-
-const ServiceSection = ({ title, services, isOpen }) => {
+const ServiceSection = ({ title, services, isOpen, onToggle }) => {
   const setServicio = useServicioStore((state) => state.setServicio);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
-  const navigate = useNavigate(); // ✅ NECESARIO para que funcione el botón
+  const navigate = useNavigate();
   const { datosCliente, setDatosCliente } = useServicioStore();
 
   const toggleDescription = (id) => {
@@ -18,7 +16,6 @@ const ServiceSection = ({ title, services, isOpen }) => {
       [id]: !prev[id],
     }));
   };
-
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -29,7 +26,9 @@ const ServiceSection = ({ title, services, isOpen }) => {
     ) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`https://eve-back.vercel.app/users/${userId}`);
+          const response = await axios.get(
+            `https://eve-back.vercel.app/users/${userId}`
+          );
           const user = response.data;
           setDatosCliente({
             nombre: user.name,
@@ -38,7 +37,10 @@ const ServiceSection = ({ title, services, isOpen }) => {
           });
           console.log("🟢 Usuario cargado desde localStorage:", user);
         } catch (error) {
-          console.error("❌ Error al cargar usuario desde localStorage:", error);
+          console.error(
+            "❌ Error al cargar usuario desde localStorage:",
+            error
+          );
         }
       };
 
@@ -48,9 +50,13 @@ const ServiceSection = ({ title, services, isOpen }) => {
 
   return (
     <div className="section">
-      <button className="section-title">
-        <span>{title}</span>
-      </button>
+      <div className="container-section-titles">
+        <button className="section-title" onClick={onToggle}>
+          <span>{title}</span>
+          <span className="toggle-icon">{isOpen ? "−" : "+"}</span>{" "}
+          {/* Agregamos un icono indicador */}
+        </button>
+      </div>
 
       {isOpen && (
         <div className="services-container">
@@ -79,7 +85,7 @@ const ServiceSection = ({ title, services, isOpen }) => {
                     className="toggle-description"
                     onClick={() => toggleDescription(service.id)}
                   >
-                    {isExpanded ? "Ver menos" : "Ver más"}
+                    <u>{isExpanded ? "Ver menos" : "Ver más"}</u>
                   </button>
                 )}
 
@@ -88,7 +94,11 @@ const ServiceSection = ({ title, services, isOpen }) => {
                     className="book-button"
                     onClick={() => {
                       setServicio(service);
-                      navigate(`/expertos/${encodeURIComponent(service.name.toLowerCase())}`);
+                      navigate(
+                        `/expertos/${encodeURIComponent(
+                          service.name.toLowerCase()
+                        )}`
+                      );
                     }}
                   >
                     Agendar

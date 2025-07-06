@@ -39,7 +39,7 @@ const Expertos = () => {
           <div key={expert.id} className="expert-card">
             <img
               // src={expert.imageUrl}
-              src="/public/Expertos/experto-1.jpg"
+              src={expert.imageUrl}
               alt={expert.name}
               className="img-experto"
             />

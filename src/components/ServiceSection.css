@@ -1,9 +1,18 @@
 .section {
   width: 100%;
+  min-width: 330px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 auto;
+  margin: 0px auto;
+}
+
+.container-section-titles {
+  width: 100%;
+  transform: translateY(60px);
+  /* margin-top: 90px; */
+  /* background-color: red; */
+  z-index: 100;
 }
 
 .section-title {
@@ -19,15 +28,14 @@
   border: 1px solid #c0a439;
   margin-top: 30px;
   transition: transform 0.2s ease;
-  z-index: 10;
   position: relative;
 }
 
 .services-container {
   padding: 10px;
   width: 100%;
-  margin-top: 10px;
   overflow: hidden;
+  margin-top: 50px;
 }
 
 .service-card {
@@ -40,6 +48,7 @@
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 0.4s ease-out forwards;
+  z-index: 10;
 }
 
 .service-card:hover {
@@ -64,12 +73,24 @@
 }
 
 .service-name {
+  text-align: left;
   color: #c0a439;
 }
 
 .details-service {
+  text-align: left;
   font-size: 16px;
   color: #3a3939;
+}
+
+.description {
+  text-align: left;
+}
+
+.toggle-description {
+  font-size: 16px;
+  border: none;
+  background: transparent;
 }
 
 .book-button {

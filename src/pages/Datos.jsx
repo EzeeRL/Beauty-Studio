@@ -87,7 +87,7 @@ const [formData, setFormData] = useState({
     <div className="datos-container">
       <h2>Ingresa tus datos</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="form">
         <input
           type="text"
           name="nombre"
@@ -95,6 +95,7 @@ const [formData, setFormData] = useState({
           required
           onChange={handleChange}
           value={formData.nombre}
+          className="input"
         />
         <input
           type="email"
@@ -103,6 +104,7 @@ const [formData, setFormData] = useState({
           required
           onChange={handleChange}
            value={formData.email}
+           className="input"
         />
         <input
           type="tel"
@@ -110,6 +112,7 @@ const [formData, setFormData] = useState({
           placeholder="Teléfono"
           required
           value={formData.telefono}
+          className="input"
           onChange={handleChange}
         />
         <p className="info-form">

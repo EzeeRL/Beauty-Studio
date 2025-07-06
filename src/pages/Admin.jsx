@@ -5,6 +5,8 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recha
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import './AdminPanel.css';
+import ServiceManager from "../components/AdminEdit";
+import ExpertManager from "../components/adminExpert";
 
 const AdminPanel = () => {
   const [appointments, setAppointments] = useState([]);
@@ -48,7 +50,7 @@ const AdminPanel = () => {
     const now = new Date();
     const date = new Date(dateStr);
     const diffHours = differenceInHours(date, now);
-    return diffHours >= 0 && diffHours <= 448;
+    return diffHours >= 0 && diffHours <= 48;
   };
 
   const sortedAppointments = [...appointments].sort((a, b) => {
@@ -292,6 +294,8 @@ const TurnosTable = ({ data }) =>
           </ResponsiveContainer>
         </div>
       </section>
+      <ServiceManager />
+        <ExpertManager />
     </div>
   );
 };

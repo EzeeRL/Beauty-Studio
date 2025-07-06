@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-/* import "./Login.css"; // Opcional si querés estilos */
+import "./Loguin.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,7 +25,10 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await axios.post("https://eve-back.vercel.app/users/login", formData);
+      const response = await axios.post(
+        "https://eve-back.vercel.app/users/login",
+        formData
+      );
       const user = response.data.user;
       localStorage.setItem("userId", user.id);
       navigate("/Perfil");
@@ -37,7 +40,8 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Iniciar Sesión</h2>
+      <h2 className="title-loguin">Iniciar Sesión</h2>
+      <p className="subtitle">Inicia sesión para poder solicitar turnos</p>
       <form onSubmit={handleSubmit} className="login-form">
         <input
           type="text"
@@ -46,6 +50,7 @@ const Login = () => {
           value={formData.name}
           onChange={handleChange}
           required
+          className="input-form"
         />
 
         <input
@@ -55,11 +60,12 @@ const Login = () => {
           value={formData.email}
           onChange={handleChange}
           required
+          className="input-form"
         />
 
         {error && <p className="error">{error}</p>}
 
-        <button type="submit">Entrar</button>
+        <button type="submit" className="button-entrar">Entrar</button>
       </form>
     </div>
   );

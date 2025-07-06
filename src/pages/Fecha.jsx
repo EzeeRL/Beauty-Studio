@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { format, parseISO, isSameDay, addMinutes } from "date-fns";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import useServicioStore from "../store/servicioStore";
 import axios from "axios";
-import "./Fecha.css";
+import "./Fecha.css"; // mantendremos el estilo, lo ajustamos abajo
 
 const horariosDisponibles = Array.from({ length: 13 }, (_, i) => {
   const hour = 8 + i;
@@ -38,11 +38,11 @@ const Fecha = () => {
           const fechaKey = format(date, "yyyy-MM-dd");
 
           const bloques = [];
-          const duracion = appt.Service.duration; // en minutos
-          const cantidadBloques = Math.ceil(duracion / 60); // ej: 120 => 2 bloques
+          const duracion = appt.tiempo;
+          const cantidadBloques = Math.ceil(duracion / 60);
 
           for (let i = 0; i < cantidadBloques; i++) {
-            const bloque = addMinutes(date, i * 60); // cada bloque de 60 min
+            const bloque = addMinutes(date, i * 60);
             bloques.push(format(bloque, "HH:mm"));
           }
 
@@ -64,29 +64,30 @@ const Fecha = () => {
 
   const handleContinue = () => {
     if (selectedDate && selectedTime) {
-      const dateTime = new Date(`${format(selectedDate, "yyyy-MM-dd")}T${selectedTime}`);
+      const dateTime = new Date(
+        `${format(selectedDate, "yyyy-MM-dd")}T${selectedTime}`
+      );
       setFecha(dateTime);
       navigate("/datos");
     }
   };
 
   const horariosOcupadosHoy =
-    selectedDate && ocupados[format(selectedDate, "yyyy-MM-dd")] || [];
+    (selectedDate && ocupados[format(selectedDate, "yyyy-MM-dd")]) || [];
 
   return (
     <div className="fecha-container">
       <h2>Selecciona una fecha para {experto?.name}</h2>
       <p>Servicio: {servicio?.name}</p>
 
-      <DayPicker
-        mode="single"
-        selected={selectedDate}
-        onSelect={setSelectedDate}
-        fromDate={new Date()}
-        modifiersClassNames={{
-          selected: "selected-day",
-          today: "today-day",
-        }}
+      <Calendar
+        onChange={setSelectedDate}
+        value={selectedDate}
+        minDate={new Date()}
+        locale="es-ES"
+        tileClassName={({ date }) =>
+          isSameDay(date, new Date()) ? "today-day" : ""
+        }
       />
 
       {selectedDate && (
@@ -111,14 +112,15 @@ const Fecha = () => {
           </div>
         </>
       )}
-
-      <button
-        className="continue-button"
-        onClick={handleContinue}
-        disabled={!selectedDate || !selectedTime}
-      >
-        Continuar
-      </button>
+      <div className="container-continue-button">
+        <button
+          className="continue-button"
+          onClick={handleContinue}
+          disabled={!selectedDate || !selectedTime}
+        >
+          Continuar
+        </button>
+      </div>
     </div>
   );
 };

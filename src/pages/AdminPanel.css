@@ -5,6 +5,7 @@
   font-family: 'Segoe UI', sans-serif;
   background-color: #f7f7f7;
   color: #333;
+  margin-top: -130px;
 }
 
 h1, h2, h3 {
@@ -38,7 +39,7 @@ tbody tr.upcoming {
   font-weight: 600;
 }
 
-button {
+/* button {
   padding: 6px 12px;
   border: none;
   border-radius: 5px;
@@ -46,33 +47,33 @@ button {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
-}
+} */
 
-button:hover {
+/* button:hover {
   opacity: 0.9;
-}
+} */
 
-button.edit {
+.edit {
   background-color: #ccc;
   color: #333;
 }
 
-button.save {
+.save {
   background-color: #4caf50;
   color: white;
 }
 
-button.cancel {
+.cancel {
   background-color: #f44336;
   color: white;
 }
 
-button.whatsapp {
+.whatsapp {
   background-color: #25D366;
   color: white;
 }
 
-button[disabled] {
+[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -278,7 +279,7 @@ button[disabled] {
 
 .admin-panel .react-calendar__tile:hover:not(:disabled) {
   background-color: #e0e7ff;
-  color: #cbcb1c;
+  color: #d4c115;
 }
 
 /* Día seleccionado */
@@ -305,7 +306,7 @@ button[disabled] {
 /* Eliminar focus ring por defecto y personalizarlo */
 .admin-panel .react-calendar__tile:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #c9b51b;
+  box-shadow: 0 0 0 2px #000000;
 }
 
 .admin-panel .calendar-section > .react-calendar {

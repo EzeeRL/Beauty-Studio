@@ -1,0 +1,89 @@
+/* Footer.css */
+.footer {
+  background: white;
+  padding: 20px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.footer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.footer-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  min-width: 100px;
+  text-align: center;
+}
+
+.footer-btn.whatsapp {
+  background: #25d366;
+}
+
+.footer-btn.instagram {
+  background: linear-gradient(
+    45deg,
+    #feda75,
+    /* amarillo */ #fa7e1e,
+    /* naranja */ #d62976,
+    /* rosado fuerte */ #962fbf,
+    /* púrpura */ #4f5bd5 /* azul */
+  );
+}
+
+.footer-btn.tiktok {
+  background: #000000;
+}
+
+.footer-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.search-input {
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  width: 80%;
+  max-width: 400px;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #aaa;
+}
+
+@media (max-width: 768px) {
+  .footer-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    min-width: 80px;
+  }
+
+  .search-input {
+    width: 90%;
+  }
+}
