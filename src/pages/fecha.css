@@ -155,7 +155,7 @@ td.today-day > button.rdp-day_button {
 
 .react-calendar__tile {
   padding: 0.5em;
-  border-radius: 50%;
+  border-radius: 10px;
   border: none;
   text-align: center;
   transition: background 0.3s ease;
@@ -170,6 +170,7 @@ td.today-day > button.rdp-day_button {
 .react-calendar__tile--now {
   border: 2px solid #d4af37;
   color: black;
+  background-color: #d4af37;
 }
 
 @media (max-width: 480px) {

@@ -20,6 +20,24 @@ const Fecha = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
   const [ocupados, setOcupados] = useState({});
+  const [horariosExpert, setHorariosExpert] = useState([]);
+
+useEffect(() => {
+  const fetchHorariosExpert = async () => {
+    try {
+      const res = await axios.get(`https://eve-back.vercel.app/hours/expert/${expertId}`);
+      console.log("🕒 Horarios del experto:", res.data);
+      setHorariosExpert(res.data);
+    } catch (error) {
+      console.error("❌ Error al obtener horarios del experto:", error);
+    }
+  };
+
+  if (expertId) {
+    fetchHorariosExpert();
+  }
+}, [expertId]);
+
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -37,14 +55,17 @@ const Fecha = () => {
           const date = parseISO(appt.date);
           const fechaKey = format(date, "yyyy-MM-dd");
 
-          const bloques = [];
-          const duracion = appt.tiempo;
-          const cantidadBloques = Math.ceil(duracion / 60);
+const bloques = [];
+const duracion = appt.tiempo;
 
-          for (let i = 0; i < cantidadBloques; i++) {
-            const bloque = addMinutes(date, i * 60);
-            bloques.push(format(bloque, "HH:mm"));
-          }
+let bloqueInicio = new Date(date);
+const bloqueFin = addMinutes(bloqueInicio, duracion);
+
+while (bloqueInicio < bloqueFin) {
+  bloques.push(format(bloqueInicio, "HH:mm"));
+  bloqueInicio = addMinutes(bloqueInicio, 30); // Paso de 30 mins para marcar ocupación parcial
+}
+
 
           if (!ocupadosPorFecha[fechaKey]) {
             ocupadosPorFecha[fechaKey] = [];
@@ -75,6 +96,69 @@ const Fecha = () => {
   const horariosOcupadosHoy =
     (selectedDate && ocupados[format(selectedDate, "yyyy-MM-dd")]) || [];
 
+const getHorariosDisponiblesParaFecha = () => {
+  if (!selectedDate) return [];
+
+  const diaSeleccionado = format(selectedDate, "yyyy-MM-dd");
+  const horario = horariosExpert.find((h) => h.day === diaSeleccionado);
+
+const expertoTurnoCorto = expertId === "3" || expertId === "6";
+const intervaloMinutos = expertoTurnoCorto
+  ? 20
+  : servicio?.category?.toLowerCase() === "manicuria"
+  ? 90
+  : 60;
+
+  const horaInicio = horario
+    ? parseInt(horario.openTime.split(":")[0], 10)
+    : 8;
+  const horaFin = horario
+    ? parseInt(horario.closeTime.split(":")[0], 10)
+    : 20;
+
+  const horarios = [];
+
+  let actual = new Date();
+  actual.setHours(horaInicio, 0, 0, 0);
+
+  const fin = new Date();
+  fin.setHours(horaFin, 0, 0, 0);
+
+  // Duración real del servicio
+  const duracionServicio = servicio?.tiempo || intervaloMinutos;
+
+  while (addMinutes(actual, duracionServicio) <= fin) {
+    const horaInicioStr = format(actual, "HH:mm");
+    const bloquesNecesarios = [];
+
+    let bloqueTemp = new Date(actual);
+    const finTurno = addMinutes(bloqueTemp, duracionServicio);
+
+    let bloqueLibre = true;
+    while (bloqueTemp < finTurno) {
+      const bloqueStr = format(bloqueTemp, "HH:mm");
+      bloquesNecesarios.push(bloqueStr);
+      if (horariosOcupadosHoy.includes(bloqueStr)) {
+        bloqueLibre = false;
+        break;
+      }
+      bloqueTemp = addMinutes(bloqueTemp, 30);
+    }
+
+    if (bloqueLibre) {
+      horarios.push(horaInicioStr);
+      // Solo avanzo al siguiente bloque si este fue posible
+      actual = addMinutes(actual, intervaloMinutos);
+    } else {
+      // Si no entra, avanzá 30 min (así no queda espacio muerto)
+      actual = addMinutes(actual, expertoTurnoCorto ? 20 : 30);
+    }
+  }
+
+  return horarios;
+};
+
+
   return (
     <div className="fecha-container">
       <h2>Selecciona una fecha para {experto?.name}</h2>
@@ -94,7 +178,7 @@ const Fecha = () => {
         <>
           <label className="label">Selecciona un horario:</label>
           <div className="horarios-grid">
-            {horariosDisponibles.map((hora) => {
+            {getHorariosDisponiblesParaFecha().map((hora) => {
               const ocupado = horariosOcupadosHoy.includes(hora);
               return (
                 <button

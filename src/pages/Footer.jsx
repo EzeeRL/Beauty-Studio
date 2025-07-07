@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="footer-content">
         <div className="footer-buttons">
           <a
-            href="https://wa.me/1234567890"
+            href="https://whatsapp.com/channel/0029VbAWocZAu3aVg8uAvE0E"
             target="_blank"
             rel="noopener noreferrer"
             className="footer-btn whatsapp"
@@ -50,7 +50,7 @@ const Footer = () => {
             </svg>
           </a>
           <a
-            href="https://www.tiktok.com/@tu_usuario"
+            href="https://www.tiktok.com/@eve.duarte_?_r=1&_d=egefe3hgic0948&sec_uid=MS4wLjABAAAAG4VzKgz0ZfgOvghCS_2mNECwL9rlWCvp6i86lYC6_mkwqavJLHGIPejAzfZ89Pdn&share_author_id=6918039187217155077&sharer_language=es&source=h5_m&u_code=dgffablhjlmfdf&ug_btm=b8727,b0&social_share_type=4&utm_source=copy&sec_user_id=MS4wLjABAAAAG4VzKgz0ZfgOvghCS_2mNECwL9rlWCvp6i86lYC6_mkwqavJLHGIPejAzfZ89Pdn&tt_from=copy&utm_medium=ios&utm_campaign=client_share&enable_checksum=1&user_id=6918039187217155077&share_link_id=CD994159-AFB4-42D6-9FFC-1E8FBEEDF45D&share_app_id=1233"
             target="_blank"
             rel="noopener noreferrer"
             className="footer-btn tiktok"

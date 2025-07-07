@@ -314,3 +314,105 @@ tbody tr.upcoming {
   margin-right: auto;
   display: block; /* Asegura que el margin auto funcione */
 }
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 10px 40px 10px 12px; /* Espacio para la flecha */
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: #fefefe;
+  color: #333;
+  font-family: inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  
+  /* Esto quita el estilo nativo del select */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image: none; /* Importante para algunos navegadores */
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: #c2a393;
+  box-shadow: 0 0 0 3px rgba(194, 163, 147, 0.2);
+  background-color: #fff;
+}
+
+.select-wrapper::after {
+  content: "▼";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+  font-size: 14px;
+  z-index: 1;
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 10px 40px 10px 12px; /* Espacio para flecha */
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: #fefefe;
+  color: #333;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+.tab-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #eee;
+  flex-wrap: wrap;
+}
+
+.tab-nav button {
+  padding: 0.7rem 1.2rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.tab-nav button:hover {
+  border-bottom: 2px solid #ccc;
+}
+
+.tab-nav .active {
+  border-bottom: 3px solid #C0A439;
+  font-weight: bold;
+}
