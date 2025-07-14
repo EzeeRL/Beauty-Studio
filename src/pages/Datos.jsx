@@ -13,6 +13,8 @@ const [formData, setFormData] = useState({
   email: datosCliente?.email || "",
   telefono: datosCliente?.telefono || "",
 });
+const [loading, setLoading] = useState(false);
+
 
 /*   useEffect(() => {
   setFormData({
@@ -22,43 +24,50 @@ const [formData, setFormData] = useState({
   });
 }, []); */
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    console.log("📤 Enviando formulario con datos:", formData);
 
-    try {
-      console.log("📤 Enviando formulario con datos:", formData);
+    setDatosCliente(formData);
 
-      setDatosCliente(formData);
+    // 1️⃣ Crear usuario
+    console.log("👤 Creando usuario...");
+    const userRes = await axios.post("https://eve-back.vercel.app/users", {
+      name: formData.nombre,
+      email: formData.email,
+      phone: formData.telefono,
+    });
 
-      // 1️⃣ Crear usuario
-      console.log("👤 Creando usuario...");
-      const userRes = await axios.post("https://eve-back.vercel.app/users", {
-        name: formData.nombre,
-        email: formData.email,
-        phone: formData.telefono,
-      });
+    const userId = userRes.data.user.id;
+    console.log("✅ Usuario creado con ID:", userId);
+    localStorage.setItem("userId", userId);
 
-      const userId = userRes.data.user.id;
-      console.log("✅ Usuario creado con ID:", userId);
-      localStorage.setItem("userId", userId);
-      // 2️⃣ Crear turno
-      console.log("📆 Creando turno...");
-      const appointmentRes = await axios.post("https://eve-back.vercel.app/appointments", {
-        userId,
-        expertId: experto.id,
-        serviceId: servicio.id,
-        date: fecha,
-      });
+    // 2️⃣ Crear turno
+    const appointmentEndpoint =
+      userId === 3
+        ? "https://eve-back.vercel.app/appointments/eve"
+        : "https://eve-back.vercel.app/appointments";
 
-      const appointmentId = appointmentRes.data.appointment.id;
-      console.log("✅ Turno creado con ID:", appointmentId);
+    console.log("📆 Creando turno en:", appointmentEndpoint);
+    const appointmentRes = await axios.post(appointmentEndpoint, {
+      userId,
+      expertId: experto.id,
+      serviceId: servicio.id,
+      date: fecha,
+    });
 
-      // 3️⃣ Crear preferencia de pago
+    const appointmentId = appointmentRes.data.appointment.id;
+    console.log("✅ Turno creado con ID:", appointmentId);
+
+    // 3️⃣ Si userId NO es 3 => Redirigir a MercadoPago
+    if (userId !== 3) {
       console.log("💰 Creando preferencia de pago en MercadoPago...");
       const preferenceRes = await axios.post("https://eve-back.vercel.app/pay", {
         title: servicio.name,
         quantity: 1,
-        unit_price: servicio.price,
+        unit_price: 10000,
         metadata: {
           appointmentId,
         },
@@ -67,14 +76,21 @@ const [formData, setFormData] = useState({
       const { init_point } = preferenceRes.data;
       console.log("🧾 Preferencia creada. Redirigiendo a:", init_point);
 
-      // 4️⃣ Redirigir al checkout de MercadoPago
       window.location.href = init_point;
-
-    } catch (error) {
-      console.error("❌ Error durante el proceso de reserva:", error);
-      alert("Hubo un error al crear tu turno. Intentalo nuevamente.");
+    } else {
+      // 4️⃣ Si es user 3, mostrar mensaje sin redirección
+      alert("✅ Turno reservado correctamente (EVE)");
     }
-  };
+
+  } catch (error) {
+    console.error("❌ Error durante el proceso de reserva:", error);
+    alert("Hubo un error al crear tu turno. Intentalo nuevamente.");
+  }  finally {
+    setLoading(false); // <- importante
+  }
+};
+
+
 
   const handleChange = (e) => {
     setFormData({
@@ -118,9 +134,14 @@ const [formData, setFormData] = useState({
         <p className="info-form">
           Usaremos tus datos para comunicarnos un día antes de tu reserva.
         </p>
-        <button type="submit" className="continue-button">
-          Continuar a pago
-        </button>
+     <button type="submit" className="continue-button" disabled={loading}>
+  {loading ? (
+    <span className="spinner"></span>
+  ) : (
+    "Continuar a pago"
+  )}
+</button>
+
       </form>
 
       <div className="container-info-turno">

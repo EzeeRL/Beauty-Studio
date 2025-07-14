@@ -416,3 +416,48 @@ tbody tr.upcoming {
   border-bottom: 3px solid #C0A439;
   font-weight: bold;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background: #ffffff;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s, transform 0.2s;
+  color: #555;
+}
+
+.nav-btn:hover {
+  background: #f5f5f5;
+  transform: scale(1.05);
+}
+
+.nav-btn.active {
+  background-color: #c0a439;
+  color: white;
+}

@@ -72,13 +72,12 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 <p className="details-service">{service.duration} min</p>
                 <p className="details-service">${service.price}</p>
 
-                <p
-                  className={`description ${
-                    isExpanded ? "expanded" : "collapsed"
-                  }`}
-                >
-                  {service.description}
-                </p>
+             <p className={`description ${isExpanded ? "expanded" : "collapsed"}`}>
+  {isExpanded
+    ? service.description
+    : service.description.slice(0, 158) + (service.description.length > 200 ? "..." : "")}
+</p>
+
 
                 {service.description.length > 100 && (
                   <button

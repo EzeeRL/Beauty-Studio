@@ -81,3 +81,24 @@
 .info-turno:hover {
   transform: scale(1.05);
 }
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #fff;
+  border-top: 2px solid #c0a439;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.continue-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

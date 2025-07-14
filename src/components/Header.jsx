@@ -83,13 +83,13 @@ const userId = localStorage.getItem("userId");
           >
             Inicio
           </a>
-          <a
+   {/*        <a
             href="#payment-methods"
             className="menu-item"
             onClick={() => setIsMenuOpen(false)}
           >
             Métodos de Pago
-          </a>
+          </a> */}
           <a
             href="/ubicacion"
             className="menu-item"

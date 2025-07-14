@@ -15,6 +15,11 @@ import Login from "./pages/loguin";
 import Ubicacion from "./pages/Ubicacion";
 import AdminPanel from "./pages/Admin";
 import Footer from "./pages/Footer";
+import ComentarioList from "./components/ComentarioList";
+import { Suspense } from "react";
+import LoadingSkeleton from "./pages/LoadingSkeleton";
+import ExpertAppointments from "./components/ExpertAppointments";
+import LoginE from "./pages/LoginExpert";
 
 function App() {
   const [services, setServices] = useState({});
@@ -22,6 +27,7 @@ function App() {
   const [activeFilter, setActiveFilter] = useState("Todos");
   const [openedSections, setOpenedSections] = useState(new Set());
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
  
 const handleSearchChange = (term) => {
@@ -53,6 +59,7 @@ const handleSearchChange = (term) => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
+        setLoading(true);
         const response = await axios.get("https://eve-back.vercel.app/services");
         const data = response.data;
 
@@ -68,6 +75,9 @@ const handleSearchChange = (term) => {
       } catch (error) {
         console.error("Error al cargar servicios:", error);
       }
+      finally {
+      setLoading(false);
+    }
     };
 
     fetchServices();
@@ -106,29 +116,35 @@ const handleSearchChange = (term) => {
   };
 
   
-  const Home = () => (
+  const Home = () => {
+  if (loading) return <LoadingSkeleton />;
+
+  return (
     <>
       <SearchAndFilter
         servicesData={services}
         onFilter={handleFilter}
         activeFilter={activeFilter}
-        onSearchChange={handleSearchChange} 
+        onSearchChange={handleSearchChange}
       />
 
-      {Object.entries(filteredServices).map(([section, items]) => (
-        <div key={section} id={section}>
-          <ServiceSection
-            title={section}
-            services={items}
-            isOpen={openedSections.has(section) || activeFilter !== "Todos"}
-            onToggle={() => toggleSection(section)}
-          />
-         
-        </div>
-      ))}
-      <Footer />
+      <div className="servicion-container">
+        {Object.entries(filteredServices).map(([section, items]) => (
+          <div key={section} id={section}>
+            <ServiceSection
+              title={section}
+              services={items}
+              isOpen={openedSections.has(section) || activeFilter !== "Todos"}
+              onToggle={() => toggleSection(section)}
+            />
+          </div>
+        ))}
+      </div>
+      <ComentarioList />
     </>
   );
+};
+
 
   return (
     <Router>
@@ -137,7 +153,8 @@ const handleSearchChange = (term) => {
         <Header />
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Home />} />
+           <Route path="/" element={<Home />} />
+
             <Route path="/Expertos/:serviceId" element={<Expertos />} />
             <Route path="/Fecha/:expertId" element={<Fecha />} />
             <Route path="/Datos" element={<Datos />} />
@@ -146,6 +163,8 @@ const handleSearchChange = (term) => {
             <Route path="/login" element={<Login />} />
             <Route path="/ubicacion" element={<Ubicacion />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/expertos/:expertId/turnos" element={<ExpertAppointments />} />
+<Route path="/login/expert" element={<LoginE />} />
           </Routes>
         </main>
       </div>

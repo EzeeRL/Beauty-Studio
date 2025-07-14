@@ -57,3 +57,68 @@ body {
     margin: 90px auto;
   }
 }
+
+.servicion-container{
+  margin-top: 40px;
+}
+
+.skeleton-container {
+  padding: 16px;
+  max-width: 600px;
+  margin: 80px auto;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.search-skeleton {
+  height: 40px;
+  background: #eee;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.filters-skeleton {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.filter-pill-skeleton {
+  width: 80px;
+  height: 32px;
+  background: #e0e0e0;
+  border-radius: 16px;
+}
+
+.service-section-skeleton {
+  height: 40px;
+  background: #f0f0f0;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.comentario-title-skeleton {
+  width: 120px;
+  height: 20px;
+  background: #ddd;
+  margin: 24px 0 8px;
+  border-radius: 4px;
+}
+
+.comentario-card-skeleton {
+  height: 60px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #f0f0f0;
+  }
+  50% {
+    background-color: #e0e0e0;
+  }
+  100% {
+    background-color: #f0f0f0;
+  }
+}

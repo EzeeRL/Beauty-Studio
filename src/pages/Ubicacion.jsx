@@ -1,3 +1,4 @@
+
 import "./Ubicacion.css";
 
 const Ubicacion = () => (
@@ -26,7 +27,9 @@ const Ubicacion = () => (
       >
         Abrir en Google Maps
       </a>
+      <img src="https://instagram.faep8-1.fna.fbcdn.net/v/t51.2885-15/503542041_18058586270257765_1015939736854955890_n.jpg?stp=dst-jpg_e35_p640x640_sh0.08_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6IlNUT1JZLmltYWdlX3VybGdlbi4xMjg0eDIyODIuc2RyLmY3NTc2MS5kZWZhdWx0X2ltYWdlIn0&_nc_ht=instagram.faep8-1.fna.fbcdn.net&_nc_cat=101&_nc_oc=Q6cZ2QG8BHr4dhtzOkUnB8OZSIGWBJ5JsjFsIWKH-GwSkPyQBtSiGNncL-VB4HhOD2z9MqDztEftoTvLx3BvHZQiH9JQ&_nc_ohc=V2AFE5IBjFQQ7kNvwHRPPWn&_nc_gid=4EFwmzAWXo2mOiOgeMzjWQ&edm=AGFyKLkBAAAA&ccb=7-5&ig_cache_key=MzY1OTIwMzkwNTYyODcyODE3OQ%3D%3D.3-ccb7-5&oh=00_AfRFxjicVlzRunUvP5afMQgO4eSVLr2-VVP4TZQsxRQvHQ&oe=687B5C35&_nc_sid=5a0a6d" alt="" />
     </div>
+   
   </div>
 );
 

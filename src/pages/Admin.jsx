@@ -7,6 +7,9 @@ import "react-calendar/dist/Calendar.css";
 import './AdminPanel.css';
 import ServiceManager from "../components/AdminEdit";
 import ExpertManager from "../components/adminExpert";
+import AdminComentarios from "../components/AdminComentarios";
+import GroupedTurnosTable from "../components/GroupedTurnosTable";
+import HorarioManager from "../components/HorarioManager";
 
 const AdminPanel = () => {
   const [appointments, setAppointments] = useState([]);
@@ -21,6 +24,8 @@ const [activeTab, setActiveTab] = useState("turnos");
   const [experts, setExperts] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 const [appointmentToDelete, setAppointmentToDelete] = useState(null);
+const [showToast, setShowToast] = useState(false);
+
 
 
 useEffect(() => {
@@ -30,26 +35,41 @@ useEffect(() => {
     .catch((err) => console.error("Error al cargar expertos:", err));
 }, []);
 
-  useEffect(() => {
-    axios
-      .get("https://eve-back.vercel.app/appointments")
-      .then((res) => setAppointments(res.data.appointments))
-      .catch((err) => console.error("Error cargando turnos:", err));
-  }, []);
+useEffect(() => {
+  axios
+    .get("https://eve-back.vercel.app/appointments")
+    .then((res) => {
+      const onlyPaidOrPartial = res.data.appointments.filter(
+        (app) => app.payStatus === "paid" || app.payStatus === "partial"
+      );
+      setAppointments(onlyPaidOrPartial);
+    })
+    .catch((err) => console.error("Error cargando turnos:", err));
+}, []);
+
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF"];
 
-  const calcularIngresosPorServicio = useMemo(() => {
-    const acumulador = {};
+const calcularIngresosPorServicio = useMemo(() => {
+  const acumulador = {};
 
-    appointments.forEach((app) => {
+  // ✅ Solo incluir turnos pagados o parcialmente pagados
+  appointments
+    .filter(
+      (app) => app.payStatus === "paid" || app.payStatus === "partial"
+    )
+    .forEach((app) => {
       const name = app.Service.name;
       const price = app.Service.price;
       acumulador[name] = (acumulador[name] || 0) + price;
     });
 
-    return Object.entries(acumulador).map(([name, value]) => ({ name, value }));
-  }, [appointments]);
+  return Object.entries(acumulador).map(([name, value]) => ({
+    name,
+    value,
+  }));
+}, [appointments]);
+
 
 const handleHorarioChange = async () => {
   if (!expertId) {
@@ -74,8 +94,8 @@ console.log({
       ...prev,
       [selectedDate]: { start: startHour, end: endHour },
     }));
-
-    alert("Horario guardado exitosamente.");
+ setShowToast(true);
+     setTimeout(() => setShowToast(false), 3000);
   } catch (error) {
     console.error("❌ Error al crear horario:", error);
     alert("Error al guardar el horario.");
@@ -343,12 +363,44 @@ const TurnosTable = ({ data }) =>
     <h1>Panel de Administración</h1>
 
     {/* Navegación tipo pestañas */}
-    <div className="tab-nav">
-      <button onClick={() => setActiveTab("turnos")} className={activeTab === "turnos" ? "active" : ""}>📅 Turnos</button>
-      <button onClick={() => setActiveTab("horarios")} className={activeTab === "horarios" ? "active" : ""}>🕒 Horarios</button>
-      <button onClick={() => setActiveTab("ingresos")} className={activeTab === "ingresos" ? "active" : ""}>📊 Ingresos</button>
-      <button onClick={() => setActiveTab("admin")} className={activeTab === "admin" ? "active" : ""}>🛠️ Servicios y Expertos</button>
-    </div>
+<nav className="admin-nav">
+  <button
+    onClick={() => setActiveTab("turnos")}
+    className={activeTab === "turnos" ? "nav-btn active" : "nav-btn"}
+    title="Turnos"
+  >
+    📅
+  </button>
+  <button
+    onClick={() => setActiveTab("horarios")}
+    className={activeTab === "horarios" ? "nav-btn active" : "nav-btn"}
+    title="Horarios"
+  >
+    🕒
+  </button>
+  <button
+    onClick={() => setActiveTab("ingresos")}
+    className={activeTab === "ingresos" ? "nav-btn active" : "nav-btn"}
+    title="Ingresos"
+  >
+    📊
+  </button>
+  <button
+    onClick={() => setActiveTab("admin")}
+    className={activeTab === "admin" ? "nav-btn active" : "nav-btn"}
+    title="Servicios"
+  >
+    🛠️
+  </button>
+  <button
+    onClick={() => setActiveTab("coment")}
+    className={activeTab === "coment" ? "nav-btn active" : "nav-btn"}
+    title="Comentarios"
+  >
+    💬
+  </button>
+</nav>
+
 
     {/* Sección: Turnos */}
     {activeTab === "turnos" && (
@@ -373,18 +425,20 @@ const TurnosTable = ({ data }) =>
 
         <section className="all-appointments" style={{ marginBottom: "3rem" }}>
           <h2>Todos los turnos (los próximos en amarillo)</h2>
-          <TurnosTable
-            data={sortedAppointments}
-            editingId={editingId}
-            editingPayStatus={editingPayStatus}
-            setEditingPayStatus={setEditingPayStatus}
-            startEdit={startEdit}
-            cancelEdit={cancelEdit}
-            saveEdit={saveEdit}
-            sendWhatsApp={sendWhatsApp}
-            isUpcoming={isUpcoming}
-            deleteAppointment={deleteAppointment}
-          />
+         <GroupedTurnosTable
+  data={sortedAppointments}
+  editingId={editingId}
+  editingPayStatus={editingPayStatus}
+  setEditingPayStatus={setEditingPayStatus}
+  startEdit={startEdit}
+  cancelEdit={cancelEdit}
+  saveEdit={saveEdit}
+  sendWhatsApp={sendWhatsApp}
+  isUpcoming={isUpcoming}
+  setAppointmentToDelete={setAppointmentToDelete}
+  setShowDeleteModal={setShowDeleteModal}
+/>
+
         </section>
       </>
     )}
@@ -396,12 +450,17 @@ const TurnosTable = ({ data }) =>
         <div className="inputs-row">
           <div className="input-group">
             <label htmlFor="date">Fecha</label>
-            <input
-              id="date"
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+           <input
+  id="date"
+  type="date"
+  value={format(new Date(selectedDate), "yyyy-MM-dd")}
+  onChange={(e) => {
+    const parts = e.target.value.split("-");
+    const selected = new Date(parts[0], parts[1] - 1, parts[2]); // Año, Mes (0 index), Día
+    setSelectedDate(selected);
+  }}
+/>
+
           </div>
 
           <div className="input-group">
@@ -451,11 +510,18 @@ const TurnosTable = ({ data }) =>
           </button>
         </div>
 
-        <p className="horario-text">
-          Horario para {format(selectedDate, "dd/MM/yyyy")}:{" "}
-          {workingHours[format(selectedDate, "yyyy-MM-dd")]?.start || "No definido"} -{" "}
-          {workingHours[format(selectedDate, "yyyy-MM-dd")]?.end || "No definido"}
-        </p>
+       {(() => {
+  const selectedKey = format(new Date(selectedDate), "yyyy-MM-dd");
+  const horario = workingHours[selectedKey];
+
+  return (
+    <p className="horario-text">
+      Horario para {format(new Date(selectedDate), "dd/MM/yyyy")}:{" "}
+      {horario?.start || "No definido"} - {horario?.end || "No definido"}
+    </p>
+  );
+})()}
+ <HorarioManager />
       </section>
     )}
 
@@ -493,6 +559,12 @@ const TurnosTable = ({ data }) =>
         <ExpertManager />
       </>
     )}
+     {activeTab === "coment" && (
+      <>
+       <AdminComentarios></AdminComentarios>
+      </>
+    )}
+
 
     {/* Modal de eliminación */}
     {showDeleteModal && (
@@ -566,6 +638,23 @@ const TurnosTable = ({ data }) =>
         </div>
       </div>
     )}
+    {showToast && (
+  <div style={{
+    position: "fixed",
+    bottom: "20px",
+    right: "20px",
+    backgroundColor: "#4CAF50",
+    color: "white",
+    padding: "12px 20px",
+    borderRadius: "6px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+    zIndex: 9999,
+    animation: "fadeInUp 0.3s ease",
+  }}>
+    ✅ Horario guardado correctamente
+  </div>
+)}
+
   </div>
 );
 

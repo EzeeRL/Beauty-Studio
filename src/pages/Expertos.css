@@ -4,6 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 90px;
 }
 
 h2,
@@ -82,4 +83,57 @@ p {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
   color: #584f4f;
   outline: none;
+}
+.experts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  padding: 0 16px;
+  max-width: 100%;
+  margin: 24px auto;
+}
+
+.expert-card {
+  background: #fff;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.2s ease;
+  justify-content: space-between; /* asegura separación vertical */
+ /* asegura que ocupe toda la altura posible */
+}
+
+.expert-card:hover {
+  transform: scale(1.03);
+}
+
+.img-experto {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 6px;
+}
+
+.expert-card h2 {
+  font-size: 0.85rem;
+  margin: 4px 0;
+}
+
+.text-especialidad {
+  font-size: 0.7rem;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.select-button {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  background-color: #c0a439;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+ margin-top: 3px; 
 }

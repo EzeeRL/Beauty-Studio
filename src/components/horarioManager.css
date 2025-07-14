@@ -1,0 +1,23 @@
+.input-estilizado {
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: #f9f5f3;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  appearance: none; /* elimina flechita por defecto */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23333' d='M2 0L0 2h4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 0.65rem auto;
+width: 320px;
+margin-top: 15px;
+}
+
+.input-estilizado:focus {
+  border-color: #c4a38f;
+  box-shadow: 0 0 0 3px rgba(196, 163, 143, 0.2);
+}

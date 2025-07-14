@@ -1,0 +1,80 @@
+.specialty-toggle {
+  background: #c0a439;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.appointments-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.appointment-card {
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 16px;
+  width: 280px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.appointment-card span {
+  font-weight: 600;
+  margin-right: 5px;
+  color: #333;
+}
+
+.appointment-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn.edit {
+  background-color: #f5f5f5;
+}
+
+.btn.whatsapp {
+  background-color: #25d366;
+  color: white;
+}
+
+.btn.delete {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.btn.save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn.cancel {
+  background-color: #ccc;
+}
+
+.status-sent {
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+}

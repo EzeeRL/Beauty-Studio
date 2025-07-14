@@ -45,9 +45,12 @@ useEffect(() => {
         const res = await axios.get("https://eve-back.vercel.app/appointments");
         const allAppointments = res.data.appointments;
 
-        const turnosDelExperto = allAppointments.filter(
-          (appt) => appt.expertId === parseInt(expertId)
-        );
+const turnosDelExperto = allAppointments.filter(
+  (appt) =>
+    appt.expertId === parseInt(expertId) &&
+    (appt.payStatus === "paid" || appt.payStatus === "partial")
+);
+
 
         const ocupadosPorFecha = {};
 
@@ -96,7 +99,7 @@ while (bloqueInicio < bloqueFin) {
   const horariosOcupadosHoy =
     (selectedDate && ocupados[format(selectedDate, "yyyy-MM-dd")]) || [];
 
-const getHorariosDisponiblesParaFecha = () => {
+/* const getHorariosDisponiblesParaFecha = () => {
   if (!selectedDate) return [];
 
   const diaSeleccionado = format(selectedDate, "yyyy-MM-dd");
@@ -107,6 +110,8 @@ const intervaloMinutos = expertoTurnoCorto
   ? 20
   : servicio?.category?.toLowerCase() === "manicuria"
   ? 90
+  : servicio?.category?.toLowerCase() === "pestañas"
+  ? 120
   : 60;
 
   const horaInicio = horario
@@ -156,7 +161,66 @@ const intervaloMinutos = expertoTurnoCorto
   }
 
   return horarios;
+}; */
+
+const getHorariosDisponiblesParaFecha = () => {
+  if (!selectedDate) return [];
+
+  const diaSeleccionado = format(selectedDate, "yyyy-MM-dd");
+  const horario = horariosExpert.find((h) => h.day === diaSeleccionado);
+
+  // Si no hay horario definido para ese día → no mostrar nada
+  if (!horario) return [];
+
+  const expertoTurnoCorto = expertId === "3" || expertId === "6";
+  const intervaloMinutos = expertoTurnoCorto
+    ? 20
+    : servicio?.category?.toLowerCase() === "manicuria"
+    ? 90
+    : servicio?.category?.toLowerCase() === "pestañas"
+    ? 120
+    : 60;
+
+  const horaInicio = parseInt(horario.openTime.split(":")[0], 10);
+  const horaFin = parseInt(horario.closeTime.split(":")[0], 10);
+
+  const horarios = [];
+
+  let actual = new Date();
+  actual.setHours(horaInicio, 0, 0, 0);
+
+  const fin = new Date();
+  fin.setHours(horaFin, 0, 0, 0);
+
+  const duracionServicio = servicio?.tiempo || intervaloMinutos;
+
+  while (addMinutes(actual, duracionServicio) <= fin) {
+    const horaInicioStr = format(actual, "HH:mm");
+
+    let bloqueTemp = new Date(actual);
+    const finTurno = addMinutes(bloqueTemp, duracionServicio);
+
+    let bloqueLibre = true;
+    while (bloqueTemp < finTurno) {
+      const bloqueStr = format(bloqueTemp, "HH:mm");
+      if (horariosOcupadosHoy.includes(bloqueStr)) {
+        bloqueLibre = false;
+        break;
+      }
+      bloqueTemp = addMinutes(bloqueTemp, 30);
+    }
+
+    if (bloqueLibre) {
+      horarios.push(horaInicioStr);
+      actual = addMinutes(actual, intervaloMinutos);
+    } else {
+      actual = addMinutes(actual, expertoTurnoCorto ? 20 : 30);
+    }
+  }
+
+  return horarios;
 };
+
 
 
   return (
@@ -178,21 +242,24 @@ const intervaloMinutos = expertoTurnoCorto
         <>
           <label className="label">Selecciona un horario:</label>
           <div className="horarios-grid">
-            {getHorariosDisponiblesParaFecha().map((hora) => {
-              const ocupado = horariosOcupadosHoy.includes(hora);
-              return (
-                <button
-                  key={hora}
-                  className={`horario-btn ${
-                    selectedTime === hora ? "activo" : ""
-                  }`}
-                  onClick={() => setSelectedTime(hora)}
-                  disabled={ocupado}
-                >
-                  {hora} {ocupado ? "⛔" : ""}
-                </button>
-              );
-            })}
+          {getHorariosDisponiblesParaFecha().length === 0 ? (
+  <p>Ya no hay turnos disponibles en esta fecha.</p>
+) : (
+  getHorariosDisponiblesParaFecha().map((hora) => {
+    const ocupado = horariosOcupadosHoy.includes(hora);
+    return (
+      <button
+        key={hora}
+        className={`horario-btn ${selectedTime === hora ? "activo" : ""}`}
+        onClick={() => setSelectedTime(hora)}
+        disabled={ocupado}
+      >
+        {hora} {ocupado ? "⛔" : ""}
+      </button>
+    );
+  })
+)}
+
           </div>
         </>
       )}
@@ -210,3 +277,4 @@ const intervaloMinutos = expertoTurnoCorto
 };
 
 export default Fecha;
+

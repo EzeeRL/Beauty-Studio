@@ -4,6 +4,7 @@ import { format, parseISO, isSameDay, addMinutes } from "date-fns";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./perfil.css";
+import ComentarioForm from "../components/comentarios";
 
 const Perfil = () => {
   const [appointments, setAppointments] = useState([]);
@@ -194,9 +195,12 @@ console.log(appt)
   if (loading) return <p className="p-4 text-center text-gray-600">Cargando datos...</p>;
 
   if (!userId) return <p className="p-4 text-center text-red-500">No se encontró usuario logueado.</p>;
-
+console.log(appointments.payStatus)
+const turnosParciales = appointments.filter(
+  (appt) => appt.payStatus === "partial"
+);
   return (
-    <div className="perfil-container">
+    <div className="perfil-container" style={{marginLeft:"-10px"}}>
       <div className="perfil-card">
         <h2>Perfil de usuario</h2>
         <div className="perfil-datos">
@@ -208,10 +212,10 @@ console.log(appt)
 
       <h2 className="turnos-title">Mis turnos</h2>
 
-      {appointments.length === 0 ? (
-        <p className="mensaje-vacio">No tenés turnos reservados.</p>
-      ) : (
-        appointments.map((appt) => (
+    {turnosParciales.length === 0 ? (
+  <p className="mensaje-vacio">No tenés turnos reservados aun.</p>
+) : (
+  turnosParciales.map((appt) => (
           <div key={appt.id} className="turno-card">
             <p><span>Servicio:</span> {appt.Service.name}</p>
             <p><span>Especialista:</span> {appt.Expert.name}</p>
@@ -310,6 +314,7 @@ console.log(appt)
           </div>
         ))
       )}
+      <ComentarioForm></ComentarioForm>
     </div>
   );
 };
