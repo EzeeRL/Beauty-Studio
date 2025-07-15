@@ -5,6 +5,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./perfil.css";
 import ComentarioForm from "../components/comentarios";
+import { useNavigate } from "react-router-dom";
 
 const Perfil = () => {
   const [appointments, setAppointments] = useState([]);
@@ -19,7 +20,7 @@ const Perfil = () => {
   const [horariosExpert, setHorariosExpert] = useState([]);
 
   const userId = localStorage.getItem("userId");
-
+  const navigate = useNavigate();
   // Carga datos usuario y turnos
   useEffect(() => {
     const fetchData = async () => {
@@ -29,11 +30,15 @@ const Perfil = () => {
       }
 
       try {
-        const userRes = await axios.get(`https://eve-back.vercel.app/users/${userId}`);
+        const userRes = await axios.get(
+          `https://eve-back.vercel.app/users/${userId}`
+        );
         setUserData(userRes.data);
 
-        const apptsRes = await axios.get(`https://eve-back.vercel.app/appointments/user/${userId}`);
-        console.log(apptsRes)
+        const apptsRes = await axios.get(
+          `https://eve-back.vercel.app/appointments/user/${userId}`
+        );
+        console.log(apptsRes);
         setAppointments(apptsRes.data.appointments);
       } catch (error) {
         console.error("Error al obtener datos:", error);
@@ -51,13 +56,15 @@ const Perfil = () => {
 
     const appt = appointments.find((a) => a.id === editingId);
     if (!appt) return;
-console.log(appt)
+    console.log(appt);
     const expertId = appt.Expert.id;
 
     const fetchHorariosExpert = async () => {
       try {
-        const res = await axios.get(`https://eve-back.vercel.app/hours/expert/${expertId}`);
-        console.log(res.data )
+        const res = await axios.get(
+          `https://eve-back.vercel.app/hours/expert/${expertId}`
+        );
+        console.log(res.data);
         setHorariosExpert(res.data);
       } catch (error) {
         console.error("Error al obtener horarios del experto:", error);
@@ -109,7 +116,6 @@ console.log(appt)
     // Inicializar selectedDate y selectedTime con la fecha actual del turno
     setSelectedDate(parseISO(appt.date));
     setSelectedTime(format(parseISO(appt.date), "HH:mm"));
-
   }, [editingId, appointments]);
 
   // Función para ver si se puede editar un turno (queda más de 48 hs)
@@ -176,7 +182,9 @@ console.log(appt)
       // Actualizar localmente la lista de turnos
       setAppointments((prev) =>
         prev.map((appt) =>
-          appt.id === editingId ? { ...appt, date: fechaNueva.toISOString() } : appt
+          appt.id === editingId
+            ? { ...appt, date: fechaNueva.toISOString() }
+            : appt
         )
       );
 
@@ -192,33 +200,55 @@ console.log(appt)
     }
   };
 
-  if (loading) return <p className="p-4 text-center text-gray-600">Cargando datos...</p>;
+  if (loading)
+    return <p className="p-4 text-center text-gray-600">Cargando datos...</p>;
 
-  if (!userId) return <p className="p-4 text-center text-red-500">No se encontró usuario logueado.</p>;
-console.log(appointments.payStatus)
-const turnosParciales = appointments.filter(
-  (appt) => appt.payStatus === "partial"
-);
+  if (!userId)
+    return (
+      <div className="p-4 text-center">
+        <p className="text-red-500 mb-4">No se encontró usuario logueado.</p>
+        <button
+          onClick={() => navigate("/login")}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        >
+          Ir al login
+        </button>
+      </div>
+    );
+  console.log(appointments.payStatus);
+  const turnosParciales = appointments.filter(
+    (appt) => appt.payStatus === "partial" || appt.payStatus === "paid"
+  );
   return (
-    <div className="perfil-container" style={{marginLeft:"-10px"}}>
+    <div className="perfil-container" style={{ marginLeft: "-10px" }}>
       <div className="perfil-card">
         <h2>Perfil de usuario</h2>
         <div className="perfil-datos">
-          <p><span>Nombre:</span> {userData?.name}</p>
-          <p><span>Email:</span> {userData?.email}</p>
-          <p><span>Teléfono:</span> {userData?.phone}</p>
+          <p>
+            <span>Nombre:</span> {userData?.name}
+          </p>
+          <p>
+            <span>Email:</span> {userData?.email}
+          </p>
+          <p>
+            <span>Teléfono:</span> {userData?.phone}
+          </p>
         </div>
       </div>
 
       <h2 className="turnos-title">Mis turnos</h2>
 
-    {turnosParciales.length === 0 ? (
-  <p className="mensaje-vacio">No tenés turnos reservados aun.</p>
-) : (
-  turnosParciales.map((appt) => (
+      {turnosParciales.length === 0 ? (
+        <p className="mensaje-vacio">No tenés turnos reservados aun.</p>
+      ) : (
+        turnosParciales.map((appt) => (
           <div key={appt.id} className="turno-card">
-            <p><span>Servicio:</span> {appt.Service.name}</p>
-            <p><span>Especialista:</span> {appt.Expert.name}</p>
+            <p>
+              <span>Servicio:</span> {appt.Service.name}
+            </p>
+            <p>
+              <span>Especialista:</span> {appt.Expert.name}
+            </p>
             <p>
               <span>Fecha:</span>{" "}
               {editingId === appt.id ? (
@@ -236,80 +266,87 @@ const turnosParciales = appointments.filter(
                     {getHorariosDisponiblesParaFecha().map((hora) => (
                       <button
                         key={hora}
-                        className={`horario-btn ${selectedTime === hora ? "activo" : ""}`}
+                        className={`horario-btn ${
+                          selectedTime === hora ? "activo" : ""
+                        }`}
                         onClick={() => setSelectedTime(hora)}
                       >
                         {hora}
                       </button>
                     ))}
                   </div>
-<div
-  style={{
-    marginTop: "20px",
-    display: "flex",
-    gap: "16px",
-    justifyContent: "center", // 👉 centra los botones horizontalmente
-    alignItems: "center",
-  }}
->
-  <button
-    onClick={handleSave}
-    disabled={!selectedTime}
-    style={{
-      background: selectedTime
-        ? "linear-gradient(90deg, #C0A439, #E6C55A)"
-        : "#ccc",
-      color: "white",
-      padding: "10px 20px",
-      border: "none",
-      borderRadius: "8px",
-      cursor: selectedTime ? "pointer" : "not-allowed",
-      opacity: selectedTime ? 1 : 0.6,
-      transition: "all 0.3s ease",
-      fontWeight: "bold",
-      boxShadow: selectedTime
-        ? "0 3px 8px rgba(192, 164, 57, 0.4)"
-        : "none",
-    }}
-  >
-    Guardar
-  </button>
+                  <div
+                    style={{
+                      marginTop: "20px",
+                      display: "flex",
+                      gap: "16px",
+                      justifyContent: "center", // 👉 centra los botones horizontalmente
+                      alignItems: "center",
+                    }}
+                  >
+                    <button
+                      onClick={handleSave}
+                      disabled={!selectedTime}
+                      style={{
+                        background: selectedTime
+                          ? "linear-gradient(90deg, #C0A439, #E6C55A)"
+                          : "#ccc",
+                        color: "white",
+                        padding: "10px 20px",
+                        border: "none",
+                        borderRadius: "8px",
+                        cursor: selectedTime ? "pointer" : "not-allowed",
+                        opacity: selectedTime ? 1 : 0.6,
+                        transition: "all 0.3s ease",
+                        fontWeight: "bold",
+                        boxShadow: selectedTime
+                          ? "0 3px 8px rgba(192, 164, 57, 0.4)"
+                          : "none",
+                      }}
+                    >
+                      Guardar
+                    </button>
 
-  <button
-    onClick={() => {
-      setEditingId(null);
-      setSelectedDate(null);
-      setSelectedTime("");
-      setHorariosExpert([]);
-      setOcupados({});
-    }}
-    style={{
-      backgroundColor: "rgba(255, 255, 255, 0.2)",
-      color: "#333",
-      padding: "10px 20px",
-      border: "1px solid rgba(255, 255, 255, 0.4)",
-      borderRadius: "8px",
-      cursor: "pointer",
-      transition: "all 0.3s ease",
-      fontWeight: "bold",
-      backdropFilter: "blur(4px)",
-      boxShadow: "0 3px 8px rgba(0, 0, 0, 0.1)",
-    }}
-  >
-    Cancelar
-  </button>
-</div>
-
-
+                    <button
+                      onClick={() => {
+                        setEditingId(null);
+                        setSelectedDate(null);
+                        setSelectedTime("");
+                        setHorariosExpert([]);
+                        setOcupados({});
+                      }}
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.2)",
+                        color: "#333",
+                        padding: "10px 20px",
+                        border: "1px solid rgba(255, 255, 255, 0.4)",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                        fontWeight: "bold",
+                        backdropFilter: "blur(4px)",
+                        boxShadow: "0 3px 8px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
                 </>
               ) : (
-                new Date(appt.date).toLocaleString("es-AR", { dateStyle: "full", timeStyle: "short" })
+                new Date(appt.date).toLocaleString("es-AR", {
+                  dateStyle: "full",
+                  timeStyle: "short",
+                })
               )}
             </p>
-            <p><span>Estado de pago:</span> {appt.payStatus}</p>
+            <p>
+              <span>Estado de pago:</span> {appt.payStatus}
+            </p>
 
             {editingId !== appt.id && canEditAppointment(appt.date) && (
-              <button onClick={() => setEditingId(appt.id)}>Editar fecha</button>
+              <button onClick={() => setEditingId(appt.id)}>
+                Editar fecha
+              </button>
             )}
           </div>
         ))

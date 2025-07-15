@@ -38,12 +38,15 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-padding: 0 5%;
-  scrollbar-width: none; /* Para Firefox */
-  -ms-overflow-style: none; /* Para IE y Edge */
+  scrollbar-width: none;
+  /* Para Firefox */
+  -ms-overflow-style: none;
+  /* Para IE y Edge */
 }
 
 .filters-container::-webkit-scrollbar {
-  display: none; /* Para Chrome, Safari y Opera */
+  display: none;
+  /* Para Chrome, Safari y Opera */
 }
 
 .filter-card {
@@ -65,9 +68,9 @@
 }
 
 .filter-card.selected {
-  background-color: #c0a439;
+  background: linear-gradient(45deg, #daba08, #e4c54d, #ecd473);
   color: white;
-  border-color: #c0a439;
+  border-color: #d7d7d7;
 }
 
 /* Estilos para móviles */
@@ -86,6 +89,7 @@
     font-size: 13px;
   }
 }
+
 .search-button {
   padding: 10px 16px;
   background-color: #f2ece8;
@@ -95,8 +99,10 @@
   cursor: pointer;
   font-weight: bold;
   margin-right: 10px;
+  transition: 0.4s ease;
 }
 
 .search-button:hover {
-  background-color: #444;
+  background: linear-gradient(45deg, #daba08, #e4c54d, #ecd473);
+  color: #fff;
 }

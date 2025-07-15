@@ -41,7 +41,7 @@ const Datos = () => {
       });
 
       const userId = userRes.data.user.id;
-      console.log("✅ Usuario creado con ID:", userId);
+      // console.log("✅ Usuario creado con ID:", userId);
       localStorage.setItem("userId", userId);
 
       // 2️⃣ Crear turno
@@ -50,7 +50,7 @@ const Datos = () => {
           ? "https://eve-back.vercel.app/appointments/eve"
           : "https://eve-back.vercel.app/appointments";
 
-      console.log("📆 Creando turno en:", appointmentEndpoint);
+      // console.log("📆 Creando turno en:", appointmentEndpoint);
       const appointmentRes = await axios.post(appointmentEndpoint, {
         userId,
         expertId: experto.id,
@@ -59,8 +59,9 @@ const Datos = () => {
       });
 
       const appointmentId = appointmentRes.data.appointment.id;
-      const appointmentId2 = appointmentRes.data.mirroredAppointment.id;
-      console.log("✅ Turno creado con ID:", appointmentId);
+      const appointmentId2 = appointmentRes?.data?.mirroredAppointment?.id;
+
+      // console.log("✅ Turno creado con ID:", appointmentId);
 
       // 3️⃣ Si userId NO es 3 => Redirigir a MercadoPago
       if (userId !== 3) {
