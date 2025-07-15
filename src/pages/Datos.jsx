@@ -1,22 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import useServicioStore from "../store/servicioStore";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Datos.css";
 
 const Datos = () => {
   const navigate = useNavigate();
-  const { servicio, experto, fecha, setDatosCliente, datosCliente } = useServicioStore();
+  const { servicio, experto, fecha, setDatosCliente, datosCliente } =
+    useServicioStore();
 
-const [formData, setFormData] = useState({
-  nombre: datosCliente?.nombre || "",
-  email: datosCliente?.email || "",
-  telefono: datosCliente?.telefono || "",
-});
-const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    nombre: datosCliente?.nombre || "",
+    email: datosCliente?.email || "",
+    telefono: datosCliente?.telefono || "",
+  });
+  const [loading, setLoading] = useState(false);
 
-
-/*   useEffect(() => {
+  /*   useEffect(() => {
   setFormData({
     nombre: datosCliente.nombre || "",
     email: datosCliente.email || "",
@@ -24,73 +24,75 @@ const [loading, setLoading] = useState(false);
   });
 }, []); */
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  try {
-    console.log("📤 Enviando formulario con datos:", formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      console.log("📤 Enviando formulario con datos:", formData);
 
-    setDatosCliente(formData);
+      setDatosCliente(formData);
 
-    // 1️⃣ Crear usuario
-    console.log("👤 Creando usuario...");
-    const userRes = await axios.post("https://eve-back.vercel.app/users", {
-      name: formData.nombre,
-      email: formData.email,
-      phone: formData.telefono,
-    });
-
-    const userId = userRes.data.user.id;
-    console.log("✅ Usuario creado con ID:", userId);
-    localStorage.setItem("userId", userId);
-
-    // 2️⃣ Crear turno
-    const appointmentEndpoint =
-      userId === 3
-        ? "https://eve-back.vercel.app/appointments/eve"
-        : "https://eve-back.vercel.app/appointments";
-
-    console.log("📆 Creando turno en:", appointmentEndpoint);
-    const appointmentRes = await axios.post(appointmentEndpoint, {
-      userId,
-      expertId: experto.id,
-      serviceId: servicio.id,
-      date: fecha,
-    });
-
-    const appointmentId = appointmentRes.data.appointment.id;
-    console.log("✅ Turno creado con ID:", appointmentId);
-
-    // 3️⃣ Si userId NO es 3 => Redirigir a MercadoPago
-    if (userId !== 3) {
-      console.log("💰 Creando preferencia de pago en MercadoPago...");
-      const preferenceRes = await axios.post("https://eve-back.vercel.app/pay", {
-        title: servicio.name,
-        quantity: 1,
-        unit_price: 10000,
-        metadata: {
-          appointmentId,
-        },
+      // 1️⃣ Crear usuario
+      console.log("👤 Creando usuario...");
+      const userRes = await axios.post("https://eve-back.vercel.app/users", {
+        name: formData.nombre,
+        email: formData.email,
+        phone: formData.telefono,
       });
 
-      const { init_point } = preferenceRes.data;
-      console.log("🧾 Preferencia creada. Redirigiendo a:", init_point);
+      const userId = userRes.data.user.id;
+      console.log("✅ Usuario creado con ID:", userId);
+      localStorage.setItem("userId", userId);
 
-      window.location.href = init_point;
-    } else {
-      // 4️⃣ Si es user 3, mostrar mensaje sin redirección
-      alert("✅ Turno reservado correctamente (EVE)");
+      // 2️⃣ Crear turno
+      const appointmentEndpoint =
+        userId === 3
+          ? "https://eve-back.vercel.app/appointments/eve"
+          : "https://eve-back.vercel.app/appointments";
+
+      console.log("📆 Creando turno en:", appointmentEndpoint);
+      const appointmentRes = await axios.post(appointmentEndpoint, {
+        userId,
+        expertId: experto.id,
+        serviceId: servicio.id,
+        date: fecha,
+      });
+
+      const appointmentId = appointmentRes.data.appointment.id;
+      const appointmentId2 = appointmentRes.data.mirroredAppointment.id;
+      console.log("✅ Turno creado con ID:", appointmentId);
+
+      // 3️⃣ Si userId NO es 3 => Redirigir a MercadoPago
+      if (userId !== 3) {
+        console.log("💰 Creando preferencia de pago en MercadoPago...");
+        const preferenceRes = await axios.post(
+          "https://eve-back.vercel.app/pay",
+          {
+            title: servicio.name,
+            quantity: 1,
+            unit_price: 10000,
+            metadata: {
+              appointmentId,
+              appointmentId2,
+            },
+          }
+        );
+
+        const { init_point } = preferenceRes.data;
+        console.log("🧾 Preferencia creada. Redirigiendo a:", init_point);
+
+        window.location.href = init_point;
+      } else {
+        // 4️⃣ Si es user 3, mostrar mensaje sin redirección
+        alert("✅ Turno reservado correctamente (EVE)");
+      }
+    } catch (error) {
+      console.error("❌ Error durante el proceso de reserva:", error);
+      alert("Hubo un error al crear tu turno. Intentalo nuevamente.");
+    } finally {
+      setLoading(false); // <- importante
     }
-
-  } catch (error) {
-    console.error("❌ Error durante el proceso de reserva:", error);
-    alert("Hubo un error al crear tu turno. Intentalo nuevamente.");
-  }  finally {
-    setLoading(false); // <- importante
-  }
-};
-
-
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -119,8 +121,8 @@ const handleSubmit = async (e) => {
           placeholder="Correo electrónico"
           required
           onChange={handleChange}
-           value={formData.email}
-           className="input"
+          value={formData.email}
+          className="input"
         />
         <input
           type="tel"
@@ -134,14 +136,9 @@ const handleSubmit = async (e) => {
         <p className="info-form">
           Usaremos tus datos para comunicarnos un día antes de tu reserva.
         </p>
-     <button type="submit" className="continue-button" disabled={loading}>
-  {loading ? (
-    <span className="spinner"></span>
-  ) : (
-    "Continuar a pago"
-  )}
-</button>
-
+        <button type="submit" className="continue-button" disabled={loading}>
+          {loading ? <span className="spinner"></span> : "Continuar a pago"}
+        </button>
       </form>
 
       <div className="container-info-turno">
