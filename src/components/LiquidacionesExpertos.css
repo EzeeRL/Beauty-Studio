@@ -1,0 +1,29 @@
+.liquidaciones-container {
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 800px;
+    margin: auto;
+}
+
+.tabla-liquidaciones {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-liquidaciones th,
+.tabla-liquidaciones td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.tabla-liquidaciones th {
+    background: linear-gradient(90deg, #C0A439, #E6C55A);
+    color: white;
+}
+
+.tabla-liquidaciones td {
+    font-size: 0.95rem;
+}

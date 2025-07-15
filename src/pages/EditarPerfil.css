@@ -1,0 +1,126 @@
+.editar-perfil {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-family: "Segoe UI", sans-serif;
+}
+
+.editar-perfil h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #333;
+}
+
+.editar-perfil label {
+    display: block;
+    margin-bottom: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.editar-perfil input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d4af37;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.3s ease;
+    font-size: 1rem;
+}
+
+.editar-perfil input:focus {
+    border-color: #e6c55a;
+    box-shadow: 0 0 5px rgba(230, 197, 90, 0.5);
+}
+
+.editar-perfil .botones {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.editar-perfil button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.editar-perfil button:first-child {
+    background: linear-gradient(90deg, #c0a439, #e6c55a);
+    color: white;
+    box-shadow: 0 3px 8px rgba(192, 164, 57, 0.4);
+}
+
+.editar-perfil button:last-child {
+    background: #f4f4f4;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.editar-perfil button:hover {
+    opacity: 0.9;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.modal-content button {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #c0a439, #e6c55a);
+    color: #fff;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Loader simple */
+.cargando {
+    text-align: center;
+    margin-top: 60px;
+    font-size: 1.1rem;
+    color: #555;
+}

@@ -6,6 +6,8 @@ import "./Datos.css";
 
 const Datos = () => {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
     useServicioStore();
 
@@ -26,7 +28,21 @@ const Datos = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newErrors = {};
+
+    if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio.";
+    if (!formData.email.trim()) newErrors.email = "El email es obligatorio.";
+    if (!formData.telefono.trim())
+      newErrors.telefono = "El teléfono es obligatorio.";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setLoading(true);
+
     try {
       console.log("📤 Enviando formulario con datos:", formData);
 
@@ -116,6 +132,7 @@ const Datos = () => {
           value={formData.nombre}
           className="input"
         />
+        {errors.nombre && <p className="error">{errors.nombre}</p>}
         <input
           type="email"
           name="email"
@@ -125,6 +142,7 @@ const Datos = () => {
           value={formData.email}
           className="input"
         />
+        {errors.email && <p className="error">{errors.email}</p>}
         <input
           type="tel"
           name="telefono"
@@ -134,6 +152,7 @@ const Datos = () => {
           className="input"
           onChange={handleChange}
         />
+        {errors.telefono && <p className="error">{errors.telefono}</p>}
         <p className="info-form">
           Usaremos tus datos para comunicarnos un día antes de tu reserva.
         </p>

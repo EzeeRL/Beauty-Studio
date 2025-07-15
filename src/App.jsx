@@ -20,6 +20,7 @@ import { Suspense } from "react";
 import LoadingSkeleton from "./pages/LoadingSkeleton";
 import ExpertAppointments from "./components/ExpertAppointments";
 import LoginE from "./pages/LoginExpert";
+import EditarPerfil from "./pages/EditarPerfil";
 
 function App() {
   const [services, setServices] = useState({});
@@ -29,38 +30,37 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
- 
-const handleSearchChange = (term) => {
-  setSearchTerm(term);
-  console.log("Buscando:", term);
+  const handleSearchChange = (term) => {
+    setSearchTerm(term);
+    console.log("Buscando:", term);
 
-  if (term.trim() === "") {
-    handleFilter(activeFilter);
-    return;
-  }
-
-  const filtered = {};
-
-  Object.entries(services).forEach(([category, items]) => {
-    const matched = items.filter((service) =>
-      service.name.toLowerCase().includes(term.toLowerCase())
-    );
-    if (matched.length > 0) {
-      filtered[category] = matched;
+    if (term.trim() === "") {
+      handleFilter(activeFilter);
+      return;
     }
-  });
 
-  setFilteredServices(filtered);
-  setOpenedSections(new Set(Object.keys(filtered)));
-};
+    const filtered = {};
 
+    Object.entries(services).forEach(([category, items]) => {
+      const matched = items.filter((service) =>
+        service.name.toLowerCase().includes(term.toLowerCase())
+      );
+      if (matched.length > 0) {
+        filtered[category] = matched;
+      }
+    });
 
+    setFilteredServices(filtered);
+    setOpenedSections(new Set(Object.keys(filtered)));
+  };
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("https://eve-back.vercel.app/services");
+        const response = await axios.get(
+          "https://eve-back.vercel.app/services"
+        );
         const data = response.data;
 
         const grouped = {};
@@ -74,10 +74,9 @@ const handleSearchChange = (term) => {
         setFilteredServices(grouped);
       } catch (error) {
         console.error("Error al cargar servicios:", error);
+      } finally {
+        setLoading(false);
       }
-      finally {
-      setLoading(false);
-    }
     };
 
     fetchServices();
@@ -115,36 +114,34 @@ const handleSearchChange = (term) => {
     }
   };
 
-  
   const Home = () => {
-  if (loading) return <LoadingSkeleton />;
+    if (loading) return <LoadingSkeleton />;
 
-  return (
-    <>
-      <SearchAndFilter
-        servicesData={services}
-        onFilter={handleFilter}
-        activeFilter={activeFilter}
-        onSearchChange={handleSearchChange}
-      />
+    return (
+      <>
+        <SearchAndFilter
+          servicesData={services}
+          onFilter={handleFilter}
+          activeFilter={activeFilter}
+          onSearchChange={handleSearchChange}
+        />
 
-      <div className="servicion-container">
-        {Object.entries(filteredServices).map(([section, items]) => (
-          <div key={section} id={section}>
-            <ServiceSection
-              title={section}
-              services={items}
-              isOpen={openedSections.has(section) || activeFilter !== "Todos"}
-              onToggle={() => toggleSection(section)}
-            />
-          </div>
-        ))}
-      </div>
-      <ComentarioList />
-    </>
-  );
-};
-
+        <div className="servicion-container">
+          {Object.entries(filteredServices).map(([section, items]) => (
+            <div key={section} id={section}>
+              <ServiceSection
+                title={section}
+                services={items}
+                isOpen={openedSections.has(section) || activeFilter !== "Todos"}
+                onToggle={() => toggleSection(section)}
+              />
+            </div>
+          ))}
+        </div>
+        <ComentarioList />
+      </>
+    );
+  };
 
   return (
     <Router>
@@ -153,7 +150,7 @@ const handleSearchChange = (term) => {
         <Header />
         <main className="main-content">
           <Routes>
-           <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home />} />
 
             <Route path="/Expertos/:serviceId" element={<Expertos />} />
             <Route path="/Fecha/:expertId" element={<Fecha />} />
@@ -163,8 +160,12 @@ const handleSearchChange = (term) => {
             <Route path="/login" element={<Login />} />
             <Route path="/ubicacion" element={<Ubicacion />} />
             <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/expertos/:expertId/turnos" element={<ExpertAppointments />} />
-<Route path="/login/expert" element={<LoginE />} />
+            <Route
+              path="/expertos/:expertId/turnos"
+              element={<ExpertAppointments />}
+            />
+            <Route path="/login/expert" element={<LoginE />} />
+            <Route path="/editar-perfil" element={<EditarPerfil />} />
           </Routes>
         </main>
       </div>
@@ -172,4 +173,4 @@ const handleSearchChange = (term) => {
   );
 }
 
-export default App; 
+export default App;

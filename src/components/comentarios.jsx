@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import "./comentarioCreate.css"
+import "./comentarioCreate.css";
 const ComentarioForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -30,7 +30,10 @@ const ComentarioForm = () => {
     }
 
     try {
-      const res = await axios.post("https://eve-back.vercel.app/comments", formData);
+      const res = await axios.post(
+        "https://eve-back.vercel.app/comments",
+        formData
+      );
       setMensaje("✅ Comentario enviado con éxito");
       setFormData({ name: "", content: "", rating: 5 });
     } catch (err) {
@@ -63,7 +66,12 @@ const ComentarioForm = () => {
       />
 
       <label>Calificación:</label>
-      <select name="rating" value={formData.rating} onChange={handleChange} style={styles.select}>
+      <select
+        name="rating"
+        value={formData.rating}
+        onChange={handleChange}
+        style={styles.select}
+      >
         {[1, 2, 3, 4, 5].map((r) => (
           <option key={r} value={r}>
             {r} ⭐
@@ -107,7 +115,7 @@ const styles = {
   },
   button: {
     padding: "10px",
-    background: "#C0A439",
+    background: "linear-gradient(90deg, #C0A439, #E6C55A)",
     color: "white",
     border: "none",
     borderRadius: "6px",

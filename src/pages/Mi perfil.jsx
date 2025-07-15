@@ -223,6 +223,7 @@ const Perfil = () => {
     <div className="perfil-container" style={{ marginLeft: "-10px" }}>
       <div className="perfil-card">
         <h2>Perfil de usuario</h2>
+
         <div className="perfil-datos">
           <p>
             <span>Nombre:</span> {userData?.name}
@@ -352,6 +353,24 @@ const Perfil = () => {
         ))
       )}
       <ComentarioForm></ComentarioForm>
+      <div style={{ marginTop: "20px", textAlign: "center" }}>
+        <button
+          onClick={() => navigate("/editar-perfil")}
+          style={{
+            background: "linear-gradient(90deg, #C0A439, #E6C55A)",
+            color: "white",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontWeight: "bold",
+            boxShadow: "0 3px 8px rgba(192, 164, 57, 0.4)",
+            transition: "all 0.3s ease",
+          }}
+        >
+          Editar Perfil
+        </button>
+      </div>
     </div>
   );
 };
