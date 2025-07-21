@@ -1,5 +1,3 @@
-
-
 .section {
   width: 100%;
   min-width: 330px;
@@ -63,6 +61,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -85,9 +84,10 @@
   -webkit-link: none;
   text-decoration: none;
   pointer-events: none;
-   text-decoration: none !important;
+  text-decoration: none !important;
   -webkit-text-fill-color: #c0a439 !important;
 }
+
 .details-service {
   text-align: left;
   font-size: 16px;
@@ -122,6 +122,13 @@
   .section-title {
     font-size: 18px;
   }
+}
+
+.section-title span {
+  color: #000 !important;
+  text-decoration: none !important;
+  -webkit-text-fill-color: #000 !important;
+  /* para iOS Safari */
 }
 
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ IMPORTANTE
+import { useNavigate } from "react-router-dom";
 import "./ServiceSection.css";
 import useServicioStore from "../store/servicioStore";
 import axios from "axios";
@@ -48,19 +48,38 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
     }
   }, [datosCliente, setDatosCliente]);
 
+  // Orden específico para la categoría "Manicuria"
+  const ordenDeseado = [
+    "Semipermanente con nivelación",
+    "Capping N'1/N'2",
+    "Capping N'3",
+    "Esculpidas en acrílico N1/2",
+    "Esculpidas en acrílico N3",
+    "Esculpidas en acrílico N4",
+    "Soft gel N1/2/3",
+    "Soft gel XXL N4/5/6",
+    "Semipermanente en pies ",
+  ];
+
+  const serviciosOrdenados =
+    title === "Manicuria"
+      ? ordenDeseado
+          .map((nombre) => services.find((s) => s.name === nombre))
+          .filter(Boolean)
+      : services; // mostrar todos normalmente si no es "Manicuria"
+
   return (
     <div className="section">
       <div className="container-section-titles">
         <button className="section-title" onClick={onToggle}>
           <span>{title}</span>
-          <span className="toggle-icon">{isOpen ? "−" : "+"}</span>{" "}
-          {/* Agregamos un icono indicador */}
+          <span className="toggle-icon">{isOpen ? "−" : "+"}</span>
         </button>
       </div>
 
       {isOpen && (
         <div className="services-container">
-          {services.map((service, idx) => {
+          {serviciosOrdenados.map((service, idx) => {
             const isExpanded = expandedDescriptions[service.id];
             return (
               <div
@@ -72,12 +91,16 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 <p className="details-service">{service.duration} min</p>
                 <p className="details-service">${service.price}</p>
 
-             <p className={`description ${isExpanded ? "expanded" : "collapsed"}`}>
-  {isExpanded
-    ? service.description
-    : service.description.slice(0, 158) + (service.description.length > 200 ? "..." : "")}
-</p>
-
+                <p
+                  className={`description ${
+                    isExpanded ? "expanded" : "collapsed"
+                  }`}
+                >
+                  {isExpanded
+                    ? service.description
+                    : service.description.slice(0, 158) +
+                      (service.description.length > 200 ? "..." : "")}
+                </p>
 
                 {service.description.length > 100 && (
                   <button

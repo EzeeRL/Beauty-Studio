@@ -22,22 +22,23 @@ const Fecha = () => {
   const [ocupados, setOcupados] = useState({});
   const [horariosExpert, setHorariosExpert] = useState([]);
 
-useEffect(() => {
-  const fetchHorariosExpert = async () => {
-    try {
-      const res = await axios.get(`https://eve-back.vercel.app/hours/expert/${expertId}`);
-      console.log("🕒 Horarios del experto:", res.data);
-      setHorariosExpert(res.data);
-    } catch (error) {
-      console.error("❌ Error al obtener horarios del experto:", error);
+  useEffect(() => {
+    const fetchHorariosExpert = async () => {
+      try {
+        const res = await axios.get(
+          `https://eve-back.vercel.app/hours/expert/${expertId}`
+        );
+        console.log("🕒 Horarios del experto:", res.data);
+        setHorariosExpert(res.data);
+      } catch (error) {
+        console.error("❌ Error al obtener horarios del experto:", error);
+      }
+    };
+
+    if (expertId) {
+      fetchHorariosExpert();
     }
-  };
-
-  if (expertId) {
-    fetchHorariosExpert();
-  }
-}, [expertId]);
-
+  }, [expertId]);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -45,12 +46,11 @@ useEffect(() => {
         const res = await axios.get("https://eve-back.vercel.app/appointments");
         const allAppointments = res.data.appointments;
 
-const turnosDelExperto = allAppointments.filter(
-  (appt) =>
-    appt.expertId === parseInt(expertId) &&
-    (appt.payStatus === "paid" || appt.payStatus === "partial")
-);
-
+        const turnosDelExperto = allAppointments.filter(
+          (appt) =>
+            appt.expertId === parseInt(expertId) &&
+            (appt.payStatus === "paid" || appt.payStatus === "partial")
+        );
 
         const ocupadosPorFecha = {};
 
@@ -58,17 +58,16 @@ const turnosDelExperto = allAppointments.filter(
           const date = parseISO(appt.date);
           const fechaKey = format(date, "yyyy-MM-dd");
 
-const bloques = [];
-const duracion = appt.tiempo;
+          const bloques = [];
+          const duracion = appt.tiempo;
 
-let bloqueInicio = new Date(date);
-const bloqueFin = addMinutes(bloqueInicio, duracion);
+          let bloqueInicio = new Date(date);
+          const bloqueFin = addMinutes(bloqueInicio, duracion);
 
-while (bloqueInicio < bloqueFin) {
-  bloques.push(format(bloqueInicio, "HH:mm"));
-  bloqueInicio = addMinutes(bloqueInicio, 30); // Paso de 30 mins para marcar ocupación parcial
-}
-
+          while (bloqueInicio < bloqueFin) {
+            bloques.push(format(bloqueInicio, "HH:mm"));
+            bloqueInicio = addMinutes(bloqueInicio, 30); // Paso de 30 mins para marcar ocupación parcial
+          }
 
           if (!ocupadosPorFecha[fechaKey]) {
             ocupadosPorFecha[fechaKey] = [];
@@ -99,7 +98,7 @@ while (bloqueInicio < bloqueFin) {
   const horariosOcupadosHoy =
     (selectedDate && ocupados[format(selectedDate, "yyyy-MM-dd")]) || [];
 
-/* const getHorariosDisponiblesParaFecha = () => {
+  /* const getHorariosDisponiblesParaFecha = () => {
   if (!selectedDate) return [];
 
   const diaSeleccionado = format(selectedDate, "yyyy-MM-dd");
@@ -163,65 +162,63 @@ const intervaloMinutos = expertoTurnoCorto
   return horarios;
 }; */
 
-const getHorariosDisponiblesParaFecha = () => {
-  if (!selectedDate) return [];
+  const getHorariosDisponiblesParaFecha = () => {
+    if (!selectedDate) return [];
 
-  const diaSeleccionado = format(selectedDate, "yyyy-MM-dd");
-  const horario = horariosExpert.find((h) => h.day === diaSeleccionado);
+    const diaSeleccionado = format(selectedDate, "yyyy-MM-dd");
+    const horario = horariosExpert.find((h) => h.day === diaSeleccionado);
 
-  // Si no hay horario definido para ese día → no mostrar nada
-  if (!horario) return [];
+    // Si no hay horario definido para ese día → no mostrar nada
+    if (!horario) return [];
 
-  const expertoTurnoCorto = expertId === "3" || expertId === "6";
-  const intervaloMinutos = expertoTurnoCorto
-    ? 20
-    : servicio?.category?.toLowerCase() === "manicuria"
-    ? 90
-    : servicio?.category?.toLowerCase() === "pestañas"
-    ? 120
-    : 60;
+    const expertoTurnoCorto = expertId === "3" || expertId === "6";
+    const intervaloMinutos = expertoTurnoCorto
+      ? 20
+      : servicio?.category?.toLowerCase() === "manicuria"
+      ? 90
+      : servicio?.category?.toLowerCase() === "pestañas"
+      ? 120
+      : 60;
 
-  const horaInicio = parseInt(horario.openTime.split(":")[0], 10);
-  const horaFin = parseInt(horario.closeTime.split(":")[0], 10);
+    const horaInicio = parseInt(horario.openTime.split(":")[0], 10);
+    const horaFin = parseInt(horario.closeTime.split(":")[0], 10);
 
-  const horarios = [];
+    const horarios = [];
 
-  let actual = new Date();
-  actual.setHours(horaInicio, 0, 0, 0);
+    let actual = new Date();
+    actual.setHours(horaInicio, 0, 0, 0);
 
-  const fin = new Date();
-  fin.setHours(horaFin, 0, 0, 0);
+    const fin = new Date();
+    fin.setHours(horaFin, 0, 0, 0);
 
-  const duracionServicio = servicio?.tiempo || intervaloMinutos;
+    const duracionServicio = servicio?.tiempo || intervaloMinutos;
 
-  while (addMinutes(actual, duracionServicio) <= fin) {
-    const horaInicioStr = format(actual, "HH:mm");
+    while (addMinutes(actual, duracionServicio) <= fin) {
+      const horaInicioStr = format(actual, "HH:mm");
 
-    let bloqueTemp = new Date(actual);
-    const finTurno = addMinutes(bloqueTemp, duracionServicio);
+      let bloqueTemp = new Date(actual);
+      const finTurno = addMinutes(bloqueTemp, duracionServicio);
 
-    let bloqueLibre = true;
-    while (bloqueTemp < finTurno) {
-      const bloqueStr = format(bloqueTemp, "HH:mm");
-      if (horariosOcupadosHoy.includes(bloqueStr)) {
-        bloqueLibre = false;
-        break;
+      let bloqueLibre = true;
+      while (bloqueTemp < finTurno) {
+        const bloqueStr = format(bloqueTemp, "HH:mm");
+        if (horariosOcupadosHoy.includes(bloqueStr)) {
+          bloqueLibre = false;
+          break;
+        }
+        bloqueTemp = addMinutes(bloqueTemp, 30);
       }
-      bloqueTemp = addMinutes(bloqueTemp, 30);
+
+      if (bloqueLibre) {
+        horarios.push(horaInicioStr);
+        actual = addMinutes(actual, intervaloMinutos);
+      } else {
+        actual = addMinutes(actual, expertoTurnoCorto ? 20 : 30);
+      }
     }
 
-    if (bloqueLibre) {
-      horarios.push(horaInicioStr);
-      actual = addMinutes(actual, intervaloMinutos);
-    } else {
-      actual = addMinutes(actual, expertoTurnoCorto ? 20 : 30);
-    }
-  }
-
-  return horarios;
-};
-
-
+    return horarios;
+  };
 
   return (
     <div className="fecha-container">
@@ -242,24 +239,27 @@ const getHorariosDisponiblesParaFecha = () => {
         <>
           <label className="label">Selecciona un horario:</label>
           <div className="horarios-grid">
-          {getHorariosDisponiblesParaFecha().length === 0 ? (
-  <p>Ya no hay turnos disponibles en esta fecha.</p>
-) : (
-  getHorariosDisponiblesParaFecha().map((hora) => {
-    const ocupado = horariosOcupadosHoy.includes(hora);
-    return (
-      <button
-        key={hora}
-        className={`horario-btn ${selectedTime === hora ? "activo" : ""}`}
-        onClick={() => setSelectedTime(hora)}
-        disabled={ocupado}
-      >
-        {hora} {ocupado ? "⛔" : ""}
-      </button>
-    );
-  })
-)}
-
+            {getHorariosDisponiblesParaFecha().length === 0 ? (
+              <p>
+                Ya no hay turnos disponibles en esta fecha con {experto?.name}.
+              </p>
+            ) : (
+              getHorariosDisponiblesParaFecha().map((hora) => {
+                const ocupado = horariosOcupadosHoy.includes(hora);
+                return (
+                  <button
+                    key={hora}
+                    className={`horario-btn ${
+                      selectedTime === hora ? "activo" : ""
+                    }`}
+                    onClick={() => setSelectedTime(hora)}
+                    disabled={ocupado}
+                  >
+                    {hora} {ocupado ? "⛔" : ""}
+                  </button>
+                );
+              })
+            )}
           </div>
         </>
       )}
@@ -277,4 +277,3 @@ const getHorariosDisponiblesParaFecha = () => {
 };
 
 export default Fecha;
-
