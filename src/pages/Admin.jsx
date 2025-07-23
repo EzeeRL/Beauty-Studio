@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { format, compareAsc, differenceInHours } from "date-fns";
+
 import {
   PieChart,
   Pie,
@@ -261,7 +262,10 @@ Indicar qué se hacen. No se aceptan cambios ese día.
       `Hola ${userName}, te recordamos tu turno el ${dia} a las ${hora}.`;
 
     const msg = encodeURIComponent(rawMessage);
-    const phoneClean = phone.replace(/\D/g, "");
+    let phoneClean = phone.replace(/\D/g, "");
+    if (!phoneClean.startsWith("54")) {
+      phoneClean = "549" + phoneClean;
+    }
     const url = `https://wa.me/${phoneClean}?text=${msg}`;
     window.open(url, "_blank");
 

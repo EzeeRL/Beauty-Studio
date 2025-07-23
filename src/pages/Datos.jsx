@@ -3,6 +3,8 @@ import useServicioStore from "../store/servicioStore";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Datos.css";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const Datos = () => {
   const navigate = useNavigate();
@@ -14,7 +16,11 @@ const Datos = () => {
   const [formData, setFormData] = useState({
     nombre: datosCliente?.nombre || "",
     email: datosCliente?.email || "",
-    telefono: datosCliente?.telefono || "",
+    telefono: datosCliente?.telefono
+      ? datosCliente.telefono.startsWith("549")
+        ? datosCliente.telefono
+        : `549${datosCliente.telefono}`
+      : "549",
   });
   const [loading, setLoading] = useState(false);
 
@@ -143,15 +149,41 @@ const Datos = () => {
           className="input"
         />
         {errors.email && <p className="error">{errors.email}</p>}
-        <input
-          type="tel"
-          name="telefono"
-          placeholder="Teléfono"
-          required
-          value={formData.telefono}
+        <PhoneInput
+          country={"ar"}
           className="input"
-          onChange={handleChange}
+          preferredCountries={["ar"]}
+          value={formData.telefono}
+          onChange={(value) =>
+            setFormData((prev) => ({
+              ...prev,
+              telefono: value,
+            }))
+          }
+          inputProps={{
+            name: "telefono",
+            required: true,
+          }}
+          masks={{ ar: "(...) ....-......" }}
+          // 👈 esta línea fuerza (911) XXX-XXXX
+          inputStyle={{
+            width: "100%",
+            height: "40px",
+            fontSize: "16px",
+            paddingLeft: "48px",
+            letterSpacing: "1px",
+            background: "transparent",
+            border: "none",
+
+            paddingBottom: "15px",
+          }}
+          buttonStyle={{
+            border: "none",
+            background: "transparent",
+          }}
+          containerStyle={{ marginBottom: "1rem" }}
         />
+
         {errors.telefono && <p className="error">{errors.telefono}</p>}
         <p className="info-form">
           Usaremos tus datos para comunicarnos un día antes de tu reserva.
