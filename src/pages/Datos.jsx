@@ -13,15 +13,23 @@ const Datos = () => {
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
     useServicioStore();
 
-  const [formData, setFormData] = useState({
-    nombre: datosCliente?.nombre || "",
-    email: datosCliente?.email || "",
-    telefono: datosCliente?.telefono
-      ? datosCliente.telefono.startsWith("549")
-        ? datosCliente.telefono
-        : `549${datosCliente.telefono}`
-      : "549",
-  });
+const procesarTelefono = (tel) => {
+  if (!tel) return "549";
+  const limpio = tel.replace(/\D/g, ""); // solo dígitos
+
+  if (limpio.length === 12) {
+    return limpio.slice(3); // quitar primeros 3
+  }
+
+  return limpio.startsWith("549") ? limpio : `549${limpio}`;
+};
+
+const [formData, setFormData] = useState({
+  nombre: datosCliente?.nombre || "",
+  email: datosCliente?.email || "",
+  telefono: procesarTelefono(datosCliente?.telefono),
+});
+
   const [loading, setLoading] = useState(false);
 
   /*   useEffect(() => {
@@ -163,8 +171,9 @@ const Datos = () => {
           inputProps={{
             name: "telefono",
             required: true,
+            placeholder: "Ej: 54 (911) 6359-2430",
           }}
-          masks={{ ar: "(...) ....-......" }}
+          masks={{ ar: "(...) ....-...." }}
           // 👈 esta línea fuerza (911) XXX-XXXX
           inputStyle={{
             width: "100%",
