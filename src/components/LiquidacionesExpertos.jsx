@@ -28,24 +28,32 @@ const LiquidacionesExpertos = ({ appointments }) => {
           fecha <= finMes
         );
       })
-      .forEach((appt) => {
-        const nombre = appt.Expert.name;
-        const precio = appt.Service.price;
+    .forEach((appt) => {
+  const { id, name } = appt.Expert;
+  const precio = appt.Service.price;
 
-        pagos[nombre] = (pagos[nombre] || 0) + precio;
-      });
+  if (!pagos[id]) {
+    pagos[id] = { nombre: name, total: 0 };
+  }
 
-    return Object.entries(pagos).map(([nombre, total]) => {
-      const esJefa = nombre.toLowerCase().includes("evelyn duarte");
-      const aPagar = esJefa ? 0 : total * 0.5;
+  pagos[id].total += precio;
+});
 
-      return {
-        experto: nombre,
-        totalGenerado: total,
-        aPagar,
-        esJefa,
-      };
-    });
+return Object.entries(pagos).map(([id, { nombre, total }]) => {
+  const esJefa = nombre.toLowerCase().includes("evelyn duarte");
+  let porcentaje = 0.8;
+
+  if (esJefa) porcentaje = 0;
+  else if (parseInt(id) === 4) porcentaje = 0.7;
+
+  return {
+    experto: nombre,
+    totalGenerado: total,
+    aPagar: total * porcentaje,
+    esJefa,
+  };
+});
+
   }, [appointments]);
 
   const totalMes = pagosExpertos.reduce((acc, exp) => {
@@ -53,7 +61,7 @@ const LiquidacionesExpertos = ({ appointments }) => {
     // Si NO es jefa, la empresa gana el otro 50%
     const gananciaEmpresa = exp.esJefa
       ? exp.totalGenerado
-      : exp.totalGenerado * 0.5;
+      : exp.totalGenerado * 0.2;
     return acc + gananciaEmpresa;
   }, 0);
 

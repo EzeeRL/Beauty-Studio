@@ -21,6 +21,7 @@ import LoadingSkeleton from "./pages/LoadingSkeleton";
 import ExpertAppointments from "./components/ExpertAppointments";
 import LoginE from "./pages/LoginExpert";
 import EditarPerfil from "./pages/EditarPerfil";
+import RutaProtegida from "./utils/RutaProtegida";
 
 function App() {
   const [services, setServices] = useState({});
@@ -159,7 +160,14 @@ function App() {
             <Route path="/Perfil" element={<Perfil />} />
             <Route path="/login" element={<Login />} />
             <Route path="/ubicacion" element={<Ubicacion />} />
-            <Route path="/admin" element={<AdminPanel />} />
+            <Route
+  path="/admin"
+  element={
+    <RutaProtegida>
+      <AdminPanel />
+    </RutaProtegida>
+  }
+/>
             <Route
               path="/expertos/:expertId/turnos"
               element={<ExpertAppointments />}
