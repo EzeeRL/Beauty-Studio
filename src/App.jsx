@@ -22,6 +22,7 @@ import ExpertAppointments from "./components/ExpertAppointments";
 import LoginE from "./pages/LoginExpert";
 import EditarPerfil from "./pages/EditarPerfil";
 import RutaProtegida from "./utils/RutaProtegida";
+import Cursos from "./pages/Cursos";
 
 function App() {
   const [services, setServices] = useState({});
@@ -160,14 +161,15 @@ function App() {
             <Route path="/Perfil" element={<Perfil />} />
             <Route path="/login" element={<Login />} />
             <Route path="/ubicacion" element={<Ubicacion />} />
+            <Route path="/Cursos" element={<Cursos />} />
             <Route
-  path="/admin"
-  element={
-    <RutaProtegida>
-      <AdminPanel />
-    </RutaProtegida>
-  }
-/>
+              path="/admin"
+              element={
+                <RutaProtegida>
+                  <AdminPanel />
+                </RutaProtegida>
+              }
+            />
             <Route
               path="/expertos/:expertId/turnos"
               element={<ExpertAppointments />}

@@ -5,12 +5,12 @@ const SearchAndFilter = ({
   servicesData,
   onFilter,
   activeFilter,
-  onSearchChange
+  onSearchChange,
 }) => {
   const filtersContainerRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const categories = ["Todos", ...Object.keys(servicesData)];
+  const categories = ["Todos", "Cursos", ...Object.keys(servicesData)];
 
   const handleFilterClick = (filter) => {
     onFilter(filter);
@@ -52,15 +52,27 @@ const SearchAndFilter = ({
       </div>
 
       <div className="filters-container" ref={filtersContainerRef}>
-        {categories.map((category) => (
-          <button
-            key={category}
-            className={`filter-card ${activeFilter === category ? "selected" : ""}`}
-            onClick={() => handleFilterClick(category)}
-          >
-            {category}
-          </button>
-        ))}
+        {categories.map((category) =>
+          category === "Cursos" ? (
+            <button
+              key={category}
+              className="filter-card cursos-button"
+              onClick={() => (window.location.href = "/Cursos")}
+            >
+              Cursos
+            </button>
+          ) : (
+            <button
+              key={category}
+              className={`filter-card ${
+                activeFilter === category ? "selected" : ""
+              }`}
+              onClick={() => handleFilterClick(category)}
+            >
+              {category}
+            </button>
+          )
+        )}
       </div>
     </div>
   );

@@ -57,6 +57,7 @@ const AdminPanel = () => {
       })
       .catch((err) => console.error("Error cargando turnos:", err));
   }, []);
+  console.log(appointments);
 
   const COLORS = [
     "#0088FE", // azul

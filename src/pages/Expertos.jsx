@@ -30,25 +30,26 @@ const Expertos = () => {
   };
 
   const handleOmitirEleccion = () => {
-  const nombresRestringidos = ["Soft gel N1/2/3", "Soft gel XXL N4/5/6"];
+    const nombresRestringidos = ["Soft gel N1/2/3", "Soft gel XXL N4/5/6"];
 
-  // Filtrar los expertos válidos como ya hacés en el .filter()
-  const expertosDisponibles = expertos.filter((expert) => {
-    const ocultarExpert4 = nombresRestringidos.includes(servicio?.name) && expert.id === 4;
-    const coincideCategoria = expert.specialty === servicio?.category;
-    return coincideCategoria && !ocultarExpert4;
-  });
+    // Filtrar los expertos válidos como ya hacés en el .filter()
+    const expertosDisponibles = expertos.filter((expert) => {
+      const ocultarExpert4 =
+        nombresRestringidos.includes(servicio?.name) && expert.id === 4;
+      const coincideCategoria = expert.specialty === servicio?.category;
+      return coincideCategoria && !ocultarExpert4;
+    });
 
-  if (expertosDisponibles.length > 0) {
-    const aleatorio = Math.floor(Math.random() * expertosDisponibles.length);
-    const expertoSeleccionado = expertosDisponibles[aleatorio];
+    if (expertosDisponibles.length > 0) {
+      const aleatorio = Math.floor(Math.random() * expertosDisponibles.length);
+      const expertoSeleccionado = expertosDisponibles[aleatorio];
 
-    setExperto(expertoSeleccionado);
-    navigate(`/fecha/${expertoSeleccionado.id}`);
-  } else {
-    alert("No hay profesionales disponibles para este servicio.");
-  }
-};
+      setExperto(expertoSeleccionado);
+      navigate(`/fecha/${expertoSeleccionado.id}`);
+    } else {
+      alert("No hay profesionales disponibles para este servicio.");
+    }
+  };
 
   return (
     <div className="container-general-expertos">
@@ -58,23 +59,34 @@ const Expertos = () => {
 
       <div className="experts-container">
         {expertos
-.filter((expert) => {
-  const nombresRestringidos = ["Soft gel N1/2/3", "Soft gel XXL N4/5/6"];
-  const ocultarExpert4 = nombresRestringidos.includes(servicio?.name) && expert.id === 4;
-  const coincideCategoria = expert.specialty === servicio?.category;
-  return coincideCategoria && !ocultarExpert4;
-})
+          .filter((expert) => {
+            const nombresRestringidos = [
+              "Soft gel N1/2/3",
+              "Soft gel XXL N4/5/6",
+            ];
+            const ocultarExpert4 =
+              nombresRestringidos.includes(servicio?.name) && expert.id === 4;
+            const coincideCategoria = expert.specialty === servicio?.category;
+            return coincideCategoria && !ocultarExpert4;
+          })
 
           .map((expert) => (
             <div key={expert.id} className="expert-card">
-              <img
-                src={expert.imageUrl}
-                alt={expert.name}
-                className="img-experto"
-              />
+              {expert.imageUrl ? (
+                <img
+                  src={expert.imageUrl}
+                  alt={expert.name}
+                  className="img-experto"
+                />
+              ) : (
+                <div className="img-placeholder">
+                  {expert.name.charAt(0).toUpperCase()}
+                </div>
+              )}
+
               <h2>{expert.name}</h2>
               <p className="text-especialidad">{expert.specialty}</p>
-               <p className="text-especialidad">{expert.description}</p>
+              <p className="text-especialidad">{expert.description}</p>
               <button
                 onClick={() => handleSelectExpert(expert)}
                 className="select-button"
@@ -91,10 +103,9 @@ const Expertos = () => {
           Podés simplemente saltear este paso y te asignaremos un profesional
           nosotros mismos
         </p>
-       <button className="button-option" onClick={handleOmitirEleccion}>
-  Omitir Elección
-</button>
-
+        <button className="button-option" onClick={handleOmitirEleccion}>
+          Omitir Elección
+        </button>
       </div>
     </div>
   );

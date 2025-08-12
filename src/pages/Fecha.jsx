@@ -180,13 +180,18 @@ const intervaloMinutos = expertoTurnoCorto
       ? 120
       : 60;
 
-    const horaInicio = parseInt(horario.openTime.split(":")[0], 10);
+    //const horaInicio = parseInt(horario.openTime.split(":")[0], 10);
+    const [horaInicio, minutosInicio] = horario.openTime
+      .split(":")
+      .map((v) => parseInt(v, 10));
+
     const horaFin = parseInt(horario.closeTime.split(":")[0], 10);
 
     const horarios = [];
 
     let actual = new Date();
-    actual.setHours(horaInicio, 0, 0, 0);
+    //actual.setHours(horaInicio, 0, 0, 0);
+    actual.setHours(horaInicio, minutosInicio, 0, 0);
 
     const fin = new Date();
     fin.setHours(horaFin, 0, 0, 0);

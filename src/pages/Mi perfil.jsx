@@ -127,7 +127,7 @@ const Perfil = () => {
   };
 
   // Calcula horarios disponibles para el experto según su horario y lo ocupado
-  const getHorariosDisponiblesParaFecha = () => {
+  /*   const getHorariosDisponiblesParaFecha = () => {
     if (!selectedDate) return [];
 
     const diaSeleccionado = format(selectedDate, "yyyy-MM-dd");
@@ -156,6 +156,70 @@ const Perfil = () => {
 
     // Filtrar los horarios ocupados
     return disponibles.filter((hora) => !ocupadosHoy.includes(hora));
+  }; */
+
+  const getHorariosDisponiblesParaFecha = () => {
+    if (!selectedDate || !editingId) return [];
+
+    const appt = appointments.find((a) => a.id === editingId);
+    if (!appt) return [];
+
+    const diaSeleccionado = format(selectedDate, "yyyy-MM-dd");
+    const horario = horariosExpert.find((h) => h.day === diaSeleccionado);
+
+    if (!horario) return [];
+
+    const expertId = appt.Expert.id;
+    const servicio = appt.Service;
+
+    const expertoTurnoCorto = expertId === 3 || expertId === 6;
+    const intervaloMinutos = expertoTurnoCorto
+      ? 20
+      : servicio?.category?.toLowerCase() === "manicuria"
+      ? 90
+      : servicio?.category?.toLowerCase() === "pestañas"
+      ? 120
+      : 60;
+
+    const horaInicio = parseInt(horario.openTime.split(":")[0], 10);
+    const horaFin = parseInt(horario.closeTime.split(":")[0], 10);
+
+    const horarios = [];
+
+    let actual = new Date();
+    actual.setHours(horaInicio, 0, 0, 0);
+
+    const fin = new Date();
+    fin.setHours(horaFin, 0, 0, 0);
+
+    const duracionServicio = servicio?.tiempo || intervaloMinutos;
+    const horariosOcupadosHoy = ocupados[diaSeleccionado] || [];
+
+    while (addMinutes(actual, duracionServicio) <= fin) {
+      const horaInicioStr = format(actual, "HH:mm");
+
+      let bloqueTemp = new Date(actual);
+      const finTurno = addMinutes(bloqueTemp, duracionServicio);
+
+      let bloqueLibre = true;
+      while (bloqueTemp < finTurno) {
+        const bloqueStr = format(bloqueTemp, "HH:mm");
+        if (horariosOcupadosHoy.includes(bloqueStr)) {
+          bloqueLibre = false;
+          break;
+        }
+        bloqueTemp = addMinutes(bloqueTemp, 30);
+      }
+
+      if (bloqueLibre) {
+        horarios.push(horaInicioStr);
+        actual = addMinutes(actual, intervaloMinutos);
+      } else {
+        actual = addMinutes(actual, expertoTurnoCorto ? 20 : 30);
+      }
+    }
+
+    return horarios;
   };
 
   const handleSave = async () => {

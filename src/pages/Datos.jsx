@@ -13,22 +13,22 @@ const Datos = () => {
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
     useServicioStore();
 
-const procesarTelefono = (tel) => {
-  if (!tel) return "549";
-  const limpio = tel.replace(/\D/g, ""); // solo dígitos
+  const procesarTelefono = (tel) => {
+    if (!tel) return "549";
+    const limpio = tel.replace(/\D/g, ""); // solo dígitos
 
-  if (limpio.length === 12) {
-    return limpio.slice(3); // quitar primeros 3
-  }
+    if (limpio.length === 12) {
+      return limpio.slice(3); // quitar primeros 3
+    }
 
-  return limpio.startsWith("549") ? limpio : `549${limpio}`;
-};
+    return limpio.startsWith("549") ? limpio : `549${limpio}`;
+  };
 
-const [formData, setFormData] = useState({
-  nombre: datosCliente?.nombre || "",
-  email: datosCliente?.email || "",
-  telefono: procesarTelefono(datosCliente?.telefono),
-});
+  const [formData, setFormData] = useState({
+    nombre: datosCliente?.nombre || "",
+    email: datosCliente?.email || "",
+    telefono: procesarTelefono(datosCliente?.telefono),
+  });
 
   const [loading, setLoading] = useState(false);
 
@@ -43,11 +43,14 @@ const [formData, setFormData] = useState({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-
+    const telefonoLimpio = formData.telefono.replace(/\D/g, "");
     if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio.";
     if (!formData.email.trim()) newErrors.email = "El email es obligatorio.";
     if (!formData.telefono.trim())
       newErrors.telefono = "El teléfono es obligatorio.";
+    if (telefonoLimpio.length < 13) {
+      newErrors.telefono = "El teléfono debe tener al menos 10 números.";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
