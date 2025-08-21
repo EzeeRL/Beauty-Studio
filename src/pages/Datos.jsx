@@ -9,6 +9,7 @@ import "react-phone-input-2/lib/style.css";
 const Datos = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const [modalError, setModalError] = useState(null);
 
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
     useServicioStore();
@@ -108,6 +109,9 @@ const Datos = () => {
             metadata: {
               appointmentId,
               appointmentId2,
+              expertId: experto.id,
+              appointmentDate: fecha.toISOString(), // objeto Date a string ISO
+              tiempo: servicio.duration || 60,
             },
           }
         );
@@ -122,9 +126,15 @@ const Datos = () => {
       }
     } catch (error) {
       console.error("❌ Error durante el proceso de reserva:", error);
-      alert("Hubo un error al crear tu turno. Intentalo nuevamente.");
+      if (error.response?.status === 400) {
+        // 🚨 Mostrar modal con mensaje de backend
+        setModalError(error.response.data.error);
+      } else {
+        // Error genérico
+        setModalError("Hubo un error al crear tu turno. Intentalo nuevamente.");
+      }
     } finally {
-      setLoading(false); // <- importante
+      setLoading(false);
     }
   };
 
@@ -213,6 +223,16 @@ const Datos = () => {
           <p>Profesional: {experto?.name}</p>
         </div>
       </div>
+      {/* 🆕 Modal de error */}
+      {modalError && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Error en la reserva</h3>
+            <p>{modalError}</p>
+            <button onClick={() => setModalError(null)}>Cerrar</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

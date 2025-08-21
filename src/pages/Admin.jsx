@@ -20,6 +20,7 @@ import GroupedTurnosTable from "../components/GroupedTurnosTable";
 import HorarioManager from "../components/HorarioManager";
 import LiquidacionesExpertos from "../components/LiquidacionesExpertos";
 import GraficoGananciasTiempo from "../components/GraficoGananciasTiempo";
+import TurnosImageGenerator from "../components/imagenGenerador";
 
 const AdminPanel = () => {
   const [appointments, setAppointments] = useState([]);
@@ -500,6 +501,7 @@ Indicar qué se hacen. No se aceptan cambios ese día.
               setShowDeleteModal={setShowDeleteModal}
             />
           </section>
+          <TurnosImageGenerator></TurnosImageGenerator>
         </>
       )}
 
