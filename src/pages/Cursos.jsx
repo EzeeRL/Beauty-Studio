@@ -10,7 +10,6 @@ const cursos = [
     whatsappMsg:
       "Hola, estoy interesada en el curso presencial de manicura. ¿Podrías darme más información?",
     features: [
-      ["📆 Duración", "Clases intensivas semanales"],
       [
         "🏫 Modalidad",
         "Clases presenciales + Material digital online y fisico",
@@ -32,8 +31,10 @@ const cursos = [
     whatsappMsg:
       "Hola, estoy interesada en el curso de extensión de pestañas. ¿Me podrías brindar más info?",
     features: [
-      ["📆 Duración", "6 semanas con prácticas supervisadas"],
-      ["🏫 Modalidad", "Clases presenciales + acceso a videos tutoriales"],
+      [
+        "🏫 Modalidad",
+        "Clases presenciales + acceso a videos tutoriales proximamente",
+      ],
       ["📄 Certificado", "Certificación incluida"],
       ["🛠️ Kit inicial", "Incluye materiales básicos para prácticas"],
       ["💬 Soporte", "Acompañamiento personalizado post curso"],

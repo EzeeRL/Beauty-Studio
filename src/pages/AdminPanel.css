@@ -8,7 +8,9 @@
   margin-top: -130px;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   text-align: center;
   margin-bottom: 1rem;
 }
@@ -17,7 +19,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
- 
+
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   overflow: hidden;
@@ -27,7 +29,8 @@ thead {
   background-color: #f0eae1;
 }
 
-th, td {
+th,
+td {
   padding: 12px 16px;
   text-align: left;
   border-bottom: 1px solid #eee;
@@ -37,6 +40,21 @@ th, td {
 tbody tr.upcoming {
   background-color: #fff9e6;
   font-weight: 600;
+}
+
+.container-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  /* background-color: red; */
+}
+
+.container-buttons-actions {
+  display: flex;
+  flex-direction: column;
+  /* background-color: red; */
 }
 
 /* button {
@@ -60,17 +78,17 @@ tbody tr.upcoming {
 
 .save {
   background-color: #4caf50;
-  color: white;
+  color: #fff;
 }
 
 .cancel {
   background-color: #f44336;
-  color: white;
+  color: #fff;
 }
 
 .whatsapp {
   background-color: #25D366;
-  color: white;
+  color: #fff;
 }
 
 [disabled] {
@@ -85,13 +103,34 @@ tbody tr.upcoming {
   color: #666;
 }
 
-.calendar-section, .config-section, .chart-section {
+.calendar-section,
+.config-section,
+.chart-section {
   margin: 2rem 0;
+}
+
+@media screen and (max-width: 768px) {
+  .all-appointments {
+    margin: 0 auto;
+    width: 100%;
+    /* background-color: red; */
+  }
+
+  .calendar-section {
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 
 /* 📱 Mobile */
 @media (max-width: 768px) {
-  table, thead, tbody, th, td, tr {
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
     display: block;
   }
 
@@ -104,7 +143,7 @@ tbody tr.upcoming {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
-    background-color: white;
+    background-color: #fff;
   }
 
   td {
@@ -131,7 +170,7 @@ tbody tr.upcoming {
   background-color: #fff;
   padding: 1.5rem;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   margin-bottom: 2rem;
 }
 
@@ -164,7 +203,7 @@ tbody tr.upcoming {
   border: 1px solid #ccc;
   font-size: 1rem;
   background-color: #f8f4f2;
-  box-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .btn-save {
@@ -176,7 +215,7 @@ tbody tr.upcoming {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .btn-save:hover {
@@ -212,7 +251,7 @@ tbody tr.upcoming {
   padding: 1rem;
   user-select: none;
   margin-bottom: 1.5rem;
-  
+
 }
 
 /* Cabecera (mes y botones) */
@@ -285,7 +324,7 @@ tbody tr.upcoming {
 /* Día seleccionado */
 .admin-panel .react-calendar__tile--active {
   background: #b9a613;
-  color: white;
+  color: #fff;
   font-weight: 700;
   border-radius: 12px;
 }
@@ -309,10 +348,11 @@ tbody tr.upcoming {
   box-shadow: 0 0 0 2px #000000;
 }
 
-.admin-panel .calendar-section > .react-calendar {
+.admin-panel .calendar-section>.react-calendar {
   margin-left: auto;
   margin-right: auto;
-  display: block; /* Asegura que el margin auto funcione */
+  display: block;
+  /* Asegura que el margin auto funcione */
 }
 
 .select-wrapper {
@@ -323,7 +363,8 @@ tbody tr.upcoming {
 
 .custom-select {
   width: 100%;
-  padding: 10px 40px 10px 12px; /* Espacio para la flecha */
+  padding: 10px 40px 10px 12px;
+  /* Espacio para la flecha */
   border: 1px solid #ccc;
   border-radius: 12px;
   font-size: 16px;
@@ -331,13 +372,14 @@ tbody tr.upcoming {
   color: #333;
   font-family: inherit;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  
+
   /* Esto quita el estilo nativo del select */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  background-image: none; /* Importante para algunos navegadores */
+  background-image: none;
+  /* Importante para algunos navegadores */
 }
 
 .custom-select:focus {
@@ -367,7 +409,8 @@ tbody tr.upcoming {
 
 .custom-select {
   width: 100%;
-  padding: 10px 40px 10px 12px; /* Espacio para flecha */
+  padding: 10px 40px 10px 12px;
+  /* Espacio para flecha */
   border: 1px solid #ccc;
   border-radius: 12px;
   font-size: 16px;
@@ -422,6 +465,7 @@ tbody tr.upcoming {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -459,5 +503,5 @@ tbody tr.upcoming {
 
 .nav-btn.active {
   background-color: #c0a439;
-  color: white;
+  color: #fff;
 }

@@ -353,7 +353,7 @@ Indicar qué se hacen. No se aceptan cambios ese día.
                     app.payStatus
                   )}
                 </td>
-                <td data-label="Acciones">
+                <td data-label="Acciones" className="container-actions">
                   {editingId === app.id ? (
                     <>
                       <button className="save" onClick={() => saveEdit(app.id)}>
@@ -370,6 +370,16 @@ Indicar qué se hacen. No se aceptan cambios ese día.
                         onClick={() => startEdit(app.id, app.payStatus)}
                       >
                         ✏️ Editar
+                      </button>
+
+                      <button
+                        className="btn delete"
+                        onClick={() => {
+                          setAppointmentToDelete(app.id);
+                          setShowDeleteModal(true);
+                        }}
+                      >
+                        🗑️ Eliminar
                       </button>
 
                       {upcoming && (
@@ -395,16 +405,6 @@ Indicar qué se hacen. No se aceptan cambios ese día.
                           📤 Recordatorio enviado
                         </span>
                       )}
-
-                      <button
-                        className="btn delete"
-                        onClick={() => {
-                          setAppointmentToDelete(app.id);
-                          setShowDeleteModal(true);
-                        }}
-                      >
-                        🗑️ Eliminar
-                      </button>
                     </>
                   )}
                 </td>

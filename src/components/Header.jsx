@@ -7,6 +7,14 @@ const Header = () => {
   // const { servicio, experto, fecha, datosCliente } = useServicioStore();
   const userId = localStorage.getItem("userId");
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [admin, setAdmin] = useState(false);
+  const userId2 = localStorage.getItem("userId");
+
+  useEffect(() => {
+    if (userId2 == "3" || userId2 == "1") {
+      setAdmin(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -111,6 +119,15 @@ const Header = () => {
           >
             Cursos
           </a>
+          {admin == true ? (
+            <a
+              href="/admin"
+              className="menu-item"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Administración
+            </a>
+          ) : null}
           {userId ? (
             <a
               href="/Perfil"
