@@ -61,12 +61,28 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
     "Semipermanente en pies ",
   ];
 
+  const ordenPestanas = [
+    "Clasicas",
+    "Efecto rímel",
+    "V. Brasilero (2D)",
+    "V. Hawaiano (3D)",
+    "V. Hollywood (4D)",
+    "V. Argentino (5D/6D)",
+    "Capping mega 6D",
+    "V. Ef foxy (2D/3D)",
+    "Spire Lashes",
+  ];
+
   const serviciosOrdenados =
     title === "Manicuria"
       ? ordenDeseado
           .map((nombre) => services.find((s) => s.name === nombre))
           .filter(Boolean)
-      : services; // mostrar todos normalmente si no es "Manicuria"
+      : title === "Pestañas"
+      ? ordenPestanas
+          .map((nombre) => services.find((s) => s.name === nombre))
+          .filter(Boolean)
+      : services;
 
   return (
     <div className="section">

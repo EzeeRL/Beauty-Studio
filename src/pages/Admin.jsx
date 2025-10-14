@@ -21,6 +21,7 @@ import HorarioManager from "../components/HorarioManager";
 import LiquidacionesExpertos from "../components/LiquidacionesExpertos";
 import GraficoGananciasTiempo from "../components/GraficoGananciasTiempo";
 import TurnosImageGenerator from "../components/imagenGenerador";
+import AddProductForm from "../components/Products";
 
 const AdminPanel = () => {
   const [appointments, setAppointments] = useState([]);
@@ -708,6 +709,7 @@ Indicar qué se hacen. No se aceptan cambios ese día.
         <>
           <ServiceManager />
           <ExpertManager />
+          <AddProductForm></AddProductForm>
         </>
       )}
       {activeTab === "coment" && (

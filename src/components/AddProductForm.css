@@ -1,0 +1,120 @@
+.admin-product-container {
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    width: 90%;
+    max-width: 1000px;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.admin-product-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #4a3c3a;
+    margin-bottom: 1.5rem;
+}
+
+.admin-product-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.admin-product-form input {
+    padding: 0.7rem;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    transition: 0.3s;
+}
+
+.admin-product-form input:focus {
+    border-color: #bca08b;
+    outline: none;
+}
+
+.admin-product-btn {
+    grid-column: 1 / -1;
+    background: #bca08b;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.admin-product-btn:hover {
+    background: #a48a77;
+}
+
+.admin-product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.admin-product-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.admin-product-info {
+    padding: 1rem;
+}
+
+.admin-product-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #4a3c3a;
+}
+
+.admin-product-info p {
+    margin: 0.2rem 0;
+    color: #555;
+}
+
+.admin-product-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.8rem;
+}
+
+.admin-product-actions button {
+    flex: 1;
+    margin: 0 0.3rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #bca08b;
+    color: white;
+    transition: 0.3s;
+}
+
+.admin-product-actions button:hover {
+    background: #a48a77;
+}
+
+.admin-product-actions .delete {
+    background: #d17272;
+}
+
+.admin-product-actions .delete:hover {
+    background: #b45b5b;
+}
