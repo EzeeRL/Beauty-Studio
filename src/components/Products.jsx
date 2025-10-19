@@ -3,6 +3,7 @@ import "./AddProductForm.css";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
+  const [ventas, setVentas] = useState([]); // 👈 nuevo estado para las ventas
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -12,10 +13,19 @@ const AdminProducts = () => {
   });
   const [editingId, setEditingId] = useState(null);
 
+  // Cargar productos
   useEffect(() => {
     fetch("https://eve-back.vercel.app/products")
       .then((res) => res.json())
       .then(setProducts)
+      .catch(console.error);
+  }, []);
+
+  // 👇 Cargar ventas
+  useEffect(() => {
+    fetch("https://eve-back.vercel.app/products/ventas")
+      .then((res) => res.json())
+      .then(setVentas)
       .catch(console.error);
   }, []);
 
@@ -71,6 +81,7 @@ const AdminProducts = () => {
     <div className="admin-product-container">
       <h2 className="admin-product-title">Gestión de Productos</h2>
 
+      {/* Formulario */}
       <form className="admin-product-form" onSubmit={handleSubmit}>
         <input
           name="name"
@@ -113,6 +124,7 @@ const AdminProducts = () => {
         </button>
       </form>
 
+      {/* Listado de productos */}
       <div className="admin-product-list">
         {products.map((product) => (
           <div key={product.id} className="admin-product-card">
@@ -135,6 +147,46 @@ const AdminProducts = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* 👇 Tabla de ventas */}
+      <div className="admin-sales-section">
+        <h2 className="admin-sales-title">Historial de Ventas</h2>
+        {ventas.length === 0 ? (
+          <p>No hay ventas registradas aún.</p>
+        ) : (
+          <table className="admin-sales-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Comprador</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ventas.map((v) => (
+                <tr key={v.id}>
+                  <td>{v.id}</td>
+                  <td>{v.product?.name || "—"}</td>
+                  <td>{v.user?.name || "—"}</td>
+                  <td>{v.quantity}</td>
+                  <td>${v.totalPrice.toFixed(2)}</td>
+                  <td>{v.paymentStatus}</td>
+                  <td>
+                    {new Date(v.createdAt).toLocaleString("es-AR", {
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

@@ -1,13 +1,26 @@
+/* 🎯 Estilos generales (por defecto) */
 .admin-product-container {
     background: #f9f9f9;
     padding: 2rem;
     border-radius: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    width: 90%;
+    width: 700px;
     max-width: 1000px;
     margin: 2rem auto;
     text-align: center;
 }
+
+/* 📱 Mobile: pantallas de hasta 768px */
+@media (max-width: 768px) {
+    .admin-product-container {
+        width: 85%;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: none;
+    }
+}
+
+
 
 .admin-product-title {
     font-size: 1.8rem;

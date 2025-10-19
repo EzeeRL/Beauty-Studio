@@ -6,6 +6,7 @@ import "react-calendar/dist/Calendar.css";
 import "./perfil.css";
 import ComentarioForm from "../components/comentarios";
 import { useNavigate } from "react-router-dom";
+import UserCompras from "../components/comprasUser";
 
 const Perfil = () => {
   const [appointments, setAppointments] = useState([]);
@@ -435,6 +436,7 @@ const Perfil = () => {
           Editar Perfil
         </button>
       </div>
+      <UserCompras></UserCompras>
     </div>
   );
 };

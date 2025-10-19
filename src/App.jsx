@@ -23,6 +23,7 @@ import LoginE from "./pages/LoginExpert";
 import EditarPerfil from "./pages/EditarPerfil";
 import RutaProtegida from "./utils/RutaProtegida";
 import Cursos from "./pages/Cursos";
+import ComprarProductos from "./pages/ProductosUser";
 
 function App() {
   const [services, setServices] = useState({});
@@ -162,6 +163,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/ubicacion" element={<Ubicacion />} />
             <Route path="/Cursos" element={<Cursos />} />
+            <Route path="/Productos" element={<ComprarProductos />} />
             <Route
               path="/admin"
               element={

@@ -457,6 +457,13 @@ Indicar qué se hacen. No se aceptan cambios ese día.
         >
           💬
         </button>
+        <button
+          onClick={() => setActiveTab("products")}
+          className={activeTab === "products" ? "nav-btn active" : "nav-btn"}
+          title="Productos"
+        >
+          💳
+        </button>
       </nav>
 
       {/* Sección: Turnos */}
@@ -709,7 +716,6 @@ Indicar qué se hacen. No se aceptan cambios ese día.
         <>
           <ServiceManager />
           <ExpertManager />
-          <AddProductForm></AddProductForm>
         </>
       )}
       {activeTab === "coment" && (
@@ -812,6 +818,11 @@ Indicar qué se hacen. No se aceptan cambios ese día.
           }}
         >
           ✅ Horario guardado correctamente
+        </div>
+      )}
+      {activeTab === "products" && (
+        <div>
+          <AddProductForm></AddProductForm>
         </div>
       )}
     </div>
