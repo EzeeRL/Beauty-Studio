@@ -108,16 +108,11 @@ const ComprarProductos = () => {
       const preferenceRes = await axios.post(
         "https://eve-back.vercel.app/products/preference",
         {
-          title: productoSeleccionado.name,
-          quantity: 1,
-          unit_price: productoSeleccionado.price,
-          metadata: {
-            productId: productoSeleccionado.id,
-            userId,
-          },
+          productId: productoSeleccionado.id,
+          quantity: 1, // o podrías dejar que el usuario elija
+          buyerId: userId,
         }
       );
-
       const { init_point } = preferenceRes.data;
       console.log("🔗 Redirigiendo a MercadoPago:", init_point);
       window.location.href = init_point;

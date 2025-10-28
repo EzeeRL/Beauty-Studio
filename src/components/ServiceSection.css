@@ -1,134 +1,181 @@
+/* --- GENERAL SECTION --- */
 .section {
   width: 100%;
-  min-width: 330px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0px auto;
+  background: #fafafa;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 0.4s ease;
 }
 
+/* --- TITLE HEADER --- */
 .container-section-titles {
-  width: 100%;
-  transform: translateY(60px);
-  /* margin-top: 90px; */
-  /* background-color: red; */
-  z-index: 100;
+  background: linear-gradient(135deg, #ffffff, #f2f2f2);
+  border-bottom: 1px solid #eee;
 }
 
 .section-title {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  padding: 1.2rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 22px;
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  background-color: #fff;
-  border: 1px solid #c0a439;
-  margin-top: 15px;
-  transition: transform 0.2s ease;
-  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.section-title:hover {
+  background-color: #f8f8f8;
+  color: #111;
+}
+
+.toggle-icon {
+  font-size: 1.6rem;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.section-title:hover .toggle-icon {
+  transform: scale(1.2);
+}
+
+/* --- SERVICES CONTAINER --- */
 .services-container {
-  padding: 10px;
-  width: 100%;
-  overflow: hidden;
-  margin-top: 50px;
-
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1.8rem;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
+/* --- SERVICE CARD --- */
 .service-card {
-  padding: 10px;
-  margin-top: 20px;
-  border-radius: 10px;
-  border: 1px solid #c0a439;
-  background-color: #fff;
-  transition: 0.3s;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  padding: 1.4rem;
+  text-align: center;
+  transform: translateY(15px);
   opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.4s ease-out forwards;
-  z-index: 10;
+  animation: slideUp 0.4s forwards;
 }
 
 .service-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-@keyframes fadeInUp {
+.service-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.details-service {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0.2rem 0;
+}
+
+/* --- DESCRIPTION --- */
+.description {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 0.8rem;
+  line-height: 1.4rem;
+  transition: all 0.3s ease;
+}
+
+.description.collapsed {
+  max-height: 3.8rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.toggle-description {
+  background: none;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  transition: color 0.2s ease;
+}
+
+.toggle-description:hover {
+  color: #000000;
+}
+
+/* --- BUTTONS --- */
+.container-button {
+  margin-top: 1rem;
+}
+
+.book-button {
+  background: linear-gradient(45deg, #daba08, #e4c54d, #ecd473);
+  border: none;
+  color: #fff;
+  padding: 0.7rem 1.4rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(234, 192, 42, 0.3);
+  transition: all 0.3s ease;
+}
+
+.book-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(234, 192, 42, 0.4);
+}
+
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
   }
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
     transform: translateY(0);
+    opacity: 1;
   }
 }
 
-.container-button {
-  display: flex;
-  justify-content: end;
-}
-
-
-.service-name {
-  text-align: left;
-  color: #c0a439;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -webkit-text-size-adjust: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-link: none;
-  text-decoration: none;
-  pointer-events: none;
-  text-decoration: none !important;
-  -webkit-text-fill-color: #c0a439 !important;
-}
-
-.details-service {
-  text-align: left;
-  font-size: 16px;
-  color: #3a3939;
-}
-
-.description {
-  text-align: left;
-}
-
-.toggle-description {
-  font-size: 16px;
-  border: none;
-  background: transparent;
-}
-
-.book-button {
-  font-size: 17px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #f2ece8;
-  color: #000;
-  cursor: pointer;
-}
-
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  .section {
-    width: 95%;
-  }
-
   .section-title {
-    font-size: 18px;
+    font-size: 1.2rem;
   }
-}
 
-.section-title span {
-  color: #000 !important;
-  text-decoration: none !important;
-  -webkit-text-fill-color: #000 !important;
+  .services-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
 
-  /* para iOS Safari */
+  .service-card {
+    padding: 1rem;
+  }
 }

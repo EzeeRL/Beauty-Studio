@@ -28,7 +28,7 @@ const AdminProducts = () => {
       .then(setVentas)
       .catch(console.error);
   }, []);
-
+  console.log(ventas);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -171,13 +171,15 @@ const AdminProducts = () => {
               {ventas.map((v) => (
                 <tr key={v.id}>
                   <td>{v.id}</td>
-                  <td>{v.product?.name || "—"}</td>
-                  <td>{v.user?.name || "—"}</td>
+                  <td>{v.Product?.name || "—"}</td>
+                  <td>{v.User?.name || "—"}</td>
                   <td>{v.quantity}</td>
                   <td>${v.totalPrice.toFixed(2)}</td>
                   <td>{v.paymentStatus}</td>
                   <td>
-                    {new Date(v.createdAt).toLocaleString("es-AR", {
+                    {new Date(
+                      new Date(v.createdAt).getTime() - 3 * 60 * 60 * 1000
+                    ).toLocaleString("es-AR", {
                       dateStyle: "short",
                       timeStyle: "short",
                     })}

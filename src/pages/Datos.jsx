@@ -13,7 +13,7 @@ const Datos = () => {
 
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
     useServicioStore();
-
+  console.log("💾 localStorage userId:", localStorage.getItem("userId"));
   const procesarTelefono = (tel) => {
     if (!tel) return "549";
     const limpio = tel.replace(/\D/g, ""); // solo dígitos

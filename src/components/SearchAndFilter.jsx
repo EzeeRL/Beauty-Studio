@@ -38,7 +38,14 @@ const SearchAndFilter = ({
 
   return (
     <div className="search-and-filter-container">
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginBottom: "10px",
+          justifyContent: "center",
+        }}
+      >
         <input
           type="text"
           className="search-input"

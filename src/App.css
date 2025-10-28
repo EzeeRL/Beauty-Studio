@@ -20,8 +20,10 @@ body {
   border-radius: 50%;
   z-index: -1;
   pointer-events: none;
-  filter: blur(80px); /* este es el efecto estilo Figma */
-  opacity: 0.7; /* opcional: para hacerlo más sutil */
+  filter: blur(80px);
+  /* este es el efecto estilo Figma */
+  opacity: 0.7;
+  /* opcional: para hacerlo más sutil */
 }
 
 /* src/App.css */
@@ -58,8 +60,8 @@ body {
   }
 }
 
-.servicion-container{
-  margin-top: 40px;
+.servicion-container {
+  margin-top: 120px;
 }
 
 .skeleton-container {
@@ -115,9 +117,11 @@ body {
   0% {
     background-color: #f0f0f0;
   }
+
   50% {
     background-color: #e0e0e0;
   }
+
   100% {
     background-color: #f0f0f0;
   }

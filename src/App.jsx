@@ -142,6 +142,7 @@ function App() {
           ))}
         </div>
         <ComentarioList />
+        {/* <FooterMediosPago /> */}
       </>
     );
   };
@@ -155,6 +156,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
 
+            {/* <Route path="/Home" element={<Home />} /> */}
             <Route path="/Expertos/:serviceId" element={<Expertos />} />
             <Route path="/Fecha/:expertId" element={<Fecha />} />
             <Route path="/Datos" element={<Datos />} />

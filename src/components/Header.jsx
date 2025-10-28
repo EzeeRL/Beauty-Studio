@@ -31,7 +31,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem("userId");
     setIsMenuOpen(false);
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   return (
