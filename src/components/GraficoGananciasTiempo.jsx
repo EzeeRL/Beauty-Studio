@@ -24,9 +24,15 @@ const GraficoGananciasDiarias = ({ appointments }) => {
           isAfter(new Date(appt.date), hace21Dias)
       )
       .forEach((appt) => {
+        // --- VALIDACIONES PARA EVITAR ERRORES ---
+        if (!appt.Service || !appt.Expert) return;
+
         const fecha = format(parseISO(appt.date), "yyyy-MM-dd");
-        const precio = appt.Service.price;
-        const esJefa = appt.Expert.name.toLowerCase().includes("evelyn duarte");
+
+        const precio = appt.Service?.price ?? 0;
+        const nombreExpert = appt.Expert?.name?.toLowerCase() ?? "";
+
+        const esJefa = nombreExpert.includes("evelyn duarte");
         const ganancia = esJefa ? precio : precio * 0.5;
 
         agrupado[fecha] = (agrupado[fecha] || 0) + ganancia;

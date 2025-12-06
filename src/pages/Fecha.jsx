@@ -225,14 +225,9 @@ const intervaloMinutos = expertoTurnoCorto
     return horarios;
   };
 
-  const userId = Number(localStorage.getItem("userId"));
-  const esAutorizado = [
-    1, 2, 3, 4, 5, 7, 10, 45, 47, 82, 84, 85, 89, 124, 125, 126, 128, 90, 162,
-    163, 164, 165, 166, 168, 169, 170, 49, 173, 167, 3, 178, 180, 11, 104, 185,
-    191, 192, 195, 196, 197, 198, 201, 205, 207, 208, 211, 210, 212, 214, 217,
-    221, 223, 226, 227, 228, 229, 44, 187, 232,
-  ].includes(userId);
-  console.log("🔑 Usuario autorizado para diciembre:", esAutorizado);
+  /* const userId = Number(localStorage.getItem("userId"));
+  const esAutorizado = [1].includes(userId);
+  console.log("🔑 Usuario autorizado para diciembre:", esAutorizado); */
   return (
     <div className="fecha-container">
       <h2>Selecciona una fecha para {experto?.name}</h2>
@@ -246,10 +241,10 @@ const intervaloMinutos = expertoTurnoCorto
         tileClassName={({ date }) =>
           isSameDay(date, new Date()) ? "today-day" : ""
         }
-        tileDisabled={({ date }) => {
+        /*    tileDisabled={({ date }) => {
           const mes = date.getMonth(); // enero=0 ... diciembre=11
           return mes === 11 && !esAutorizado;
-        }}
+        }} */
       />
 
       {selectedDate && (

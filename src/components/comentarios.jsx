@@ -44,7 +44,7 @@ const ComentarioForm = () => {
 
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
-      <h2>Dejá tu comentario</h2>
+      <h2>Dejános tu comentario</h2>
 
       <input
         type="text"

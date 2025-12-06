@@ -117,6 +117,16 @@ function App() {
     }
   };
 
+  const categoryOrder = [
+    "Manicuria",
+    "Pestañas",
+    "Cosmetologia",
+    "Depilación definitiva mujer",
+    "Depilación definitiva hombres",
+    "Lash lifting y cejas",
+    "Adicionales",
+  ];
+
   const Home = () => {
     if (loading) return <LoadingSkeleton />;
 
@@ -130,19 +140,25 @@ function App() {
         />
 
         <div className="servicion-container">
-          {Object.entries(filteredServices).map(([section, items]) => (
-            <div key={section} id={section}>
-              <ServiceSection
-                title={section}
-                services={items}
-                isOpen={openedSections.has(section) || activeFilter !== "Todos"}
-                onToggle={() => toggleSection(section)}
-              />
-            </div>
-          ))}
+          {Object.entries(filteredServices)
+            .sort(([a], [b]) => {
+              return categoryOrder.indexOf(a) - categoryOrder.indexOf(b);
+            })
+            .map(([section, items]) => (
+              <div key={section} id={section}>
+                <ServiceSection
+                  title={section}
+                  services={items}
+                  isOpen={
+                    openedSections.has(section) || activeFilter !== "Todos"
+                  }
+                  onToggle={() => toggleSection(section)}
+                />
+              </div>
+            ))}
         </div>
+
         <ComentarioList />
-        {/* <FooterMediosPago /> */}
       </>
     );
   };

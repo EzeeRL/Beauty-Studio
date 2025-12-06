@@ -284,6 +284,7 @@ const Perfil = () => {
   const turnosParciales = appointments.filter(
     (appt) => appt.payStatus === "partial" || appt.payStatus === "paid"
   );
+  const ultimos3Turnos = turnosParciales.slice(-3);
   return (
     <div className="perfil-container" style={{ marginLeft: "-10px" }}>
       <div className="perfil-card">
@@ -302,12 +303,12 @@ const Perfil = () => {
         </div>
       </div>
 
+      <ComentarioForm></ComentarioForm>
       <h2 className="turnos-title">Mis turnos</h2>
-
-      {turnosParciales.length === 0 ? (
+      {ultimos3Turnos.length === 0 ? (
         <p className="mensaje-vacio">No tenés turnos reservados aun.</p>
       ) : (
-        turnosParciales.map((appt) => (
+        ultimos3Turnos.map((appt) => (
           <div key={appt.id} className="turno-card">
             <p>
               <span>Servicio:</span> {appt.Service.name}
@@ -417,7 +418,7 @@ const Perfil = () => {
           </div>
         ))
       )}
-      <ComentarioForm></ComentarioForm>
+
       <div style={{ marginTop: "20px", textAlign: "center" }}>
         <button
           onClick={() => navigate("/editar-perfil")}

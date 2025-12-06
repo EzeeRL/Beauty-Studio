@@ -10,7 +10,13 @@ const SearchAndFilter = ({
   const filtersContainerRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const categories = ["Todos", "Cursos", ...Object.keys(servicesData)];
+  const categories = [
+    "Todos",
+    "Productos",
+    "Cursos",
+
+    ...Object.keys(servicesData),
+  ];
 
   const handleFilterClick = (filter) => {
     onFilter(filter);
@@ -67,6 +73,14 @@ const SearchAndFilter = ({
               onClick={() => (window.location.href = "/Cursos")}
             >
               Cursos
+            </button>
+          ) : category === "Productos" ? (
+            <button
+              key={category}
+              className="filter-card cursos-button"
+              onClick={() => (window.location.href = "/Productos")}
+            >
+              Productos
             </button>
           ) : (
             <button

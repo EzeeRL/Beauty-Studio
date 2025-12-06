@@ -73,7 +73,8 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
     "Spire Lashes",
   ];
 
-  const serviciosOrdenados =
+  // 1. Obtener servicios en el orden deseado
+  const serviciosEnOrden =
     title === "Manicuria"
       ? ordenDeseado
           .map((nombre) => services.find((s) => s.name === nombre))
@@ -82,13 +83,25 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
       ? ordenPestanas
           .map((nombre) => services.find((s) => s.name === nombre))
           .filter(Boolean)
+      : [];
+
+  // 2. Agregar los servicios que NO están en la lista de orden
+  const serviciosNoListados =
+    title === "Manicuria"
+      ? services.filter((s) => !ordenDeseado.includes(s.name))
+      : title === "Pestañas"
+      ? services.filter((s) => !ordenPestanas.includes(s.name))
       : services;
+
+  // 3. Combinar ambos → primero en orden, luego los demás
+  const serviciosOrdenados = [...serviciosEnOrden, ...serviciosNoListados];
 
   return (
     <div className="section">
       <div className="container-section-titles">
         <button className="section-title" onClick={onToggle}>
           <span>{title}</span>
+
           <span className="toggle-icon">{isOpen ? "−" : "+"}</span>
         </button>
       </div>

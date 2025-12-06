@@ -28,32 +28,36 @@ const LiquidacionesExpertos = ({ appointments }) => {
           fecha <= finMes
         );
       })
-    .forEach((appt) => {
-  const { id, name } = appt.Expert;
-  const precio = appt.Service.price;
+      .forEach((appt) => {
+        // Si falta el Expert o el Service → ignoramos ese turno
+        if (!appt.Expert || !appt.Service) return;
 
-  if (!pagos[id]) {
-    pagos[id] = { nombre: name, total: 0 };
-  }
+        const { id, name } = appt.Expert;
 
-  pagos[id].total += precio;
-});
+        // Evita error si price es null o undefined
+        const precio = appt.Service?.price ?? 0;
 
-return Object.entries(pagos).map(([id, { nombre, total }]) => {
-  const esJefa = nombre.toLowerCase().includes("evelyn duarte");
-  let porcentaje = 0.8;
+        if (!pagos[id]) {
+          pagos[id] = { nombre: name, total: 0 };
+        }
 
-  if (esJefa) porcentaje = 0;
-  else if (parseInt(id) === 4) porcentaje = 0.7;
+        pagos[id].total += precio;
+      });
 
-  return {
-    experto: nombre,
-    totalGenerado: total,
-    aPagar: total * porcentaje,
-    esJefa,
-  };
-});
+    return Object.entries(pagos).map(([id, { nombre, total }]) => {
+      const esJefa = nombre.toLowerCase().includes("evelyn duarte");
+      let porcentaje = 0.8;
 
+      if (esJefa) porcentaje = 0;
+      else if (parseInt(id) === 4) porcentaje = 0.7;
+
+      return {
+        experto: nombre,
+        totalGenerado: total,
+        aPagar: total * porcentaje,
+        esJefa,
+      };
+    });
   }, [appointments]);
 
   const totalMes = pagosExpertos.reduce((acc, exp) => {

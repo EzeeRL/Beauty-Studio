@@ -30,7 +30,7 @@ const Expertos = () => {
   };
 
   const handleOmitirEleccion = () => {
-    const nombresRestringidos = ["Soft gel N1/2/3", "Soft gel XXL N4/5/6"];
+    const nombresRestringidos = ["Soft gel", "Soft gel XL"];
 
     // Filtrar los expertos válidos como ya hacés en el .filter()
     const expertosDisponibles = expertos.filter((expert) => {
@@ -60,10 +60,7 @@ const Expertos = () => {
       <div className="experts-container">
         {expertos
           .filter((expert) => {
-            const nombresRestringidos = [
-              "Soft gel N1/2/3",
-              "Soft gel XXL N4/5/6",
-            ];
+            const nombresRestringidos = ["Soft gel", "Soft gel XL"];
             const ocultarExpert4 =
               nombresRestringidos.includes(servicio?.name) && expert.id === 4;
             const coincideCategoria = expert.specialty === servicio?.category;

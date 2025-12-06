@@ -157,6 +157,7 @@ const ComprarProductos = () => {
                 <h3>{p.name}</h3>
                 <p>{p.description}</p>
                 <span>${p.price}</span>
+                <button className="detalle">Ver</button>
               </div>
             ))
           ) : (
@@ -185,7 +186,10 @@ const ComprarProductos = () => {
           <h2>{productoSeleccionado.name}</h2>
           <p>{productoSeleccionado.description}</p>
           <h3>${productoSeleccionado.price}</h3>
-
+          <div className="retiro-local">
+            <span className="retiro-icon"></span>
+            <p>📍 Este producto se retira en el local.</p>
+          </div>
           <form onSubmit={handleCompra} className="comprar-form">
             <input
               type="text"

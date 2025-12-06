@@ -98,13 +98,13 @@ const Header = () => {
           >
             Inicio
           </a>
-          {/*        <a
-            href="#payment-methods"
+          <a
+            href="/productos"
             className="menu-item"
             onClick={() => setIsMenuOpen(false)}
           >
-            Métodos de Pago
-          </a> */}
+            Productos
+          </a>
           <a
             href="/ubicacion"
             className="menu-item"

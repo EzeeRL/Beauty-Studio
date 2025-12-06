@@ -186,3 +186,35 @@
     cursor: pointer;
     margin-top: 1rem;
 }
+
+.detalle {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #bca08b, #cfb8a8);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.detalle:hover {
+    background: linear-gradient(135deg, #9e7556, #c4a289);
+
+    box-shadow: 0 4px 10px rgba(255, 105, 180, 0.4);
+}
+
+.detalle:active {
+    transform: scale(0.96);
+}
+
+.comprar-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 15px;
+}

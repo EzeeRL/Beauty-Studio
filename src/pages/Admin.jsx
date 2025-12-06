@@ -83,11 +83,17 @@ const AdminPanel = () => {
     const acumulador = {};
 
     appointments
-      .filter((app) => app.payStatus === "paid" || app.payStatus === "partial")
+      .filter(
+        (app) =>
+          (app.payStatus === "paid" || app.payStatus === "partial") &&
+          app.Service &&
+          app.Expert
+      )
       .forEach((app) => {
         const key =
           modoGrafico === "servicio" ? app.Expert.specialty : app.Expert.name;
-        const price = app.Service.price;
+
+        const price = app.Service?.price ?? 0;
         acumulador[key] = (acumulador[key] || 0) + price;
       });
 
@@ -189,17 +195,16 @@ RECORDATORIO DE TURNO - MANICURÍA
 📅 Día: ${dia}
 🕒 Hora: ${hora}
 
-⚠️ Confirmar asistencia 72hs antes o se cancela el turno.
-Indicar qué se hacen y el diseño para darles el precio. No se aceptan cambios el mismo día si es más complejo
-
+⚠️ Confirmar asistencia 48hs antes.
+Mandar diseño para darles un precio. No se aceptan cambios en el día si es más complejo. 
 🚫 Sin acompañantes.
 
 💵 Se pierde la seña si:
-* No se confirma el turno o la inasistencia con 72hs de antelación.
-* Llegan tarde (+10 min).
-* Si llegan tarde y quieren ser atendidas (solo si es posible), deberán abonar el total del servicio.
+•⁠  ⁠No se avisa la inasistencia 48hs antes.
+•⁠  ⁠Llegan tarde (pasado +10 min).
+•⁠  ⁠Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar el total del servicio. (La seña está PERDIDA)
 
-Gracias 💕 ¡Nos vemos pronto ${userName}! ✨`,
+Gracias 💕 ¡Nos vemos pronto! ${userName}! ✨`,
 
       pestañas: `
 RECORDATORIO DE TURNO - PESTAÑAS
@@ -208,17 +213,14 @@ RECORDATORIO DE TURNO - PESTAÑAS
 🕒 Hora: ${hora}
 
 ⚠️ Asistir sin maquillaje ni cremas. (Pierden garantía)
-Confirmar asistencia 72hs antes o se cancela.
-Indicar qué se hacen. No se aceptan cambios ese día.
-
+Confirmar asistencia 48hs antes.
 🚫 Sin acompañantes.
 
 💵 Se pierde la seña si:
-* No se confirma o se avisa con menos de 72hs.
-* Llegan tarde (+10min).
-* Si llegan tarde y quieren ser atendidas (si hay disponibilidad), abonan el total.
-
-¡Gracias! 💕 Nos vemos pronto ${userName} ✨`,
+•⁠  ⁠No se avisa la inasistencia 48 hs antes.
+•⁠  ⁠Llegan tarde (+10min).
+•⁠ Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar el total del servicio. (La seña está PERDIDA)
+¡Gracias! 💕 Nos vemos pronto ✨${userName} ✨`,
 
       cejas: `
 RECORDATORIO DE TURNO - CEJAS
@@ -227,16 +229,13 @@ RECORDATORIO DE TURNO - CEJAS
 🕒 Hora: ${hora}
 
 ⚠️ Asistir sin maquillaje ni cremas. (Pierden garantía)
-Confirmar asistencia 72hs antes o se cancela.
-Indicar qué se hacen. No se aceptan cambios ese día.
-
+Confirmar asistencia 48hs antes.
 🚫 Sin acompañantes.
 
 💵 Se pierde la seña si:
-* No se confirma o se avisa con menos de 72hs.
-* Llegan tarde (+10min).
-* Si llegan tarde y quieren ser atendidas (si hay disponibilidad), abonan el total.
-
+•⁠  ⁠No se avisa la inasistencia 48 hs antes.
+•⁠  ⁠Llegan tarde (+10min).
+•⁠ Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar el total del servicio. (La seña está PERDIDA)
 ¡Gracias! 💕 Nos vemos pronto ${userName} ✨`,
 
       cosmetologia: `
@@ -246,15 +245,13 @@ RECORDATORIO DE TURNO - COSMETOLOGÍA
 🕒 Hora: ${hora}
 
 ⚠️ Asistir sin maquillaje ni cremas. En lo posible evitar la depilación facial 48 horas antes.
-Confirmar asistencia 72hs antes o se cancela.
-Indicar qué se hacen. No se aceptan cambios ese día.
-
+Confirmar asistencia 48hs antes.
 🚫 Sin acompañantes.
 
 💵 Se pierde la seña si:
-* No se confirma o se avisa con menos de 72hs.
-* Llegan tarde (+10min).
-* Si llegan tarde y quieren ser atendidas (si hay disponibilidad), abonan el total.
+•⁠  ⁠No se avisa la inasistencia 48 hs antes.
+•⁠  ⁠Llegan tarde (+10min).
+•⁠  ⁠Si llegan tarde y quieren ser atendidas (si hay disponibilidad), abonan el total.
 
 ¡Gracias! 💕 Nos vemos pronto ${userName} ✨`,
     };
