@@ -332,11 +332,11 @@ Confirmar asistencia 48hs antes.
                   {format(new Date(app.date), "dd/MM/yyyy")}
                 </td>
                 <td data-label="Hora">{format(new Date(app.date), "HH:mm")}</td>
-                <td data-label="Servicio">{app.Service.name}</td>
+                <td data-label="Servicio">{app.Service?.name ?? "—"}</td>
                 <td data-label="Experto">{app.Expert.name}</td>
                 <td data-label="Usuario">{app.User.name}</td>
                 <td data-label="Teléfono">{app.User.phone}</td>
-                <td data-label="Precio">${app.Service.price}</td>
+                <td data-label="Precio">${app.Service?.price ?? "—"}</td>
                 <td data-label="Estado">
                   {editingId === app.id ? (
                     <select
