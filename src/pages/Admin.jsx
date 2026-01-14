@@ -195,32 +195,34 @@ RECORDATORIO DE TURNO - MANICURÍA
 📅 Día: ${dia}
 🕒 Hora: ${hora}
 
-⚠️ Confirmar asistencia 48hs antes.
+⚠️ Confirmar asistencia.
 Mandar diseño para darles un precio. No se aceptan cambios en el día si es más complejo. 
+
 🚫 Sin acompañantes.
 
 💵 Se pierde la seña si:
 •⁠  ⁠No se avisa la inasistencia 48hs antes.
 •⁠  ⁠Llegan tarde (pasado +10 min).
-•⁠  ⁠Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar el total del servicio. (La seña está PERDIDA)
+•⁠  ⁠Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar $10.000 adicionales
 
-Gracias 💕 ¡Nos vemos pronto! ${userName}! ✨`,
+Gracias 💕 ¡Nos vemos pronto ${userName}! ✨`,
 
       pestañas: `
-RECORDATORIO DE TURNO - PESTAÑAS
+RECORDATORIO DE TURNO - PESTAÑAS/CEJAS
 
 📅 Día: ${dia}
 🕒 Hora: ${hora}
 
-⚠️ Asistir sin maquillaje ni cremas. (Pierden garantía)
-Confirmar asistencia 48hs antes.
+⚠️ Confirmar asistencia.
+Asistir sin maquillaje ni cremas. (Pierden garantía)
+
 🚫 Sin acompañantes.
 
 💵 Se pierde la seña si:
 •⁠  ⁠No se avisa la inasistencia 48 hs antes.
 •⁠  ⁠Llegan tarde (+10min).
-•⁠ Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar el total del servicio. (La seña está PERDIDA)
-¡Gracias! 💕 Nos vemos pronto ✨${userName} ✨`,
+•⁠ Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar $10.000 adicionales
+¡Gracias! 💕 Nos vemos pronto${userName} ✨`,
 
       cejas: `
 RECORDATORIO DE TURNO - CEJAS
