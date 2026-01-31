@@ -109,6 +109,58 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
       {isOpen && (
         <div className="services-container">
           {serviciosOrdenados.map((service, idx) => {
+            // Si la categoría es "Pestañas", mostrar card con nombre e imagen
+            if (service.category === "Pestañas" || title === "Pestañas") {
+              let imageUrl = service.image || "/Expertos/pestanas_default.jpg";
+              if (service.name === "V. Brasilero (2D)") {
+                imageUrl = "/pestañas/brasilero.jpeg";
+              } else if (service.name === "Spire Lashes") {
+                imageUrl = "/pestañas/sprieLashes.jpeg";
+              } else if (service.name === "V. Hawaiano (3D)") {
+                imageUrl = "/pestañas/3d.jpeg";
+              } else if (service.name === "V. Hollywood (4D)") {
+                imageUrl = "/pestañas/4d.jpeg";
+              } else if (service.name === "Efecto rímel") {
+                imageUrl = "/pestañas/rimel.jpeg";
+              } else if (service.name === "Capping mega 6D") {
+                imageUrl = "/pestañas/6d.jpeg";
+              } else if (service.name === "Clasicas") {
+                imageUrl = "/pestañas/clasicas.jpeg";
+              } else if (service.name === "V. Argentino (5D)") {
+                imageUrl = "/pestañas/5d.jpeg";
+              }
+              return (
+                <div
+                  key={service.id || service.name}
+                  className="service-card"
+                  style={{ animationDelay: `${idx * 0.05}s` }}
+                >
+                  <img
+                    src={imageUrl}
+                    alt={service.name}
+                    className="service-image-pestanas"
+                  />
+                  <h3 className="service-name" style={{ marginTop: "10px" }}>{service.name}</h3>
+                  <p className="details-service">${service.price}</p>
+                  <div className="container-button">
+                    <button
+                      className="book-button"
+                      onClick={() => {
+                        setServicio(service);
+                        navigate(
+                          `/expertos/${encodeURIComponent(
+                            service.name.toLowerCase()
+                          )}`
+                        );
+                      }}
+                    >
+                      Agendar
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+            // Para el resto, renderizado original
             const isExpanded = expandedDescriptions[service.id];
             return (
               <div
@@ -119,7 +171,6 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 <h3 className="service-name">{service.name}</h3>
                 <p className="details-service">{service.duration} min</p>
                 <p className="details-service">${service.price}</p>
-
                 <p
                   className={`description ${
                     isExpanded ? "expanded" : "collapsed"
@@ -130,8 +181,7 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                     : service.description.slice(0, 158) +
                       (service.description.length > 200 ? "..." : "")}
                 </p>
-
-                {service.description.length > 100 && (
+                {service.description && service.description.length > 100 && (
                   <button
                     className="toggle-description"
                     onClick={() => toggleDescription(service.id)}
@@ -139,7 +189,6 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                     <u>{isExpanded ? "Ver menos" : "Ver más"}</u>
                   </button>
                 )}
-
                 <div className="container-button">
                   <button
                     className="book-button"
