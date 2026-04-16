@@ -27,7 +27,7 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
       const fetchUser = async () => {
         try {
           const response = await axios.get(
-            `https://eve-back.vercel.app/users/${userId}`
+            `https://eve-back.vercel.app/users/${userId}`,
           );
           const user = response.data;
           setDatosCliente({
@@ -39,7 +39,7 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
         } catch (error) {
           console.error(
             "❌ Error al cargar usuario desde localStorage:",
-            error
+            error,
           );
         }
       };
@@ -51,14 +51,14 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
   // Orden específico para la categoría "Manicuria"
   const ordenDeseado = [
     "Semipermanente con nivelación",
-    "Capping N'1/N'2",
-    "Capping N'3",
-    "Esculpidas en acrílico N1/2",
+    "Capping ", // En la búsqueda usaremos .trim() para ignorar si el backend manda "Capping " con espacio
+    "Esculpidas en acrílico N1 o 2",
     "Esculpidas en acrílico N3",
     "Esculpidas en acrílico N4",
-    "Soft gel N1/2/3",
-    "Soft gel XXL N4/5/6",
-    "Semipermanente en pies ",
+    "Soft gel",
+    "Soft gel XL",
+    "Semipermanente en pies",
+    "Set nuevo + retiro.",
   ];
 
   const ordenPestanas = [
@@ -67,7 +67,7 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
     "V. Brasilero (2D)",
     "V. Hawaiano (3D)",
     "V. Hollywood (4D)",
-    "V. Argentino (5D/6D)",
+    "V. Argentino (5D)",
     "Capping mega 6D",
     "V. Ef foxy (2D/3D)",
     "Spire Lashes",
@@ -80,18 +80,18 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
           .map((nombre) => services.find((s) => s.name === nombre))
           .filter(Boolean)
       : title === "Pestañas"
-      ? ordenPestanas
-          .map((nombre) => services.find((s) => s.name === nombre))
-          .filter(Boolean)
-      : [];
+        ? ordenPestanas
+            .map((nombre) => services.find((s) => s.name === nombre))
+            .filter(Boolean)
+        : [];
 
   // 2. Agregar los servicios que NO están en la lista de orden
   const serviciosNoListados =
     title === "Manicuria"
       ? services.filter((s) => !ordenDeseado.includes(s.name))
       : title === "Pestañas"
-      ? services.filter((s) => !ordenPestanas.includes(s.name))
-      : services;
+        ? services.filter((s) => !ordenPestanas.includes(s.name))
+        : services;
 
   // 3. Combinar ambos → primero en orden, luego los demás
   const serviciosOrdenados = [...serviciosEnOrden, ...serviciosNoListados];
@@ -128,6 +128,10 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 imageUrl = "/pestañas/clasicas.jpeg";
               } else if (service.name === "V. Argentino (5D)") {
                 imageUrl = "/pestañas/5d.jpeg";
+              } else if (service.name === "Volumen foxy") {
+                imageUrl = "/pestañas/vfoxy.jpeg";
+              } else if (service.name === "Laminado + perfilado") {
+                imageUrl = "/pestañas/perf.jpeg";
               }
               return (
                 <div
@@ -140,7 +144,9 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                     alt={service.name}
                     className="service-image-pestanas"
                   />
-                  <h3 className="service-name" style={{ marginTop: "10px" }}>{service.name}</h3>
+                  <h3 className="service-name" style={{ marginTop: "10px" }}>
+                    {service.name}
+                  </h3>
                   <p className="details-service">${service.price}</p>
                   <div className="container-button">
                     <button
@@ -149,8 +155,8 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                         setServicio(service);
                         navigate(
                           `/expertos/${encodeURIComponent(
-                            service.name.toLowerCase()
-                          )}`
+                            service.name.toLowerCase(),
+                          )}`,
                         );
                       }}
                     >
@@ -196,8 +202,8 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                       setServicio(service);
                       navigate(
                         `/expertos/${encodeURIComponent(
-                          service.name.toLowerCase()
-                        )}`
+                          service.name.toLowerCase(),
+                        )}`,
                       );
                     }}
                   >

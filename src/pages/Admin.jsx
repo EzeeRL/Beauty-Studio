@@ -22,11 +22,12 @@ import LiquidacionesExpertos from "../components/LiquidacionesExpertos";
 import GraficoGananciasTiempo from "../components/GraficoGananciasTiempo";
 import TurnosImageGenerator from "../components/imagenGenerador";
 import AddProductForm from "../components/Products";
+import CouponManager from "../components/CouponManager";
 
 const AdminPanel = () => {
   const [appointments, setAppointments] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
-    format(new Date(), "yyyy-MM-dd")
+    format(new Date(), "yyyy-MM-dd"),
   );
   const [activeTab, setActiveTab] = useState("turnos");
   const [workingHours, setWorkingHours] = useState({});
@@ -53,7 +54,7 @@ const AdminPanel = () => {
       .get("https://eve-back.vercel.app/appointments")
       .then((res) => {
         const onlyPaidOrPartial = res.data.appointments.filter(
-          (app) => app.payStatus === "paid" || app.payStatus === "partial"
+          (app) => app.payStatus === "paid" || app.payStatus === "partial",
         );
         setAppointments(onlyPaidOrPartial);
       })
@@ -87,7 +88,7 @@ const AdminPanel = () => {
         (app) =>
           (app.payStatus === "paid" || app.payStatus === "partial") &&
           app.Service &&
-          app.Expert
+          app.Expert,
       )
       .forEach((app) => {
         const key =
@@ -154,7 +155,7 @@ const AdminPanel = () => {
   const filteredAppointments = appointments.filter(
     (app) =>
       format(new Date(app.date), "yyyy-MM-dd") ===
-      format(selectedDate, "yyyy-MM-dd")
+      format(selectedDate, "yyyy-MM-dd"),
   );
 
   const startEdit = (id, currentStatus) => {
@@ -170,8 +171,8 @@ const AdminPanel = () => {
   const saveEdit = (id) => {
     setAppointments((prev) =>
       prev.map((app) =>
-        app.id === id ? { ...app, payStatus: editingPayStatus } : app
-      )
+        app.id === id ? { ...app, payStatus: editingPayStatus } : app,
+      ),
     );
     setEditingId(null);
     setEditingPayStatus("");
@@ -182,7 +183,7 @@ const AdminPanel = () => {
     userName,
     date,
     appointmentId,
-    serviceName
+    serviceName,
   ) => {
     const dia = format(new Date(date), "dd/MM/yyyy");
     const hora = format(new Date(date), "HH:mm");
@@ -276,13 +277,15 @@ Confirmar asistencia 48hs antes.
         `https://eve-back.vercel.app/appointments/${appointmentId}`,
         {
           reminderStatus: "enviado",
-        }
+        },
       );
 
       setAppointments((prev) =>
         prev.map((app) =>
-          app.id === appointmentId ? { ...app, reminderStatus: "enviado" } : app
-        )
+          app.id === appointmentId
+            ? { ...app, reminderStatus: "enviado" }
+            : app,
+        ),
       );
     } catch (err) {
       console.error("❌ Error al actualizar reminderStatus:", err);
@@ -291,13 +294,13 @@ Confirmar asistencia 48hs antes.
 
   const deleteAppointment = async (appointmentId) => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro que querés eliminar este turno?"
+      "¿Estás seguro que querés eliminar este turno?",
     );
     if (!confirmDelete) return;
 
     try {
       await axios.delete(
-        `https://eve-back.vercel.app/appointments/${appointmentId}`
+        `https://eve-back.vercel.app/appointments/${appointmentId}`,
       );
       setAppointments((prev) => prev.filter((app) => app.id !== appointmentId));
       alert("Turno eliminado correctamente.");
@@ -391,7 +394,7 @@ Confirmar asistencia 48hs antes.
                               app.User.name,
                               app.date,
                               app.id,
-                              app.Expert.specialty
+                              app.Expert.specialty,
                             )
                           }
                           disabled={app.reminderStatus === "enviado"}
@@ -417,8 +420,6 @@ Confirmar asistencia 48hs antes.
 
   return (
     <div className="admin-panel">
-      <h1>Panel de Administración</h1>
-
       {/* Navegación tipo pestañas */}
       <nav className="admin-nav">
         <button
@@ -463,6 +464,13 @@ Confirmar asistencia 48hs antes.
         >
           💳
         </button>
+        <button
+          onClick={() => setActiveTab("cupones")}
+          className={activeTab === "cupones" ? "nav-btn active" : "nav-btn"}
+          title="Cupones"
+        >
+          🎟️
+        </button>
       </nav>
 
       {/* Sección: Turnos */}
@@ -493,7 +501,7 @@ Confirmar asistencia 48hs antes.
             className="all-appointments"
             style={{ marginBottom: "3rem" }}
           >
-            <h2>Todos los turnos (los próximos en amarillo)</h2>
+            <h2>Próximos Turnos</h2>
             <GroupedTurnosTable
               data={sortedAppointments}
               editingId={editingId}
@@ -774,10 +782,10 @@ Confirmar asistencia 48hs antes.
                 onClick={async () => {
                   try {
                     await axios.delete(
-                      `https://eve-back.vercel.app/appointments/${appointmentToDelete}`
+                      `https://eve-back.vercel.app/appointments/${appointmentToDelete}`,
                     );
                     setAppointments((prev) =>
-                      prev.filter((a) => a.id !== appointmentToDelete)
+                      prev.filter((a) => a.id !== appointmentToDelete),
                     );
                     setShowDeleteModal(false);
                     setAppointmentToDelete(null);
@@ -823,6 +831,18 @@ Confirmar asistencia 48hs antes.
         <div>
           <AddProductForm></AddProductForm>
         </div>
+      )}
+      {activeTab === "products" && (
+        <div>
+          <AddProductForm></AddProductForm>
+        </div>
+      )}
+
+      {/* AGREGAR ESTA SECCIÓN NUEVA */}
+      {activeTab === "cupones" && (
+        <section style={{ padding: "20px" }}>
+          <CouponManager />
+        </section>
       )}
     </div>
   );
