@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-// Asegúrate de que la ruta base coincida con la de tu backend
+import "./CouponManager.css";
+
 const API_URL = "https://eve-back.vercel.app";
 
 const CouponManager = () => {
   const [coupons, setCoupons] = useState([]);
   const [services, setServices] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  // Estado inicial del formulario
   const initialFormState = {
     code: "",
     description: "",
@@ -23,7 +25,16 @@ const CouponManager = () => {
   const [form, setForm] = useState(initialFormState);
   const [editingId, setEditingId] = useState(null);
 
-  // Cargar cupones y servicios al montar el componente
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   useEffect(() => {
     fetchCoupons();
     fetchServices();
@@ -33,65 +44,46 @@ const CouponManager = () => {
     try {
       const res = await axios.get(`${API_URL}/coupons`);
       setCoupons(res.data);
-    } catch (error) {
-      console.error("Error al cargar cupones:", error);
+    } catch (err) {
+      console.error("Error al obtener cupones", err);
     }
   };
 
   const fetchServices = async () => {
     try {
-      // Ajusta esta ruta si tu endpoint de servicios es diferente
       const res = await axios.get(`${API_URL}/services`);
       setServices(res.data);
-    } catch (error) {
-      console.error("Error al cargar servicios:", error);
+    } catch (err) {
+      console.error("Error al obtener servicios", err);
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm({
-      ...form,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  const handleServiceSelect = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions, (option) =>
-      parseInt(option.value),
-    );
-    setForm({ ...form, applicableServiceIds: selectedOptions });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Formatear los datos antes de enviar
-      const payload = {
-        ...form,
-        discountValue: parseFloat(form.discountValue),
-        maxUses: parseInt(form.maxUses),
-        // Si no seleccionó ningún servicio, enviamos null para que aplique a todos
-        applicableServiceIds:
-          form.applicableServiceIds.length > 0
-            ? form.applicableServiceIds
-            : null,
-      };
-
       if (editingId) {
-        await axios.put(`${API_URL}/coupons/${editingId}`, payload);
-        alert("Cupón actualizado con éxito");
+        await axios.put(`${API_URL}/coupons/${editingId}`, form);
+        alert("¡Cupón actualizado con éxito!");
       } else {
-        await axios.post(`${API_URL}/coupons`, payload);
-        alert("Cupón creado con éxito");
+        await axios.post(`${API_URL}/coupons`, form);
+        alert("¡Cupón creado exitosamente!");
       }
-
       setForm(initialFormState);
       setEditingId(null);
       fetchCoupons();
-    } catch (error) {
-      console.error("Error al guardar el cupón:", error);
-      alert(error.response?.data?.error || "Error al guardar el cupón");
+    } catch (err) {
+      alert("Error al procesar el cupón");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("¿Estás seguro de eliminar este cupón?")) {
+      try {
+        await axios.delete(`${API_URL}/coupons/${id}`);
+        fetchCoupons();
+      } catch (err) {
+        alert("Error al eliminar el cupón");
+      }
     }
   };
 
@@ -103,218 +95,284 @@ const CouponManager = () => {
       discountType: coupon.discountType,
       discountValue: coupon.discountValue,
       maxUses: coupon.maxUses,
-      validFrom: coupon.validFrom ? coupon.validFrom.slice(0, 16) : "", // Formato para datetime-local
-      validUntil: coupon.validUntil ? coupon.validUntil.slice(0, 16) : "",
+      validFrom: coupon.validFrom ? coupon.validFrom.split("T")[0] : "",
+      validUntil: coupon.validUntil ? coupon.validUntil.split("T")[0] : "",
       applicableServiceIds: coupon.applicableServiceIds || [],
       isActive: coupon.isActive,
     });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("¿Seguro que deseas eliminar este cupón?")) {
-      try {
-        await axios.delete(`${API_URL}/coupons/${id}`);
-        alert("Cupón eliminado");
-        fetchCoupons();
-      } catch (error) {
-        console.error("Error al eliminar cupón:", error);
+  const toggleService = (serviceId) => {
+    setForm((prev) => {
+      const alreadySelected = prev.applicableServiceIds.includes(serviceId);
+      if (alreadySelected) {
+        return {
+          ...prev,
+          applicableServiceIds: prev.applicableServiceIds.filter(
+            (id) => id !== serviceId,
+          ),
+        };
+      } else {
+        return {
+          ...prev,
+          applicableServiceIds: [...prev.applicableServiceIds, serviceId],
+        };
       }
-    }
-  };
-
-  const cancelEdit = () => {
-    setForm(initialFormState);
-    setEditingId(null);
+    });
   };
 
   return (
-    <div className="coupon-manager">
-      <h2>{editingId ? "Editar Cupón" : "Crear Nuevo Cupón"}</h2>
+    <div className="coupon-manager-container">
+      <div className="coupon-form-card">
+        <h2 className="section-title">
+          {editingId ? "Editar Cupón" : "Crear Nuevo Cupón"}
+        </h2>
+        <form onSubmit={handleSubmit} className="coupon-form">
+          <div className="form-row">
+            <div className="form-group">
+              <label>Código del Cupón</label>
+              <input
+                type="text"
+                placeholder="EJ: VERANO2024"
+                value={form.code}
+                onChange={(e) =>
+                  setForm({ ...form, code: e.target.value.toUpperCase() })
+                }
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Valor de Descuento</label>
+              <input
+                type="number"
+                placeholder="Monto o %"
+                value={form.discountValue}
+                onChange={(e) =>
+                  setForm({ ...form, discountValue: e.target.value })
+                }
+                required
+              />
+            </div>
+          </div>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-          maxWidth: "500px",
-          marginBottom: "30px",
-        }}
-      >
-        <input
-          type="text"
-          name="code"
-          placeholder="Código (Ej: VERANO20)"
-          value={form.code}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="description"
-          placeholder="Descripción (Opcional)"
-          value={form.description}
-          onChange={handleChange}
-        />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Tipo de Descuento</label>
+              <select
+                value={form.discountType}
+                onChange={(e) =>
+                  setForm({ ...form, discountType: e.target.value })
+                }
+              >
+                <option value="percentage">Porcentaje (%)</option>
+                <option value="fixed">Monto Fijo ($)</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Uso Máximo</label>
+              <input
+                type="number"
+                value={form.maxUses}
+                onChange={(e) => setForm({ ...form, maxUses: e.target.value })}
+                required
+              />
+            </div>
+          </div>
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <select
-            name="discountType"
-            value={form.discountType}
-            onChange={handleChange}
-          >
-            <option value="percentage">Porcentaje (%)</option>
-            <option value="fixed">Monto Fijo ($)</option>
-          </select>
-          <input
-            type="number"
-            name="discountValue"
-            placeholder="Valor del descuento"
-            value={form.discountValue}
-            onChange={handleChange}
-            required
-          />
-        </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Válido Desde</label>
+              <input
+                type="date"
+                value={form.validFrom}
+                onChange={(e) =>
+                  setForm({ ...form, validFrom: e.target.value })
+                }
+              />
+            </div>
+            <div className="form-group">
+              <label>Válido Hasta</label>
+              <input
+                type="date"
+                value={form.validUntil}
+                onChange={(e) =>
+                  setForm({ ...form, validUntil: e.target.value })
+                }
+              />
+            </div>
+          </div>
 
-        <input
-          type="number"
-          name="maxUses"
-          placeholder="Límite de usos totales"
-          value={form.maxUses}
-          onChange={handleChange}
-          required
-        />
-
-        <div style={{ display: "flex", gap: "10px" }}>
-          <label>
-            Válido Desde:
+          <div className="form-group">
+            <label>Descripción (Opcional)</label>
             <input
-              type="datetime-local"
-              name="validFrom"
-              value={form.validFrom}
-              onChange={handleChange}
+              type="text"
+              placeholder="Ej: Solo para masajes faciales"
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
             />
-          </label>
-          <label>
-            Válido Hasta:
-            <input
-              type="datetime-local"
-              name="validUntil"
-              value={form.validUntil}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
+          </div>
 
-        <label>
-          Aplica a servicios (Ctrl/Cmd + Click para múltiple. Vacío = Todos):
-          <select
-            multiple
-            name="applicableServiceIds"
-            value={form.applicableServiceIds}
-            onChange={handleServiceSelect}
-            style={{ height: "100px", width: "100%" }}
-          >
-            {services.map((service) => (
-              <option key={service.id} value={service.id}>
-                {service.name}
-              </option>
-            ))}
-          </select>
-        </label>
+          <div className="form-group" ref={dropdownRef}>
+            <label>Servicios Aplicables</label>
+            <div className="custom-multiselect">
+              <div
+                className={`multiselect-header ${isDropdownOpen ? "active" : ""}`}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                <span>
+                  {form.applicableServiceIds.length === 0
+                    ? "Todos los servicios"
+                    : `${form.applicableServiceIds.length} seleccionados`}
+                </span>
+                <span className="arrow">{isDropdownOpen ? "▲" : "▼"}</span>
+              </div>
 
-        <label style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <input
-            type="checkbox"
-            name="isActive"
-            checked={form.isActive}
-            onChange={handleChange}
-          />
-          Cupón Activo
-        </label>
+              {isDropdownOpen && (
+                <div className="multiselect-dropdown">
+                  {services.map((s) => {
+                    const isSelected = form.applicableServiceIds.includes(s.id);
+                    return (
+                      <div
+                        key={s.id}
+                        className={`multiselect-item ${isSelected ? "selected" : ""}`}
+                        onClick={() => toggleService(s.id)}
+                      >
+                        <div className="checkbox-custom">
+                          {isSelected && "✓"}
+                        </div>
+                        {s.name}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <button
-            type="submit"
-            style={{
-              flex: 1,
-              padding: "10px",
-              backgroundColor: "#4CAF50",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            {editingId ? "Guardar Cambios" : "Crear Cupón"}
+          <div className="switch-container">
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={form.isActive}
+                onChange={(e) =>
+                  setForm({ ...form, isActive: e.target.checked })
+                }
+              />
+              <span className="slider"></span>
+            </label>
+            <span style={{ fontSize: "0.9rem", fontWeight: "600" }}>
+              {form.isActive ? "Cupón Activo" : "Cupón Inactivo"}
+            </span>
+          </div>
+
+          <button type="submit" className="btn-submit">
+            {editingId ? "Actualizar Cupón" : "Crear Cupón"}
           </button>
           {editingId && (
             <button
               type="button"
-              onClick={cancelEdit}
+              className="btn-cancel"
+              onClick={() => {
+                setEditingId(null);
+                setForm(initialFormState);
+              }}
               style={{
-                flex: 1,
-                padding: "10px",
-                backgroundColor: "#f44336",
-                color: "white",
+                marginTop: "10px",
+                background: "transparent",
                 border: "none",
+                color: "#666",
                 cursor: "pointer",
+                textDecoration: "underline",
               }}
             >
-              Cancelar
+              Cancelar Edición
             </button>
           )}
-        </div>
-      </form>
+        </form>
+      </div>
 
-      <h2>Lista de Cupones</h2>
-      <table
-        style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}
-      >
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Descuento</th>
-            <th>Usos</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div className="coupon-list-container">
+        <h2 className="section-title">Cupones Existentes</h2>
+        <div className="coupons-grid">
           {coupons.length === 0 ? (
-            <tr>
-              <td colSpan="5">No hay cupones creados.</td>
-            </tr>
+            <p className="empty-state">No hay cupones creados aún.</p>
           ) : (
             coupons.map((coupon) => (
-              <tr
+              <div
                 key={coupon.id}
-                style={{ borderBottom: "1px solid #ddd", textAlign: "center" }}
+                className={`coupon-card ${!coupon.isActive ? "is-inactive" : ""}`}
               >
-                <td>
-                  <strong>{coupon.code}</strong>
-                </td>
-                <td>
-                  {coupon.discountValue}
-                  {coupon.discountType === "percentage" ? "%" : "$"}
-                </td>
-                <td>
-                  {coupon.usedCount} / {coupon.maxUses}
-                </td>
-                <td>{coupon.isActive ? "🟢 Activo" : "🔴 Inactivo"}</td>
-                <td>
-                  <button
-                    onClick={() => handleEdit(coupon)}
-                    style={{ marginRight: "10px" }}
-                  >
-                    ✏️
-                  </button>
-                  <button onClick={() => handleDelete(coupon.id)}>🗑️</button>
-                </td>
-              </tr>
+                <div className="coupon-card-left">
+                  <div className="discount-badge">
+                    {coupon.discountType === "percentage" ? (
+                      <>
+                        <span>{coupon.discountValue}</span>%
+                      </>
+                    ) : (
+                      <>
+                        <span>${coupon.discountValue}</span>
+                      </>
+                    )}
+                  </div>
+                  <p>OFF</p>
+                </div>
+
+                <div className="coupon-card-right">
+                  <div className="coupon-header">
+                    <span className="coupon-code">{coupon.code}</span>
+                    <span
+                      className={`status-dot ${coupon.isActive ? "active" : "inactive"}`}
+                      title={coupon.isActive ? "Activo" : "Inactivo"}
+                    ></span>
+                  </div>
+
+                  <p className="coupon-description">
+                    {coupon.description || "Sin descripción"}
+                  </p>
+
+                  <div className="coupon-details">
+                    <div className="detail-item">
+                      <span className="detail-label">Usos:</span>
+                      <span className="detail-value">
+                        {coupon.usedCount} / {coupon.maxUses}
+                      </span>
+                    </div>
+                    {coupon.validUntil && (
+                      <div className="detail-item">
+                        <span className="detail-label">Vence:</span>
+                        <span className="detail-value">
+                          {new Date(coupon.validUntil).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="coupon-actions">
+                    <button
+                      className="action-btn edit"
+                      onClick={() => handleEdit(coupon)}
+                    >
+                      ✏️ <span>Editar</span>
+                    </button>
+                    <button
+                      className="action-btn delete"
+                      onClick={() => handleDelete(coupon.id)}
+                    >
+                      🗑️ <span>Eliminar</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="ticket-cut-top"></div>
+                <div className="ticket-cut-bottom"></div>
+              </div>
             ))
           )}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   );
 };

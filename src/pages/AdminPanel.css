@@ -561,63 +561,82 @@ tbody tr.upcoming {
   .admin-panel-container {
     display: flex;
     flex-direction: row;
-    /* Eliminamos márgenes negativos que causan desplazamientos raros */
     margin: 0;
-    padding-left: 200px;
-    /* Dejamos el espacio exacto para el sidebar fijo */
+    padding: 0;
     width: 100%;
+    min-height: 100vh;
   }
 
   .admin-nav {
     width: 200px;
-    height: 80vh;
+    min-width: 200px;
+    /* Evita que se encoja */
+    height: 100vh;
     position: fixed;
-    /* Esto lo ancla al borde de la ventana de navegación */
-    top: 70px;
+    top: 0;
     left: 0;
     background: #fff;
     border-right: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
-    /* padding: 0px 0; */
-
-    /* Asegura que esté por encima de todo */
+    padding-top: 0;
+    /* Sin padding arriba */
+    padding-bottom: 10px;
+    /* Un poco de respiro abajo */
+    z-index: 100;
+    overflow-y: auto;
+    /* Por si hay muchos items */
   }
 
   .admin-main-content {
     flex: 1;
-    padding: 40px;
+    margin-left: 200px;
+    /* Compensa el ancho del sidebar fijo */
+    padding: 20px;
     min-height: 100vh;
     background-color: #f7f7f7;
-    /* Quitamos el margen negativo de aquí también si existiera */
+    width: calc(100% - 200px);
+    /* Asegura que no se desborde */
+    box-sizing: border-box;
   }
 
   .nav-logo {
     display: block;
     text-align: center;
     font-weight: bold;
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    padding: 0.3rem 0;
     color: #c0a439;
-    padding: 0 10px;
+    border-bottom: 1px solid #e0e0e0;
   }
 
   .nav-btn {
     width: 90%;
     justify-content: flex-start;
-    border-radius: 10px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 6px;
+    padding: 6px 8px;
+    /* Mucho más compacto */
+    margin: 1px auto;
+    /* Casi sin margen vertical */
     border: none;
     background: transparent;
     cursor: pointer;
     transition: 0.2s;
   }
 
+  .nav-icon {
+    font-size: 1rem;
+    /* Icono más pequeño */
+  }
+
   .nav-text {
     display: inline;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
+    /* Texto más pequeño */
   }
 }
 
@@ -639,6 +658,10 @@ tbody tr.upcoming {
     background: #fff;
     border-bottom: 1px solid #ddd;
     width: 100%;
+    box-sizing: border-box;
+    /* 👈 ESTA ES LA SOLUCIÓN MÁGICA */
+    margin: 0;
+    /* Aseguramos que no haya márgenes fantasma */
     z-index: 1000;
   }
 
@@ -650,9 +673,64 @@ tbody tr.upcoming {
     flex-direction: column;
     padding: 8px 0;
     font-size: 0.7rem;
+    margin: 0;
   }
 
   .nav-text {
     font-size: 0.65rem;
   }
+}
+
+/* AdminPanel.css */
+
+@media (min-width: 769px) {
+  .admin-nav {
+    width: 200px;
+    /* Reducimos un poco el ancho total del sidebar */
+    min-width: 200px;
+    padding: -1px 0;
+    /* Menos padding superior/inferior */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    /* Espacio mínimo entre botones */
+  }
+
+  .nav-logo {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding: 10px;
+    transform: none;
+    /* Quitamos desplazamientos raros */
+  }
+
+  .nav-btn {
+    width: 92%;
+    margin: 2px auto;
+    /* Centrado horizontal con margen vertical mínimo */
+    padding: 8px 12px;
+    /* Reducimos el padding interno del botón */
+    gap: 10px;
+    /* Espacio entre icono y texto */
+  }
+
+  .nav-icon {
+    font-size: 1.1rem;
+    min-width: 20px;
+    /* Asegura que los iconos estén alineados */
+  }
+
+  .nav-text {
+    font-size: 0.85rem;
+    /* Texto ligeramente más pequeño para que no rompa línea */
+    white-space: nowrap;
+    /* Evita que el texto salte a la siguiente línea */
+  }
+}
+
+/* IMPORTANTE: Corrige esto al principio del archivo */
+.admin-container {
+  padding: 2rem;
+  margin-top: 0;
+  /* Asegúrate de que sea 0 para que no suba y se corte con el techo */
 }

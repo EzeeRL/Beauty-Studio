@@ -1,0 +1,423 @@
+/* =========================================
+   CouponManager.css - Versión Optimizada
+========================================= */
+
+/* Reseteo de box-sizing para evitar desbordamientos */
+.coupon-manager-container,
+.coupon-manager-container * {
+    box-sizing: border-box;
+}
+
+.coupon-manager-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    /* Ajuste de posición para que no choque con el header */
+    transform: translateY(-90px);
+    padding: 0 10px;
+    /* Margen mínimo en los lados */
+}
+
+.section-title {
+    color: #333;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    text-align: left;
+    /* Alineado a la izquierda como pediste */
+    border-bottom: 2px solid #f0eae1;
+    padding-bottom: 10px;
+}
+
+/* Tarjetas Base */
+.coupon-form-card,
+.coupon-list-container {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0f0f0;
+    width: 100%;
+}
+
+/* =========================================
+   FORMULARIO
+========================================= */
+.coupon-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    background: #fafafa;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #c0a439;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(192, 164, 57, 0.1);
+}
+
+/* =========================================
+   SELECTOR MÚLTIPLE DESPLEGABLE
+========================================= */
+.custom-multiselect {
+    position: relative;
+    width: 100%;
+}
+
+.multiselect-header {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.multiselect-header.active {
+    border-color: #c0a439;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background: #fff;
+}
+
+.multiselect-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #c0a439;
+    border-top: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.multiselect-item {
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.multiselect-item.selected {
+    background: #fdf9e9;
+    color: #c0a439;
+    font-weight: 600;
+}
+
+.checkbox-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.multiselect-item.selected .checkbox-custom {
+    background: #c0a439;
+    border-color: #c0a439;
+    color: white;
+}
+
+/* =========================================
+   GRID DE CUPONES (TICKETS)
+========================================= */
+.coupons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.coupon-card {
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    border: 1px solid #eee;
+}
+
+.coupon-card.is-inactive {
+    filter: grayscale(0.8);
+    opacity: 0.7;
+}
+
+/* Lado del Descuento */
+.coupon-card-left {
+    background: linear-gradient(135deg, #c0a439 0%, #d4bc5d 100%);
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    border-right: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.discount-badge {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.discount-badge span {
+    font-size: 2rem;
+}
+
+/* Lado de la Info */
+.coupon-card-right {
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.coupon-code {
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 1rem;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.status-dot.active {
+    background: #2ecc71;
+    box-shadow: 0 0 5px #2ecc71;
+}
+
+.status-dot.inactive {
+    background: #e74c3c;
+}
+
+.coupon-details {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #f5f5f5;
+    padding-top: 8px;
+    margin-top: auto;
+}
+
+.detail-label {
+    font-size: 0.65rem;
+    color: #aaa;
+    text-transform: uppercase;
+}
+
+.detail-value {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+}
+
+/* Botones de Acción */
+.coupon-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.action-btn {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.action-btn.edit {
+    background: #fdf9e9;
+    color: #c0a439;
+}
+
+.action-btn.delete {
+    background: #fff5f5;
+    color: #e74c3c;
+}
+
+/* Efecto Corte de Ticket */
+.ticket-cut-top,
+.ticket-cut-bottom {
+    position: absolute;
+    left: 90px;
+    width: 20px;
+    height: 20px;
+    background: #f7f7f7;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.ticket-cut-top {
+    top: -10px;
+}
+
+.ticket-cut-bottom {
+    bottom: -10px;
+}
+
+/* =========================================
+   RESPONSIVE (MÓVIL)
+========================================= */
+@media (max-width: 768px) {
+    .coupon-manager-container {
+        transform: translateY(0);
+        /* Quitamos el desplazamiento en móvil */
+        padding: 10px;
+        gap: 15px;
+    }
+
+
+    .coupon-form-card,
+    .coupon-list-container {
+        padding: 15px;
+        border-radius: 12px;
+    }
+
+    .discount-badge span {
+        font-size: 1rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .coupons-grid {
+        grid-template-columns: 1fr;
+        /* Una sola columna de cards */
+    }
+
+    .coupon-card-left {
+        min-width: 85px;
+        padding: 15px 10px;
+    }
+
+    .ticket-cut-top,
+    .ticket-cut-bottom {
+        left: 75px;
+    }
+}
+
+/* Switch (Toggle) */
+.switch-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #c0a439;
+}
+
+input:checked+.slider:before {
+    transform: translateX(22px);
+}
+
+.btn-submit {
+    background: #c0a439;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit:hover {
+    background: #a88f31;
+    transform: translateY(-2px);
+}

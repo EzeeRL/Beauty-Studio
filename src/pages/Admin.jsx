@@ -167,11 +167,7 @@ const AdminPanel = () => {
 
         {activeTab === "products" && <AddProductForm />}
 
-        {activeTab === "cupones" && (
-          <section style={{ padding: "20px" }}>
-            <CouponManager />
-          </section>
-        )}
+        {activeTab === "cupones" && <CouponManager />}
       </main>
 
       {/* Modales y notificaciones globales */}
