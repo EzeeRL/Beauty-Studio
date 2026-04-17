@@ -477,7 +477,7 @@ tbody tr.upcoming {
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  background: #ffffff;
+  /* background: red; */
   padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
   position: sticky;
@@ -504,4 +504,155 @@ tbody tr.upcoming {
 .nav-btn.active {
   background-color: #c0a439;
   color: #fff;
+}
+
+/* 1. Estilos base (Móvil por defecto) */
+.admin-panel-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Eliminamos los márgenes de aquí para que no afecten a móviles */
+}
+
+.admin-main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f7f7f7;
+}
+
+/* Navbar General */
+.admin-nav {
+  display: flex;
+  /* background: red; */
+  z-index: 100;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.nav-logo {
+  display: none;
+}
+
+/* Estilos de Botón */
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: #555;
+  transition: all 0.2s;
+  flex: 1;
+}
+
+.nav-btn.active {
+  background-color: #c0a439;
+  color: #fff;
+}
+
+.nav-icon {
+  font-size: 1.4rem;
+}
+
+/* 🖥️ DESKTOP (Sidebar fijo al borde izquierdo) */
+@media screen and (min-width: 769px) {
+  .admin-panel-container {
+    display: flex;
+    flex-direction: row;
+    /* Eliminamos márgenes negativos que causan desplazamientos raros */
+    margin: 0;
+    padding-left: 200px;
+    /* Dejamos el espacio exacto para el sidebar fijo */
+    width: 100%;
+  }
+
+  .admin-nav {
+    width: 200px;
+    height: 80vh;
+    position: fixed;
+    /* Esto lo ancla al borde de la ventana de navegación */
+    top: 70px;
+    left: 0;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    /* padding: 0px 0; */
+
+    /* Asegura que esté por encima de todo */
+  }
+
+  .admin-main-content {
+    flex: 1;
+    padding: 40px;
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    /* Quitamos el margen negativo de aquí también si existiera */
+  }
+
+  .nav-logo {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #c0a439;
+    padding: 0 10px;
+  }
+
+  .nav-btn {
+    width: 90%;
+    justify-content: flex-start;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .nav-text {
+    display: inline;
+    font-size: 0.95rem;
+  }
+}
+
+/*  MOBILE (Cuadrícula de 2 filas) */
+@media (max-width: 768px) {
+  .admin-panel-container {
+    display: block;
+    /* Vuelve a flujo normal en móvil */
+    padding-left: 0;
+  }
+
+  .admin-nav {
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    padding: 10px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .nav-logo {
+    display: none;
+  }
+
+  .nav-btn {
+    flex-direction: column;
+    padding: 8px 0;
+    font-size: 0.7rem;
+  }
+
+  .nav-text {
+    font-size: 0.65rem;
+  }
 }
