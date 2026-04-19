@@ -10,7 +10,11 @@ const Datos = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [modalError, setModalError] = useState(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponStatus, setCouponStatus] = useState(null);
+  const [verifyingCoupon, setVerifyingCoupon] = useState(false);
 
+  const BASE_PRICE = 10000; // Precio normal
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
     useServicioStore();
   console.log("💾 localStorage userId:", localStorage.getItem("userId"));
@@ -32,6 +36,51 @@ const Datos = () => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  // 🟡 Función para verificar el cupón en el backend
+  const handleVerifyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setVerifyingCoupon(true);
+    setCouponStatus(null);
+
+    try {
+      const res = await axios.post(
+        "https://eve-back.vercel.app/coupons/validate",
+        {
+          code: couponCode,
+          serviceId: servicio?.id,
+        },
+      );
+
+      if (res.data.valid) {
+        setCouponStatus({
+          valid: true,
+          type: res.data.coupon.discountType,
+          value: res.data.coupon.discountValue,
+          message: "✅ ¡Cupón aplicado correctamente!",
+        });
+      }
+    } catch (error) {
+      setCouponStatus({
+        valid: false,
+        message:
+          "❌ " + (error.response?.data?.error || "Cupón inválido o expirado"),
+      });
+    } finally {
+      setVerifyingCoupon(false);
+    }
+  };
+
+  // 🧮 Calcular el precio final en base al cupón (se recalcula automáticamente)
+  let finalPrice = BASE_PRICE;
+  if (couponStatus?.valid) {
+    if (couponStatus.type === "percentage") {
+      finalPrice = BASE_PRICE - BASE_PRICE * (couponStatus.value / 100);
+    } else if (couponStatus.type === "fixed") {
+      finalPrice = BASE_PRICE - couponStatus.value;
+    }
+    if (finalPrice < 0) finalPrice = 0;
+  }
 
   /*   useEffect(() => {
   setFormData({
@@ -97,6 +146,18 @@ const Datos = () => {
 
       // console.log("✅ Turno creado con ID:", appointmentId);
 
+      // 2.5️⃣ Si hay un cupón válido, informamos al backend que se use (se incremente el contador)
+      if (couponStatus?.valid) {
+        try {
+          await axios.post("https://eve-back.vercel.app/coupons/apply", {
+            code: couponCode,
+            serviceId: servicio.id,
+          });
+        } catch (couponErr) {
+          // Si falla el cupón al intentar aplicarlo (ej: se agotó justo en ese segundo)
+          // podés decidir si frenar el pago o dejarlo pasar.
+        }
+      }
       // 3️⃣ Si userId NO es 3 => Redirigir a MercadoPago
       if (userId !== 3) {
         console.log("💰 Creando preferencia de pago en MercadoPago...");
@@ -105,7 +166,7 @@ const Datos = () => {
           {
             title: servicio.name,
             quantity: 1,
-            unit_price: 10000,
+            unit_price: finalPrice,
             metadata: {
               appointmentId,
               appointmentId2,
@@ -113,7 +174,7 @@ const Datos = () => {
               appointmentDate: fecha.toISOString(), // objeto Date a string ISO
               tiempo: servicio.duration || 60,
             },
-          }
+          },
         );
 
         const { init_point } = preferenceRes.data;
@@ -205,6 +266,53 @@ const Datos = () => {
           }}
           containerStyle={{ marginBottom: "1rem" }}
         />
+        {/* 🎟️ SECCIÓN DE CUPONES */}
+        <div className="coupon-container">
+          <div className="coupon-input-group">
+            <input
+              type="text"
+              placeholder="¿Tenés un código de descuento?"
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+              className="input coupon-input"
+            />
+            <button
+              type="button"
+              onClick={handleVerifyCoupon}
+              disabled={verifyingCoupon || !couponCode.trim()}
+              className="verify-button"
+            >
+              {verifyingCoupon ? "..." : "Aplicar"}
+            </button>
+          </div>
+          {couponStatus && (
+            <p
+              className={couponStatus.valid ? "coupon-success" : "coupon-error"}
+            >
+              {couponStatus.message}
+            </p>
+          )}
+        </div>
+
+        {couponStatus?.valid && (
+          <div className="payment-summary">
+            <div className="summary-row">
+              <span>Subtotal:</span>
+              <span>${BASE_PRICE}</span>
+            </div>
+            {couponStatus?.valid && (
+              <div className="summary-row discount-row">
+                <span>Descuento aplicado:</span>
+                <span>-${BASE_PRICE - finalPrice}</span>
+              </div>
+            )}
+            <div className="summary-row total-row">
+              <span>Total a pagar:</span>
+              <span>${finalPrice}</span>
+            </div>
+          </div>
+        )}
+        {/* 💰 RESUMEN DE PAGO */}
 
         {errors.telefono && <p className="error">{errors.telefono}</p>}
         <p className="info-form">
