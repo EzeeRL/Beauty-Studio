@@ -69,6 +69,7 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
     "V. Hollywood (4D)",
     "V. Argentino (5D)",
     "Capping mega 6D",
+    "Volumen tech marrones",
     "V. Ef foxy (2D/3D)",
     "Spire Lashes",
   ];
@@ -132,6 +133,8 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 imageUrl = "/pestañas/vfoxy.jpeg";
               } else if (service.name === "Laminado + perfilado") {
                 imageUrl = "/pestañas/perf.jpeg";
+              } else if (service.name === "Volumen tech marrones") {
+                imageUrl = "/pestañas/VolumenTechMarrones.jpeg";
               }
               return (
                 <div
