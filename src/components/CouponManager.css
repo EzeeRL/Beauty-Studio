@@ -320,6 +320,8 @@
         /* Quitamos el desplazamiento en móvil */
         padding: 10px;
         gap: 15px;
+        width: 120%;
+        margin-left: -31px;
     }
 
 
