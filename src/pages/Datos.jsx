@@ -3,6 +3,7 @@ import useServicioStore from "../store/servicioStore";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Datos.css";
+import ReservaSteps from "../components/ReservaSteps";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -208,6 +209,7 @@ const Datos = () => {
 
   return (
     <div className="datos-container">
+      <ReservaSteps currentStep={3} />
       <h2>Ingresa tus datos</h2>
 
       <form onSubmit={handleSubmit} className="form">
@@ -319,7 +321,18 @@ const Datos = () => {
           Usaremos tus datos para comunicarnos un día antes de tu reserva.
         </p>
         <button type="submit" className="continue-button" disabled={loading}>
-          {loading ? <span className="spinner"></span> : "Continuar a pago"}
+          {loading ? (
+            <span className="spinner"></span>
+          ) : (
+            <>
+              Continuar a pago
+              <img
+                src="/mercado.png"
+                alt="Mercado Pago"
+                className="mercado-pago-icon"
+              />
+            </>
+          )}
         </button>
       </form>
 

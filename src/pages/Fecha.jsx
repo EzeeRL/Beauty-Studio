@@ -5,6 +5,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import useServicioStore from "../store/servicioStore";
 import axios from "axios";
+import ReservaSteps from "../components/ReservaSteps";
 import "./Fecha.css"; // mantendremos el estilo, lo ajustamos abajo
 
 const horariosDisponibles = Array.from({ length: 13 }, (_, i) => {
@@ -229,7 +230,9 @@ const intervaloMinutos = expertoTurnoCorto
   const esAutorizado = [1].includes(userId);
   console.log("🔑 Usuario autorizado para diciembre:", esAutorizado); */
   return (
-    <div className="fecha-container">
+    <>
+      <ReservaSteps currentStep={2} />
+      <div className="fecha-container">
       <h2>Selecciona una fecha para {experto?.name}</h2>
       <p>Servicio: {servicio?.name}</p>
 
@@ -284,7 +287,8 @@ const intervaloMinutos = expertoTurnoCorto
           Continuar
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

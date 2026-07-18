@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useServicioStore from "../store/servicioStore";
+import ReservaSteps from "../components/ReservaSteps";
 import "./Expertos.css";
 
 const Expertos = () => {
@@ -53,6 +54,7 @@ const Expertos = () => {
 
   return (
     <div className="container-general-expertos">
+      <ReservaSteps currentStep={1} />
       <h2 className="title-pagina-expertos">
         Selecciona un Profesional para {servicio?.name}
       </h2>

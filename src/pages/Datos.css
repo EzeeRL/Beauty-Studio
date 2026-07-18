@@ -11,6 +11,10 @@
   padding: 20px 0;
 }
 
+.datos-container .reserva-steps {
+  margin-bottom: 0;
+}
+
 .form {
   width: 85%;
   max-width: 500px;
@@ -55,6 +59,16 @@
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mercado-pago-icon {
+  height: 22px;
+  width: auto;
+  border-radius: 4px;
 }
 
 .continue-button:disabled {

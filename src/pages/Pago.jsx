@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useServicioStore from "../store/servicioStore";
+import ReservaSteps from "../components/ReservaSteps";
 
 const Pago = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const Pago = () => {
 
   return (
     <div className="pago-container">
+      <ReservaSteps currentStep={3} />
       <h2>Resumen y pago</h2>
 
       <div className="resumen">

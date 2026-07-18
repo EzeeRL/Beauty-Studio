@@ -1,0 +1,99 @@
+.reserva-steps {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 2rem auto;
+  padding: 0 1rem;
+}
+
+.reserva-steps *,
+.reserva-steps *::before {
+  box-sizing: border-box;
+}
+
+.reserva-steps-track {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.reserva-steps-track::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  height: 4px;
+  background: #e0e0e0;
+  border-radius: 2px;
+  z-index: 0;
+}
+
+.reserva-steps-fill {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  height: 4px;
+  background: linear-gradient(45deg, #daba08, #e4c54d, #ecd473);
+  border-radius: 2px;
+  z-index: 1;
+  width: calc(100% - 36px);
+  max-width: calc(100% - 36px);
+  transform-origin: left;
+  transition: width 0.4s ease;
+}
+
+.reserva-step {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reserva-step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  color: #777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.reserva-step-circle.completado {
+  background: linear-gradient(45deg, #daba08, #e4c54d, #ecd473);
+  border-color: #e4c54d;
+  color: #fff;
+}
+
+.reserva-step-circle.activo {
+  background: #fff;
+  border-color: #e4c54d;
+  color: #daba08;
+  box-shadow: 0 0 0 4px rgba(228, 197, 77, 0.25);
+}
+
+.reserva-step-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #999;
+  transition: color 0.3s ease;
+}
+
+.reserva-step-label.activo {
+  color: #333;
+}
+
+@media (max-width: 480px) {
+  .reserva-step-label {
+    font-size: 0.75rem;
+  }
+}
