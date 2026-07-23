@@ -11,17 +11,17 @@ RECORDATORIO DE TURNO - MANICURÍA
 📅 Día: ${dia}
 🕒 Hora: ${hora}
 
-⚠️ Confirmar asistencia.
-Mandar diseño para darles un precio. No se aceptan cambios en el día si es más complejo. 
+⚠️Confirmar asistencia. 
+Mandar diseño para cotizarles. No se aceptan cambios en el día si es más complejo. 
 
 🚫 Sin acompañantes.
 
 💵 Se pierde la seña si:
 •⁠  ⁠No se avisa la inasistencia 48hs antes.
-•⁠  ⁠Llegan tarde (pasado +10 min).
-•⁠  ⁠Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar $10.000 adicionales
+•⁠  ⁠Llegan tarde +10 min.
+•⁠  ⁠Si llegan pasado los 10min y quieren ser atendidas. Deberán abonar $10.000 adicionales
 
-Gracias 💕 ¡Nos vemos pronto ${userName}! ✨`,
+Nos vemos pronto! ✨ ${userName}! ✨`,
 
     pestañas: `
 RECORDATORIO DE TURNO - PESTAÑAS/CEJAS
@@ -36,9 +36,9 @@ Asistir sin maquillaje ni cremas. (Pierden garantía)
 
 💵 Se pierde la seña si:
 •⁠  ⁠No se avisa la inasistencia 48 hs antes.
-•⁠  ⁠Llegan tarde (+10min).
-•⁠ Si llegan pasado los 10min y quieren ser atendidas, si es posible. Deberán abonar $10.000 adicionales
-¡Gracias! 💕 Nos vemos pronto ${userName} ✨`,
+•⁠  ⁠Llegan tarde +10min
+•⁠ Si llegan pasado los 10min y quieren ser atendidas. Deberán abonar $10.000 adicionales
+Nos vemos pronto.✨ ${userName} ✨`,
 
     cejas: `
 RECORDATORIO DE TURNO - CEJAS
@@ -62,16 +62,15 @@ RECORDATORIO DE TURNO - COSMETOLOGÍA
 📅 Día: ${dia}
 🕒 Hora: ${hora}
 
-⚠️ Asistir sin maquillaje ni cremas. En lo posible evitar la depilación facial 48 horas antes.
-Confirmar asistencia 48hs antes.
+⚠️ En lo posible evitar la depilación facial 48 horas antes.
+
 🚫 Sin acompañantes.
 
 💵 Se pierde la seña si:
 •⁠  ⁠No se avisa la inasistencia 48 hs antes.
 •⁠  ⁠Llegan tarde (+10min).
-•⁠  ⁠Si llegan tarde y quieren ser atendidas (si hay disponibilidad), abonan el total.
-
-¡Gracias! 💕 Nos vemos pronto ${userName} ✨`,
+•⁠  Si llegan pasado los 10min y quieren ser atendidas. Deberán abonar $10.000 adicionales
+Nos vemos pronto 🫧 ${userName} ✨`,
   };
 
   const clave = serviceName.toLowerCase();
