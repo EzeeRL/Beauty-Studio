@@ -110,9 +110,29 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
       {isOpen && (
         <div className="services-container">
           {serviciosOrdenados.map((service, idx) => {
-            // Si la categoría es "Pestañas", mostrar card con nombre e imagen
-            if (service.category === "Pestañas" || title === "Pestañas") {
+            const isExpanded = expandedDescriptions[service.id];
+            // Si la categoría es "Pestañas" o "Lifting y cejas", mostrar card con nombre e imagen
+            if (
+              service.category === "Pestañas" ||
+              title === "Pestañas" ||
+              service.category === "Lifting y cejas" ||
+              title === "Lifting y cejas"
+            ) {
               let imageUrl = service.image || "/Expertos/pestanas_default.jpg";
+              let description = service.description;
+              if (service.name === "Lifting con tinte y nutricion") {
+                description =
+                  "El Lash Lifting es una técnica que trabaja sobre tus pestañas naturales, arqueándolas desde la raíz. Además, les aportamos color para que luzcan más intensas y definidas, sin necesidad de máscara de pestañas.";
+              } else if (service.name === "Diseño, perfilado y henna") {
+                description =
+                  "En el perfilado de cejas combinamos la técnica con hilo y pinza. La henna es un tinte que aporta color y rellena visualmente las áreas despobladas. Su duración aprox es de hasta 10 días en la piel, dependiendo de los cuidados posteriores.";
+              } else if (service.name === "Dieño y perfilado de cejas") {
+                description =
+                  "Combinamos la técnica con hilo y pinza para retirar hasta los vellos más pequeños y lograr un diseño limpio, preciso y súper definido.";
+              } else if (service.name === "Diseño, perfilado y laminado") {
+                description =
+                  "En el perfilado de cejas combinamos la técnica con hilo y pinza. El laminado alisa y estira los vellos para mantenerlos en su lugar, logra un efecto prolijo, ordenado y con mayor volumen. Su duración aprox es de 21 días.";
+              }
               if (service.name === "V. Brasilero (2D)") {
                 imageUrl = "/pestañas/brasilero.jpeg";
               } else if (service.name === "Spire Lashes") {
@@ -135,6 +155,10 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 imageUrl = "/pestañas/perf.jpeg";
               } else if (service.name === "Volumen tech marrones") {
                 imageUrl = "/pestañas/VolumenTechMarrones.jpeg";
+              } else if (service.name === "Lifting con tinte y nutricion") {
+                imageUrl = "/lifting/lifting.jpeg";
+              } else if (service.name === "Diseño, perfilado y henna") {
+                imageUrl = "/lifting/perfilado.jpeg";
               }
               return (
                 <div
@@ -151,6 +175,26 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                     {service.name}
                   </h3>
                   <p className="details-service">${service.price}</p>
+                  {description && (
+                    <p
+                      className={`description ${
+                        isExpanded ? "expanded" : "collapsed"
+                      }`}
+                    >
+                      {isExpanded
+                        ? description
+                        : description.slice(0, 158) +
+                          (description.length > 200 ? "..." : "")}
+                    </p>
+                  )}
+                  {description && description.length > 100 && (
+                    <button
+                      className="toggle-description"
+                      onClick={() => toggleDescription(service.id)}
+                    >
+                      <u>{isExpanded ? "Ver menos" : "Ver más"}</u>
+                    </button>
+                  )}
                   <div className="container-button">
                     <button
                       className="book-button"
@@ -170,7 +214,6 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
               );
             }
             // Para el resto, renderizado original
-            const isExpanded = expandedDescriptions[service.id];
             return (
               <div
                 key={service.id}
