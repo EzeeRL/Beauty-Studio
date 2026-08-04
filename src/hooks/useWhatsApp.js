@@ -4,26 +4,7 @@ import axios from "axios";
 const API = "https://eve-back.vercel.app";
 
 const buildMessage = (serviceName, userName, dia, hora) => {
-  const mensajesPorServicio = {
-    manicuria: `
-RECORDATORIO DE TURNO - MANICURÍA
-
-📅 Día: ${dia}
-🕒 Hora: ${hora}
-
-⚠️Confirmar asistencia. 
-Mandar diseño para cotizarles. No se aceptan cambios en el día si es más complejo. 
-
-🚫 Sin acompañantes.
-
-💵 Se pierde la seña si:
-•⁠  ⁠No se avisa la inasistencia 48hs antes.
-•⁠  ⁠Llegan tarde +10 min.
-•⁠  ⁠Si llegan pasado los 10min y quieren ser atendidas. Deberán abonar $10.000 adicionales
-
-Nos vemos pronto! ✨ ${userName}! ✨`,
-
-    pestañas: `
+  const mensajePestañasCejas = `
 RECORDATORIO DE TURNO - PESTAÑAS/CEJAS
 
 📅 Día: ${dia}
@@ -38,7 +19,32 @@ Asistir sin maquillaje ni cremas. (Pierden garantía)
 •⁠  ⁠No se avisa la inasistencia 48 hs antes.
 •⁠  ⁠Llegan tarde +10min
 •⁠ Si llegan pasado los 10min y quieren ser atendidas. Deberán abonar $10.000 adicionales
-Nos vemos pronto.✨ ${userName} ✨`,
+Nos vemos pronto.✨ ${userName} ✨`;
+
+  const mensajesPorServicio = {
+    manicuria: `
+RECORDATORIO DE TURNO - MANICURÍA
+
+📅 Día: ${dia}
+🕒 Hora: ${hora}
+
+⚠️Confirmar asistencia.
+Mandar diseño para cotizarles. No se aceptan cambios en el día si es más complejo.
+
+🚫 Sin acompañantes.
+
+💵 Se pierde la seña si:
+•⁠  ⁠No se avisa la inasistencia 48hs antes.
+•⁠  ⁠Llegan tarde +10 min.
+•⁠  ⁠Si llegan pasado los 10min y quieren ser atendidas. Deberán abonar $10.000 adicionales
+
+Nos vemos pronto! ✨ ${userName}! ✨`,
+
+    pestañas: mensajePestañasCejas,
+
+    "lifting y cejas": mensajePestañasCejas,
+
+    lifting: mensajePestañasCejas,
 
     cejas: `
 RECORDATORIO DE TURNO - CEJAS
