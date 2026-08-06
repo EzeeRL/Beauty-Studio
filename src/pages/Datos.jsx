@@ -6,6 +6,7 @@ import "./Datos.css";
 import ReservaSteps from "../components/ReservaSteps";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { CalendarDays, Sparkles, UserRound } from "lucide-react";
 
 const Datos = () => {
   const navigate = useNavigate();
@@ -210,7 +211,7 @@ const Datos = () => {
   return (
     <div className="datos-container">
       <ReservaSteps currentStep={3} />
-      <h2>Ingresa tus datos</h2>
+      <h2 className="tituloDatos">Ingresa tus datos</h2>
 
       <form onSubmit={handleSubmit} className="form">
         <input
@@ -337,11 +338,42 @@ const Datos = () => {
       </form>
 
       <div className="container-info-turno">
-        <h2>Información de tu turno</h2>
+        <h2 className="title-info-turno">Información de tu turno</h2>
         <div className="info-turno">
-          <p>Fecha: {fecha?.toLocaleString()}</p>
-          <p>Servicio: {servicio?.name}</p>
-          <p>Profesional: {experto?.name}</p>
+          <div className="info-turno-row">
+            <span className="info-turno-icon">
+              <CalendarDays size={18} />
+            </span>
+            <div className="info-turno-text">
+              <span className="info-turno-label">Fecha</span>
+              <span className="info-turno-value">
+                {fecha?.toLocaleString(undefined, {
+                  dateStyle: "short",
+                  timeStyle: "short",
+                })}
+              </span>
+            </div>
+          </div>
+          <div className="info-turno-row">
+            <span className="info-turno-icon">
+              <Sparkles size={18} />
+            </span>
+            <div className="info-turno-text">
+              <span className="info-turno-label">Servicio</span>
+              <span className="info-turno-value">{servicio?.name}</span>
+            </div>
+          </div>
+          <div className="info-turno-row">
+            <span className="info-turno-icon">
+              <UserRound size={18} />
+            </span>
+            <div className="info-turno-text">
+              <span className="info-turno-label">Profesional</span>
+              <span className="info-turno-value">
+                {experto?.name?.trim()}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
       {/* 🆕 Modal de error */}

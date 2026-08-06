@@ -68,7 +68,12 @@ const Expertos = () => {
             const coincideCategoria = expert.specialty === servicio?.category;
             return coincideCategoria && !ocultarExpert4;
           })
-
+          .sort((a, b) => {
+            const esEvelyn = (expert) => expert.name.trim() === "Evelyn Duarte";
+            if (esEvelyn(a)) return -1;
+            if (esEvelyn(b)) return 1;
+            return 0;
+          })
           .map((expert) => (
             <div key={expert.id} className="expert-card">
               {expert.imageUrl ? (
@@ -97,7 +102,7 @@ const Expertos = () => {
       </div>
 
       <div className="container-option">
-        <h2>¿No sabés a quién elegir?</h2>
+        <h2 className="title-option">¿No sabés a quién elegir?</h2>
         <p className="text-option">
           Podés simplemente saltear este paso y te asignaremos un profesional
           nosotros mismos

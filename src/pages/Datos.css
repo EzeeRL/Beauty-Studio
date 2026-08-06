@@ -140,14 +140,68 @@
 
 /* --- INFO DEL TURNO (Abajo) --- */
 .container-info-turno {
-  margin-top: 20px;
+  width: 85%;
+  max-width: 500px;
+  margin-top: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+  background-color: #fff;
   text-align: center;
 }
 
+.title-info-turno {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  color: #584f4f;
+}
+
 .info-turno {
-  background: #eee;
-  padding: 15px;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-turno-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: start;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f2ece8;
+}
+
+.info-turno-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.info-turno-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #daba08, #e4c54d, #ecd473);
+  color: #fff;
+}
+
+.info-turno-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-turno-label {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.info-turno-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #584f4f;
 }
 
 /* --- MODAL --- */
@@ -191,6 +245,9 @@
     margin-top: 0;
   }
 
+  .tituloDatos{
+    margin-top: 7px;
+  }
   .input {
     width: 90%;
     padding: 8px 10px;
@@ -230,6 +287,11 @@
     padding: 10px;
     font-size: 1rem;
     margin-top: 5px;
+  }
+
+  .container-info-turno {
+    width: 92%;
+    padding: 15px;
   }
 
   /* Ajuste para el input de teléfono */
