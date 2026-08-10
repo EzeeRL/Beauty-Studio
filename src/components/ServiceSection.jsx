@@ -159,6 +159,8 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 imageUrl = "/lifting/lifting.jpeg";
               } else if (service.name === "Diseño, perfilado y henna") {
                 imageUrl = "/lifting/perfilado.jpeg";
+              } else if (service.name === "Diseño, perfilado y laminado") {
+                imageUrl = "/lifting/lamyperf.jpeg";
               }
               return (
                 <div
