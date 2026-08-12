@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import "./grupedTurno.css";
 
 const TurnosTable = ({
   data,
@@ -13,113 +14,113 @@ const TurnosTable = ({
   setAppointmentToDelete,
   setShowDeleteModal,
 }) => {
-  if (data.length === 0) return <p>No hay turnos para mostrar.</p>;
+  if (data.length === 0) return <p className="no-turnos">No hay turnos para mostrar.</p>;
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Hora</th>
-          <th>Servicio</th>
-          <th>Experto</th>
-          <th>Usuario</th>
-          <th>Teléfono</th>
-          <th>Precio</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((app) => {
-          const upcoming = isUpcoming(app.date);
-          return (
-            <tr key={app.id} className={upcoming ? "upcoming" : ""}>
-              <td data-label="Fecha">
-                {format(new Date(app.date), "dd/MM/yyyy")}
-              </td>
-              <td data-label="Hora">{format(new Date(app.date), "HH:mm")}</td>
-              <td data-label="Servicio">{app.Service?.name ?? "—"}</td>
-              <td data-label="Experto">{app.Expert.name}</td>
-              <td data-label="Usuario">{app.User.name}</td>
-              <td data-label="Teléfono">{app.User.phone}</td>
-              <td data-label="Precio">${app.Service?.price ?? "—"}</td>
+    <div className="appointments-container">
+      {data.map((app) => {
+        const upcoming = isUpcoming(app.date);
+        return (
+          <div key={app.id} className={`appointment-card ${upcoming ? "upcoming" : ""}`}>
+            <div className="card-header">
+              <span className="card-date">{format(new Date(app.date), "dd/MM/yyyy")}</span>
+              <span className="card-time">{format(new Date(app.date), "HH:mm")} hs</span>
+            </div>
 
-              <td data-label="Estado">
-                {editingId === app.id ? (
-                  <select
-                    value={editingPayStatus}
-                    onChange={(e) => setEditingPayStatus(e.target.value)}
+            <div className="card-body">
+              <div className="card-row">
+                <span className="card-label">💅 Servicio</span>
+                <span className="card-value">{app.Service?.name ?? "—"}</span>
+              </div>
+              <div className="card-row">
+                <span className="card-label">👩‍🎓 Experto</span>
+                <span className="card-value">{app.Expert.name}</span>
+              </div>
+              <div className="card-row">
+                <span className="card-label">🙍 Usuario</span>
+                <span className="card-value">{app.User.name}</span>
+              </div>
+              <div className="card-row">
+                <span className="card-label">📞 Teléfono</span>
+                <span className="card-value">{app.User.phone}</span>
+              </div>
+              <div className="card-row">
+                <span className="card-label">💵 Precio</span>
+                <span className="card-value">${app.Service?.price ?? "—"}</span>
+              </div>
+              <div className="card-row">
+                <span className="card-label">📌 Estado</span>
+                <span className="card-value">
+                  {editingId === app.id ? (
+                    <select
+                      value={editingPayStatus}
+                      onChange={(e) => setEditingPayStatus(e.target.value)}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="paid">Paid</option>
+                      <option value="pagado">Pagado</option>
+                    </select>
+                  ) : (
+                    <span className={`pay-badge ${app.payStatus}`}>{app.payStatus}</span>
+                  )}
+                </span>
+              </div>
+            </div>
+
+            <div className="appointment-actions">
+              {editingId === app.id ? (
+                <>
+                  <button className="btn save" onClick={() => saveEdit(app.id)}>
+                    Guardar
+                  </button>
+                  <button className="btn cancel" onClick={cancelEdit}>
+                    Cancelar
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className="btn edit" onClick={() => startEdit(app.id, app.payStatus)}>
+                    ✏️ Editar
+                  </button>
+
+                  {upcoming && (
+                    <button
+                      className="btn whatsapp"
+                      onClick={() =>
+                        sendWhatsApp(
+                          app.User.phone,
+                          app.User.name,
+                          app.date,
+                          app.id,
+                          app.Expert.specialty,
+                        )
+                      }
+                      disabled={app.reminderStatus === "enviado"}
+                    >
+                      📲 WhatsApp
+                    </button>
+                  )}
+
+                  <button
+                    className="btn delete"
+                    onClick={() => {
+                      setAppointmentToDelete(app.id);
+                      setShowDeleteModal(true);
+                    }}
                   >
-                    <option value="pending">Pending</option>
-                    <option value="paid">Paid</option>
-                    <option value="pagado">Pagado</option>
-                  </select>
-                ) : (
-                  app.payStatus
-                )}
-              </td>
+                    🗑️ Eliminar
+                  </button>
+                </>
+              )}
+            </div>
 
-              <td data-label="Acciones" className="container-actions">
-                {editingId === app.id ? (
-                  <>
-                    <button className="save" onClick={() => saveEdit(app.id)}>
-                      Guardar
-                    </button>
-                    <button className="cancel" onClick={cancelEdit}>
-                      Cancelar
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      className="btn edit"
-                      onClick={() => startEdit(app.id, app.payStatus)}
-                    >
-                      ✏️ Editar
-                    </button>
-
-                    <button
-                      className="btn delete"
-                      onClick={() => {
-                        setAppointmentToDelete(app.id);
-                        setShowDeleteModal(true);
-                      }}
-                    >
-                      🗑️ Eliminar
-                    </button>
-
-                    {upcoming && (
-                      <button
-                        className="btn whatsapp"
-                        onClick={() =>
-                          sendWhatsApp(
-                            app.User.phone,
-                            app.User.name,
-                            app.date,
-                            app.id,
-                            app.Expert.specialty,
-                          )
-                        }
-                        disabled={app.reminderStatus === "enviado"}
-                      >
-                        📲 WhatsApp
-                      </button>
-                    )}
-
-                    {app.reminderStatus === "enviado" && (
-                      <span className="status-sent">
-                        📤 Recordatorio enviado
-                      </span>
-                    )}
-                  </>
-                )}
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+            {app.reminderStatus === "enviado" && (
+              <span className="status-sent">📤 Recordatorio enviado</span>
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 };
 

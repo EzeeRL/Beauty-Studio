@@ -1,5 +1,24 @@
+.horario-manager {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.filter-bar label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+}
+
 .input-estilizado {
-  padding: 7px;
+  padding: 10px 40px 10px 12px;
   border: 1px solid #ccc;
   border-radius: 12px;
   font-size: 1rem;
@@ -8,16 +27,148 @@
   outline: none;
   transition: all 0.3s ease;
   font-family: inherit;
-  appearance: none; /* elimina flechita por defecto */
+  appearance: none;
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23333' d='M2 0L0 2h4z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 0.65rem auto;
-width: 320px;
-margin-top: 15px;
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
 }
 
 .input-estilizado:focus {
   border-color: #c4a38f;
   box-shadow: 0 0 0 3px rgba(196, 163, 143, 0.2);
+}
+
+.horario-empty {
+  color: #888;
+  padding: 1rem 0;
+}
+
+.horario-list-title {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.9rem;
+  text-transform: capitalize;
+}
+
+.horario-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.horario-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.horario-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.horario-card-date {
+  font-weight: 700;
+  color: #333;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+.horario-card-range {
+  font-weight: 700;
+  color: #c0a439;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.horario-card-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.horario-card-edit label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.horario-card-edit input {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.horario-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.horario-card-actions .btn {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 90px;
+}
+
+.horario-card-actions .btn.edit {
+  background-color: #f5f5f5;
+}
+
+.horario-card-actions .btn.delete {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.horario-card-actions .btn.save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.horario-card-actions .btn.cancel {
+  background-color: #ccc;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+@media (max-width: 640px) {
+  .horario-cards {
+    grid-template-columns: 1fr;
+  }
 }

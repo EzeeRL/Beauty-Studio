@@ -5,25 +5,73 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     max-width: 800px;
     margin: auto;
+    box-sizing: border-box;
 }
 
-.tabla-liquidaciones {
-    width: 100%;
-    border-collapse: collapse;
+.liquidaciones-list {
+    display: flex;
+    flex-direction: column;
 }
 
-.tabla-liquidaciones th,
-.tabla-liquidaciones td {
-    padding: 12px;
-    text-align: left;
+.liquidacion-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 4px;
     border-bottom: 1px solid #eee;
 }
 
-.tabla-liquidaciones th {
-    background: linear-gradient(90deg, #C0A439, #E6C55A);
-    color: white;
+.liquidacion-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
 }
 
-.tabla-liquidaciones td {
-    font-size: 0.95rem;
+.liquidacion-nombre {
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+}
+
+.liquidacion-generado {
+    font-size: 0.8rem;
+    color: #999;
+    white-space: nowrap;
+}
+
+.liquidacion-pagar {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #c0a439;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.liquidacion-pagar.es-jefa {
+    color: #888;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.liquidacion-total {
+    border-bottom: none;
+    border-top: 2px solid #f0e6c8;
+    margin-top: 6px;
+    padding-top: 16px;
+}
+
+.liquidacion-total .liquidacion-nombre {
+    font-weight: 700;
+}
+
+.liquidacion-total .liquidacion-pagar {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 420px) {
+    .liquidacion-nombre {
+        white-space: normal;
+    }
 }

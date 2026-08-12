@@ -74,36 +74,26 @@ const LiquidacionesExpertos = ({ appointments }) => {
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
         💼 Liquidación de expertos
       </h2>
-      <table className="tabla-liquidaciones">
-        <thead>
-          <tr>
-            <th>Experto</th>
-            <th>Total generado</th>
-            <th>A pagar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pagosExpertos.map(({ experto, totalGenerado, aPagar, esJefa }) => (
-            <tr key={experto}>
-              <td>{experto}</td>
-              <td>${totalGenerado.toLocaleString()}</td>
-              <td style={{ color: esJefa ? "gray" : "#C0A439" }}>
-                {esJefa ? "Es jefa" : `$${aPagar.toLocaleString()}`}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colSpan="2" style={{ fontWeight: "bold", textAlign: "right" }}>
-              Total de ganancias (mes):
-            </td>
-            <td style={{ fontWeight: "bold", color: "#C0A439" }}>
-              ${totalMes.toLocaleString()}
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+      <div className="liquidaciones-list">
+        {pagosExpertos.map(({ experto, totalGenerado, aPagar, esJefa }) => (
+          <div className="liquidacion-row" key={experto}>
+            <div className="liquidacion-info">
+              <span className="liquidacion-nombre">{experto}</span>
+              <span className="liquidacion-generado">
+                Generado: ${totalGenerado.toLocaleString()}
+              </span>
+            </div>
+            <span className={`liquidacion-pagar ${esJefa ? "es-jefa" : ""}`}>
+              {esJefa ? "Es jefa" : `$${aPagar.toLocaleString()}`}
+            </span>
+          </div>
+        ))}
+
+        <div className="liquidacion-row liquidacion-total">
+          <span className="liquidacion-nombre">Total de ganancias (mes)</span>
+          <span className="liquidacion-pagar">${totalMes.toLocaleString()}</span>
+        </div>
+      </div>
     </div>
   );
 };

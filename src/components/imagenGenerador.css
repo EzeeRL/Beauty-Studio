@@ -1,0 +1,173 @@
+.flyer-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+
+.flyer-title {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.flyer-date-input {
+  padding: 8px 12px;
+  font-size: 15px;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 100%;
+  max-width: 220px;
+}
+
+.flyer-loading {
+  color: #888;
+  padding: 2rem 0;
+}
+
+.flyer-preview {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 9 / 16;
+  position: relative;
+  background-image: url("/curso2.jpeg");
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  margin: 0 auto;
+}
+
+.flyer-preview-overlay {
+  background-color: rgba(0, 0, 0, 0.55);
+  border-radius: 14px;
+  padding: 6%;
+  text-align: center;
+  width: 92%;
+}
+
+.flyer-preview-title {
+  font-size: 1.05rem;
+  color: #ffde59;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+  margin-bottom: 14px;
+}
+
+.flyer-preview-list {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.flyer-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.25rem;
+}
+
+.flyer-btn {
+  flex: 1;
+  padding: 12px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.flyer-btn-download {
+  background: linear-gradient(90deg, #ff914d, #ffde59);
+  color: #000;
+}
+
+.flyer-btn-copy {
+  background: #4caf50;
+  color: #fff;
+}
+
+.flyer-text-preview {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #eee;
+  text-align: left;
+}
+
+.flyer-text-preview-title {
+  font-size: 0.9rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.6rem;
+}
+
+.flyer-text-preview-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flyer-text-preview-list li {
+  background: #faf6ea;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.flyer-text-preview-empty {
+  background: transparent !important;
+  color: #888 !important;
+  font-weight: 400 !important;
+  padding: 0 !important;
+  text-align: center;
+}
+
+.flyer-toast-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.flyer-toast {
+  background-color: #fff;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+}
+
+@media (max-width: 480px) {
+  .flyer-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .flyer-actions {
+    flex-direction: column;
+  }
+}

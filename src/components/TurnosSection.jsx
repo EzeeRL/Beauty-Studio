@@ -29,11 +29,14 @@ const TurnosSection = ({
   );
 
   return (
-    <>
-      <section className="calendar-section" style={{ marginBottom: "3rem" }}>
-        <h2>Calendario y turnos por fecha</h2>
+    <div className="turnos-section-stack">
+      <section className="calendar-section section-card">
+        <h2>Calendario</h2>
         <Calendar onChange={setSelectedDate} value={selectedDate} />
-        <h3>Turnos para {format(selectedDate, "dd/MM/yyyy")}</h3>
+      </section>
+
+      <section className="day-appointments section-card">
+        <h2>Turnos para {format(selectedDate, "dd/MM/yyyy")}</h2>
         <TurnosTable
           data={filteredAppointments}
           editingId={editingId}
@@ -49,7 +52,7 @@ const TurnosSection = ({
         />
       </section>
 
-      <section className="all-appointments" style={{ marginBottom: "3rem" }}>
+      <section className="all-appointments section-card">
         <h2>Próximos Turnos</h2>
         <GroupedTurnosTable
           data={sortedAppointments}
@@ -67,7 +70,7 @@ const TurnosSection = ({
       </section>
 
       <TurnosImageGenerator />
-    </>
+    </div>
   );
 };
 

@@ -103,17 +103,51 @@ tbody tr.upcoming {
   color: #666;
 }
 
-.calendar-section,
 .config-section,
 .chart-section {
   margin: 2rem 0;
 }
 
+.turnos-section-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.section-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.section-card h2 {
+  margin-bottom: 1rem;
+}
+
+.section-card h3 {
+  margin-top: 1.5rem;
+}
+
 @media screen and (max-width: 768px) {
+  .turnos-section-stack {
+    gap: 1.25rem;
+  }
+
+  .section-card {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
   .all-appointments {
     margin: 0 auto;
     width: 100%;
-    /* background-color: red; */
   }
 
   .calendar-section {
