@@ -145,8 +145,7 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 imageUrl = "/pestañas/rimel.jpeg";
               } else if (service.name === "Capping mega 6D") {
                 imageUrl = "/pestañas/6d.jpeg";
-              } 
-               else if (service.name === "Volumen mega 6D") {
+              } else if (service.name === "Volumen mega 6D") {
                 imageUrl = "/pestañas/mega6d.jpeg";
               } else if (service.name === "Clasicas") {
                 imageUrl = "/pestañas/clasicas.jpeg";
@@ -162,10 +161,17 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 imageUrl = "/lifting/lifting.jpeg";
               } else if (service.name === "Diseño, perfilado y henna") {
                 imageUrl = "/lifting/perfilado.jpeg";
-              } else if (service.name === "Diseño, perfilado y laminado") {
+              } else if (
+                service.name === "Diseño y perfilado de cejas con hilo"
+              ) {
                 imageUrl = "/lifting/lamyperf.jpeg";
-              }  else if (service.name === "Full cejas: Diseño + perfilado + laminado + henna") {
+              } else if (
+                service.name ===
+                "Full cejas: Diseño + perfilado + laminado + henna"
+              ) {
                 imageUrl = "/lifting/fullcejas.jpeg";
+              } else if (service.name === "Diseño, perfilado y laminado") {
+                imageUrl = "/lifting/diseñoperfilado.jpeg";
               }
               return (
                 <div
