@@ -134,7 +134,7 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                   "En el perfilado de cejas combinamos la técnica con hilo y pinza. El laminado alisa y estira los vellos para mantenerlos en su lugar, logra un efecto prolijo, ordenado y con mayor volumen. Su duración aprox es de 21 días.";
               }
               if (service.name === "V. Brasilero (2D)") {
-                imageUrl = "/pestañas/brasilero.jpeg";
+                imageUrl = "/pestañas/2d.jpeg";
               } else if (service.name === "Spire Lashes") {
                 imageUrl = "/pestañas/sprieLashes.jpeg";
               } else if (service.name === "V. Hawaiano (3D)") {
@@ -145,6 +145,9 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 imageUrl = "/pestañas/rimel.jpeg";
               } else if (service.name === "Capping mega 6D") {
                 imageUrl = "/pestañas/6d.jpeg";
+              } 
+               else if (service.name === "Volumen mega 6D") {
+                imageUrl = "/pestañas/mega6d.jpeg";
               } else if (service.name === "Clasicas") {
                 imageUrl = "/pestañas/clasicas.jpeg";
               } else if (service.name === "V. Argentino (5D)") {
@@ -161,6 +164,8 @@ const ServiceSection = ({ title, services, isOpen, onToggle }) => {
                 imageUrl = "/lifting/perfilado.jpeg";
               } else if (service.name === "Diseño, perfilado y laminado") {
                 imageUrl = "/lifting/lamyperf.jpeg";
+              }  else if (service.name === "Full cejas: Diseño + perfilado + laminado + henna") {
+                imageUrl = "/lifting/fullcejas.jpeg";
               }
               return (
                 <div
