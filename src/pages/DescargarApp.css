@@ -1,0 +1,89 @@
+.descargar-app-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 1rem 3rem;
+  box-sizing: border-box;
+  margin-top: -85px;
+}
+
+.descargar-app-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 2rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.descargar-app-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 16px;
+  margin-bottom: 1rem;
+}
+
+.descargar-app-card h1 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.descargar-app-subtitle {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1.75rem;
+}
+
+.descargar-app-btn {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.9rem;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #c0a439, #e6c55a);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(192, 164, 57, 0.35);
+  transition: opacity 0.2s;
+}
+
+.descargar-app-btn:hover {
+  opacity: 0.9;
+}
+
+.descargar-app-meta {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.descargar-app-help {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+  text-align: left;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.descargar-app-help strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.descargar-app-help ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}

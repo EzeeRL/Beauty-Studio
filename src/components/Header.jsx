@@ -99,6 +99,13 @@ const Header = () => {
             Inicio
           </a>
           <a
+            href="/app"
+            className="menu-item"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Nuestra app
+          </a>
+          <a
             href="/productos"
             className="menu-item"
             onClick={() => setIsMenuOpen(false)}

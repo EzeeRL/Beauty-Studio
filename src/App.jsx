@@ -24,6 +24,7 @@ import EditarPerfil from "./pages/EditarPerfil";
 import RutaProtegida from "./utils/RutaProtegida";
 import Cursos from "./pages/Cursos";
 import ComprarProductos from "./pages/ProductosUser";
+import DescargarApp from "./pages/DescargarApp";
 
 function App() {
   const [services, setServices] = useState({});
@@ -182,6 +183,7 @@ function App() {
             <Route path="/ubicacion" element={<Ubicacion />} />
             <Route path="/Cursos" element={<Cursos />} />
             <Route path="/Productos" element={<ComprarProductos />} />
+            <Route path="/app" element={<DescargarApp />} />
             <Route
               path="/admin"
               element={

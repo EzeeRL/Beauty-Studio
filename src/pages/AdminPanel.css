@@ -588,6 +588,12 @@ tbody tr.upcoming {
 
 .nav-icon {
   font-size: 1.4rem;
+  display: inline-flex;
+}
+
+.nav-icon svg {
+  width: 1em;
+  height: 1em;
 }
 
 /* 🖥️ DESKTOP (Sidebar fijo al borde izquierdo) */
