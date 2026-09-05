@@ -157,6 +157,17 @@ const ServiceManager = () => {
                 className="modern-input"
               />
             </div>
+            <div className="input-group full-width">
+              <label>Descripción</label>
+              <textarea
+                name="description"
+                placeholder="Breve descripción del servicio..."
+                value={newService.description}
+                onChange={handleChange}
+                className="modern-input"
+                rows={3}
+              />
+            </div>
           </div>
           <button
             onClick={handleCreateOrUpdate}
@@ -285,6 +296,8 @@ const ServiceManager = () => {
         }
 
         .modern-input:focus { border-color: #4f46e5; background: white; }
+
+        textarea.modern-input { resize: vertical; font-family: inherit; }
 
         .modern-button {
           padding: 0.8rem;
