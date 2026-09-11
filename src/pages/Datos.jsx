@@ -15,6 +15,9 @@ const Datos = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponStatus, setCouponStatus] = useState(null);
   const [verifyingCoupon, setVerifyingCoupon] = useState(false);
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
+  const [availableRewards, setAvailableRewards] = useState([]);
+  const [selectedRewardId, setSelectedRewardId] = useState("");
 
   const BASE_PRICE = 10000; // Precio normal
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
@@ -38,6 +41,22 @@ const Datos = () => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  // 🎁 Traer puntos y premios de fidelidad disponibles (solo si ya conocemos al usuario)
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+
+    axios
+      .get(`https://eve-back.vercel.app/users/${userId}`)
+      .then((res) => {
+        setLoyaltyPoints(res.data.points || 0);
+        setAvailableRewards(res.data.availableRewards || []);
+      })
+      .catch(() => {
+        // Si falla, simplemente no mostramos opciones de canje
+      });
+  }, []);
 
   // 🟡 Función para verificar el cupón en el backend
   const handleVerifyCoupon = async () => {
@@ -73,16 +92,27 @@ const Datos = () => {
     }
   };
 
-  // 🧮 Calcular el precio final en base al cupón (se recalcula automáticamente)
+  const selectedReward = availableRewards.find(
+    (r) => String(r.id) === String(selectedRewardId),
+  );
+
+  // 🧮 Calcular el precio final en base al premio de fidelidad o al cupón
+  // (son excluyentes entre sí; el premio de fidelidad tiene prioridad si hay uno seleccionado)
   let finalPrice = BASE_PRICE;
-  if (couponStatus?.valid) {
+  if (selectedReward) {
+    if (selectedReward.discountType === "percentage") {
+      finalPrice = BASE_PRICE - BASE_PRICE * (selectedReward.discountValue / 100);
+    } else if (selectedReward.discountType === "fixed") {
+      finalPrice = BASE_PRICE - selectedReward.discountValue;
+    }
+  } else if (couponStatus?.valid) {
     if (couponStatus.type === "percentage") {
       finalPrice = BASE_PRICE - BASE_PRICE * (couponStatus.value / 100);
     } else if (couponStatus.type === "fixed") {
       finalPrice = BASE_PRICE - couponStatus.value;
     }
-    if (finalPrice < 0) finalPrice = 0;
   }
+  if (finalPrice < 0) finalPrice = 0;
 
   /*   useEffect(() => {
   setFormData({
@@ -163,19 +193,25 @@ const Datos = () => {
       // 3️⃣ Si userId NO es 3 => Redirigir a MercadoPago
       if (userId !== 3) {
         console.log("💰 Creando preferencia de pago en MercadoPago...");
+        const metadata = {
+          appointmentId,
+          appointmentId2,
+          expertId: experto.id,
+          appointmentDate: fecha.toISOString(), // objeto Date a string ISO
+          tiempo: servicio.duration || 60,
+        };
+        // Solo mandamos loyaltyRewardId si el cliente eligió canjear un premio
+        if (selectedReward) {
+          metadata.loyaltyRewardId = selectedReward.id;
+        }
+
         const preferenceRes = await axios.post(
           "https://eve-back.vercel.app/pay",
           {
             title: servicio.name,
             quantity: 1,
             unit_price: finalPrice,
-            metadata: {
-              appointmentId,
-              appointmentId2,
-              expertId: experto.id,
-              appointmentDate: fecha.toISOString(), // objeto Date a string ISO
-              tiempo: servicio.duration || 60,
-            },
+            metadata,
           },
         );
 
@@ -269,6 +305,34 @@ const Datos = () => {
           }}
           containerStyle={{ marginBottom: "1rem" }}
         />
+        {/* 🎁 SECCIÓN DE PUNTOS DE FIDELIDAD */}
+        {availableRewards.length > 0 && (
+          <div className="loyalty-container">
+            <p className="loyalty-points">
+              Tenés {loyaltyPoints} {loyaltyPoints === 1 ? "punto" : "puntos"}{" "}
+              acumulados 🎉
+            </p>
+            <select
+              className="input loyalty-select"
+              value={selectedRewardId}
+              disabled={!!couponStatus?.valid}
+              onChange={(e) => setSelectedRewardId(e.target.value)}
+            >
+              <option value="">No canjear ningún premio</option>
+              {availableRewards.map((reward) => (
+                <option key={reward.id} value={reward.id}>
+                  {reward.description}
+                </option>
+              ))}
+            </select>
+            {couponStatus?.valid && (
+              <p className="loyalty-hint">
+                Ya tenés un cupón aplicado, no podés combinarlo con un premio.
+              </p>
+            )}
+          </div>
+        )}
+
         {/* 🎟️ SECCIÓN DE CUPONES */}
         <div className="coupon-container">
           <div className="coupon-input-group">
@@ -278,17 +342,24 @@ const Datos = () => {
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
               className="input coupon-input"
+              disabled={!!selectedReward}
             />
             <button
               type="button"
               onClick={handleVerifyCoupon}
-              disabled={verifyingCoupon || !couponCode.trim()}
+              disabled={verifyingCoupon || !couponCode.trim() || !!selectedReward}
               className="verify-button"
             >
               {verifyingCoupon ? "..." : "Aplicar"}
             </button>
           </div>
-          {couponStatus && (
+          {selectedReward && (
+            <p className="coupon-error">
+              Ya elegiste canjear un premio de fidelidad, no podés combinarlo con
+              un cupón.
+            </p>
+          )}
+          {couponStatus && !selectedReward && (
             <p
               className={couponStatus.valid ? "coupon-success" : "coupon-error"}
             >
@@ -297,18 +368,16 @@ const Datos = () => {
           )}
         </div>
 
-        {couponStatus?.valid && (
+        {(selectedReward || couponStatus?.valid) && (
           <div className="payment-summary">
             <div className="summary-row">
               <span>Subtotal:</span>
               <span>${BASE_PRICE}</span>
             </div>
-            {couponStatus?.valid && (
-              <div className="summary-row discount-row">
-                <span>Descuento aplicado:</span>
-                <span>-${BASE_PRICE - finalPrice}</span>
-              </div>
-            )}
+            <div className="summary-row discount-row">
+              <span>Descuento aplicado:</span>
+              <span>-${BASE_PRICE - finalPrice}</span>
+            </div>
             <div className="summary-row total-row">
               <span>Total a pagar:</span>
               <span>${finalPrice}</span>

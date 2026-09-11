@@ -75,6 +75,28 @@
   background-color: #ccc;
 }
 
+/* --- SECCIÓN DE PUNTOS DE FIDELIDAD --- */
+.loyalty-container {
+  width: 85%;
+  margin-top: 5px;
+}
+
+.loyalty-points {
+  font-size: 0.85rem;
+  color: #584f4f;
+  margin: 0 0 6px;
+}
+
+.loyalty-select {
+  width: 100%;
+}
+
+.loyalty-hint {
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
 /* --- SECCIÓN DE CUPONES --- */
 .coupon-container {
   width: 85%;
@@ -253,6 +275,11 @@
     padding: 8px 10px;
     /* Inputs más compactos */
     font-size: 0.9rem;
+  }
+
+  .loyalty-container {
+    margin-bottom: 5px;
+    width: 90%;
   }
 
   .coupon-container {
