@@ -111,12 +111,17 @@ const Datos = () => {
   // (son excluyentes entre sí; el premio de fidelidad tiene prioridad si el usuario tiene uno)
   let finalPrice = BASE_PRICE;
   if (applyLoyaltyDiscount) {
+    // El % de fidelidad se calcula sobre el precio TOTAL del servicio (no
+    // sobre la seña), porque la seña es solo una parte del servicio.
+    // El monto resultante en pesos se resta de la seña que se cobra ahora.
+    const precioTotalServicio = servicio?.price || BASE_PRICE;
+    let descuentoEnPesos = 0;
     if (loyaltyDiscount.discountType === "percentage") {
-      finalPrice =
-        BASE_PRICE - BASE_PRICE * (loyaltyDiscount.discountValue / 100);
+      descuentoEnPesos = precioTotalServicio * (loyaltyDiscount.discountValue / 100);
     } else if (loyaltyDiscount.discountType === "fixed") {
-      finalPrice = BASE_PRICE - loyaltyDiscount.discountValue;
+      descuentoEnPesos = loyaltyDiscount.discountValue;
     }
+    finalPrice = BASE_PRICE - descuentoEnPesos;
   } else if (couponStatus?.valid) {
     if (couponStatus.type === "percentage") {
       finalPrice = BASE_PRICE - BASE_PRICE * (couponStatus.value / 100);
