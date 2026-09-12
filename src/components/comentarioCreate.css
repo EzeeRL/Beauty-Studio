@@ -1,12 +1,14 @@
 .input {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   background-color: #ffffff;
-width: 90%;
+  width: 90%;
   height: 25px;
   padding: 10px;
   /* text-align: center; */
-  border: 2px solid white;
+  border: 2px solid #fff;
   border-radius: 5px;
   /* box-shadow: 3px 3px 2px rgb(249, 255, 85); */
+  resize: none;
 }
 
 .input:focus {
@@ -14,6 +16,6 @@ width: 90%;
   background-color: #ffffff;
   outline-color: rgb(253, 65, 193);
   box-shadow: -3px -3px 15px rgb(227, 193, 27);
-  transition: .1s;
+  transition: 0.1s;
   transition-property: box-shadow;
 }

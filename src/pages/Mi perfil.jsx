@@ -20,6 +20,7 @@ const Perfil = () => {
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
   const [rewardTiers, setRewardTiers] = useState([]);
   const [displayedPoints, setDisplayedPoints] = useState(0);
+  const [celebrateTierId, setCelebrateTierId] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [scanMessage, setScanMessage] = useState(null);
@@ -350,12 +351,25 @@ const Perfil = () => {
   const handleScanQr = async (code) => {
     setScanning(true);
     setScanMessage(null);
+    const previousPoints = loyaltyPoints;
     try {
       const res = await axios.post("https://eve-back.vercel.app/loyalty/scan", {
         userId,
         code,
       });
-      setLoyaltyPoints(res.data.points);
+      const newPoints = res.data.points;
+      setLoyaltyPoints(newPoints);
+
+      // Si con este punto nuevo se cruzó el umbral de un premio, festejamos ese nodo
+      const unlockedTier = rewardTiers.find(
+        (t) =>
+          previousPoints < t.pointsRequired && newPoints >= t.pointsRequired,
+      );
+      if (unlockedTier) {
+        setCelebrateTierId(unlockedTier.id);
+        setTimeout(() => setCelebrateTierId(null), 2200);
+      }
+
       setScanMessage({
         type: "success",
         text: "🎉 ¡Sumaste un punto de fidelidad!",
@@ -391,37 +405,44 @@ const Perfil = () => {
   );
   const ultimos3Turnos = turnosParciales.slice(-3);
 
-  // 🎁 Arma la escalera de premios: qué nodos ya se alcanzaron, cuál sigue,
-  // y cuánto se rellena la barra entre cada tramo según los puntos actuales
-  let nextRewardAssigned = false;
-  const rewardNodes = rewardTiers.map((tier) => {
-    const reached = displayedPoints >= tier.pointsRequired;
-    const isNext = !reached && !nextRewardAssigned;
-    if (isNext) nextRewardAssigned = true;
+  // 🎁 Arma la escalera de puntos, de a uno: un nodo por cada punto entre 1 y
+  // el premio más alto configurado. Los que coinciden con un premio se marcan
+  // distinto (más grandes, con el descuento) que los puntos "de relleno".
+  const maxPoints =
+    rewardTiers.length > 0
+      ? rewardTiers[rewardTiers.length - 1].pointsRequired
+      : 0;
+  const tierByPoints = new Map(rewardTiers.map((t) => [t.pointsRequired, t]));
 
-    return {
-      ...tier,
+  let nextAssigned = false;
+  const pointSlots = [];
+  for (let p = 1; p <= maxPoints; p++) {
+    const tier = tierByPoints.get(p);
+    const reached = displayedPoints >= p;
+    const isNext = !reached && !nextAssigned;
+    if (isNext) nextAssigned = true;
+
+    pointSlots.push({
+      points: p,
+      isReward: !!tier,
+      tier,
       reached,
       isNext,
+      isCurrent: displayedPoints > 0 && p === displayedPoints,
+      celebrate: !!tier && tier.id === celebrateTierId,
       stateClass: reached ? "reached" : isNext ? "next" : "locked",
-      discountLabel:
-        tier.discountType === "percentage"
+      discountLabel: tier
+        ? tier.discountType === "percentage"
           ? `${tier.discountValue}% OFF`
-          : `$${tier.discountValue} OFF`,
-      pointsLabel:
-        tier.pointsRequired === 1 ? "1 pt" : `${tier.pointsRequired} pts`,
-    };
-  });
+          : `$${tier.discountValue} OFF`
+        : null,
+    });
+  }
 
-  const rewardSegments = rewardTiers.slice(1).map((tier, i) => {
-    const from = rewardTiers[i].pointsRequired;
-    const to = tier.pointsRequired;
-    let fillPct = 0;
-    if (displayedPoints >= to) fillPct = 100;
-    else if (displayedPoints > from)
-      fillPct = ((displayedPoints - from) / (to - from)) * 100;
-    return { fillPct, widthPct: 100 / (rewardTiers.length - 1) };
-  });
+  const rewardSegments = pointSlots.slice(1).map((slot) => ({
+    fillPct: displayedPoints >= slot.points ? 100 : 0,
+    widthPct: 100 / (pointSlots.length - 1),
+  }));
 
   const reachedTiers = rewardTiers.filter(
     (t) => displayedPoints >= t.pointsRequired,
@@ -435,7 +456,7 @@ const Perfil = () => {
             : `$${reachedTiers[reachedTiers.length - 1].discountValue}`
         } de descuento disponible para tu próximo turno de manicuria!`;
   return (
-    <div className="perfil-container" style={{ marginLeft: "-10px" }}>
+    <div className="perfil-container">
       <div className="perfil-card">
         <h2>Perfil de usuario</h2>
 
@@ -458,9 +479,8 @@ const Perfil = () => {
         {rewardTiers.length > 0 ? (
           <>
             <p className="loyalty-subtitle">
-              Tenés {loyaltyPoints}{" "}
-              {loyaltyPoints === 1 ? "punto" : "puntos"} — sumás 1 por cada
-              turno de manicuria pagado.
+              Tenés {loyaltyPoints} {loyaltyPoints === 1 ? "punto" : "puntos"} —
+              sumás 1 por cada turno de manicuria pagado.
             </p>
 
             <div className="reward-ladder">
@@ -483,66 +503,89 @@ const Perfil = () => {
                 className="reward-nodes-row"
                 style={{
                   justifyContent:
-                    rewardNodes.length === 1 ? "center" : "space-between",
+                    pointSlots.length === 1 ? "center" : "space-between",
                 }}
               >
-                {rewardNodes.map((node) => (
-                  <div
-                    className="reward-node"
-                    key={node.id}
-                    title={node.description}
-                  >
-                    <div className={`reward-circle ${node.stateClass}`}>
-                      {node.reached ? (
-                        <svg
-                          width="22"
-                          height="22"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            d="M5 13l4 4L19 7"
-                            stroke="white"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      ) : (
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <rect
-                            x="5"
-                            y="11"
-                            width="14"
-                            height="9"
-                            rx="2"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          />
-                          <path
-                            d="M8 11V7a4 4 0 0 1 8 0v4"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      )}
-                    </div>
-                    <div className={`reward-points-label ${node.stateClass}`}>
-                      {node.pointsLabel}
-                    </div>
+                {pointSlots.map((slot) =>
+                  slot.isReward ? (
                     <div
-                      className={`reward-discount-label ${node.stateClass}`}
+                      className="reward-node"
+                      key={slot.points}
+                      title={slot.tier.description}
                     >
-                      {node.discountLabel}
+                      <div className="reward-node-top">
+                        {slot.isCurrent && (
+                          <div className="reward-here-arrow" />
+                        )}
+                        <div
+                          className={`reward-circle ${slot.stateClass} ${
+                            slot.celebrate ? "celebrate" : ""
+                          }`}
+                        >
+                          {slot.reached ? (
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <path
+                                d="M5 13l4 4L19 7"
+                                stroke="white"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <rect
+                                x="5"
+                                y="11"
+                                width="14"
+                                height="9"
+                                rx="2"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              />
+                              <path
+                                d="M8 11V7a4 4 0 0 1 8 0v4"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                      </div>
+                      <div className={`reward-points-label ${slot.stateClass}`}>
+                        {slot.points} pt{slot.points === 1 ? "" : "s"}
+                      </div>
+                      <div
+                        className={`reward-discount-label ${slot.stateClass}`}
+                      >
+                        {slot.discountLabel}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ) : (
+                    <div
+                      className="reward-node reward-node-plain"
+                      key={slot.points}
+                    >
+                      <div className="reward-node-top">
+                        {slot.isCurrent && (
+                          <div className="reward-here-arrow" />
+                        )}
+                        <div className={`reward-dot ${slot.stateClass}`}></div>
+                      </div>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
 
@@ -606,7 +649,7 @@ const Perfil = () => {
       <ComentarioForm></ComentarioForm>
       <h2 className="turnos-title">Mis turnos</h2>
       {ultimos3Turnos.length === 0 ? (
-        <p className="mensaje-vacio">No tenés turnos reservados aun.</p>
+        <p className="mensaje-vacio">No tenés turnos reservados aún.</p>
       ) : (
         ultimos3Turnos.map((appt) => (
           <div key={appt.id} className="turno-card">
@@ -711,23 +754,14 @@ const Perfil = () => {
             </p>
 
             {editingId !== appt.id && canEditAppointment(appt.date) && (
-              <button
-                onClick={() => setEditingId(appt.id)}
-                style={{
-                  backgroundColor: "rgba(202, 202, 202, 0.2)",
-                  color: "#333",
-                  padding: "10px 20px",
-                  border: "1px solid rgba(255, 255, 255, 0.4)",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  fontWeight: "bold",
-                  backdropFilter: "blur(4px)",
-                  boxShadow: "0 3px 8px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                Editar fecha
-              </button>
+              <div className="container-editar">
+                <button
+                  onClick={() => setEditingId(appt.id)}
+                  className="button-editar"
+                >
+                  Editar fecha
+                </button>
+              </div>
             )}
           </div>
         ))
