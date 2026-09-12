@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { format, parseISO, isSameDay, addMinutes } from "date-fns";
 import Calendar from "react-calendar";
@@ -7,12 +7,23 @@ import "./perfil.css";
 import ComentarioForm from "../components/comentarios";
 import { useNavigate } from "react-router-dom";
 import UserCompras from "../components/comprasUser";
+import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode";
+import { QrCode, X } from "lucide-react";
 
 const Perfil = () => {
   const [appointments, setAppointments] = useState([]);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
+
+  // 🎁 Puntos de fidelidad y escaneo de QR
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
+  const [rewardTiers, setRewardTiers] = useState([]);
+  const [displayedPoints, setDisplayedPoints] = useState(0);
+  const [showScanner, setShowScanner] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const [scanMessage, setScanMessage] = useState(null);
+  const qrReaderRef = useRef(null);
 
   // Estado para edición de fecha/hora dentro del perfil
   const [selectedDate, setSelectedDate] = useState(null);
@@ -35,6 +46,20 @@ const Perfil = () => {
           `https://eve-back.vercel.app/users/${userId}`,
         );
         setUserData(userRes.data);
+        setLoyaltyPoints(userRes.data.points || 0);
+
+        try {
+          const rewardsRes = await axios.get(
+            "https://eve-back.vercel.app/loyalty/rewards",
+          );
+          setRewardTiers(
+            rewardsRes.data
+              .filter((r) => r.isActive)
+              .sort((a, b) => a.pointsRequired - b.pointsRequired),
+          );
+        } catch (rewardsError) {
+          console.error("Error al obtener premios de fidelidad:", rewardsError);
+        }
 
         const apptsRes = await axios.get(
           `https://eve-back.vercel.app/appointments/user/${userId}`,
@@ -265,6 +290,86 @@ const Perfil = () => {
     }
   };
 
+  // 🎁 Anima el relleno de la escalera de premios cuando cambian los puntos
+  useEffect(() => {
+    const t = setTimeout(() => setDisplayedPoints(loyaltyPoints), 80);
+    return () => clearTimeout(t);
+  }, [loyaltyPoints]);
+
+  // 📷 Maneja el ciclo de vida de la cámara mientras el modal de escaneo está abierto
+  useEffect(() => {
+    if (!showScanner) return;
+
+    let cancelled = false;
+    const html5QrCode = new Html5Qrcode("qr-reader-perfil");
+    qrReaderRef.current = html5QrCode;
+
+    // Único punto que detiene la cámara: evita llamar a stop() dos veces
+    // (una vez detenida, stop() vuelve a llamarse tira una excepción sincrónica
+    // que no se puede atrapar con .catch, y eso rompe el render de React)
+    const stopCamera = () => {
+      try {
+        if (html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+          return html5QrCode.stop().then(() => html5QrCode.clear());
+        }
+      } catch {
+        // Ignorar: puede pasar si la cámara ya se estaba deteniendo
+      }
+      return Promise.resolve();
+    };
+
+    html5QrCode
+      .start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        (decodedText) => {
+          if (cancelled) return;
+          cancelled = true;
+          setShowScanner(false); // dispara el cleanup de este efecto, que detiene la cámara
+          handleScanQr(decodedText);
+        },
+        () => {
+          // Se llama en cada frame sin QR detectado, lo ignoramos
+        },
+      )
+      .catch((error) => {
+        console.error("No se pudo iniciar la cámara:", error);
+        setScanMessage({
+          type: "error",
+          text: "No se pudo acceder a la cámara. Revisá los permisos.",
+        });
+        setShowScanner(false);
+      });
+
+    return () => {
+      cancelled = true;
+      stopCamera().catch(() => {});
+    };
+  }, [showScanner]);
+
+  const handleScanQr = async (code) => {
+    setScanning(true);
+    setScanMessage(null);
+    try {
+      const res = await axios.post("https://eve-back.vercel.app/loyalty/scan", {
+        userId,
+        code,
+      });
+      setLoyaltyPoints(res.data.points);
+      setScanMessage({
+        type: "success",
+        text: "🎉 ¡Sumaste un punto de fidelidad!",
+      });
+    } catch (error) {
+      setScanMessage({
+        type: "error",
+        text: error.response?.data?.error || "No se pudo escanear el QR.",
+      });
+    } finally {
+      setScanning(false);
+    }
+  };
+
   if (loading)
     return <p className="p-4 text-center text-gray-600">Cargando datos...</p>;
 
@@ -285,6 +390,50 @@ const Perfil = () => {
     (appt) => appt.payStatus === "partial" || appt.payStatus === "paid",
   );
   const ultimos3Turnos = turnosParciales.slice(-3);
+
+  // 🎁 Arma la escalera de premios: qué nodos ya se alcanzaron, cuál sigue,
+  // y cuánto se rellena la barra entre cada tramo según los puntos actuales
+  let nextRewardAssigned = false;
+  const rewardNodes = rewardTiers.map((tier) => {
+    const reached = displayedPoints >= tier.pointsRequired;
+    const isNext = !reached && !nextRewardAssigned;
+    if (isNext) nextRewardAssigned = true;
+
+    return {
+      ...tier,
+      reached,
+      isNext,
+      stateClass: reached ? "reached" : isNext ? "next" : "locked",
+      discountLabel:
+        tier.discountType === "percentage"
+          ? `${tier.discountValue}% OFF`
+          : `$${tier.discountValue} OFF`,
+      pointsLabel:
+        tier.pointsRequired === 1 ? "1 pt" : `${tier.pointsRequired} pts`,
+    };
+  });
+
+  const rewardSegments = rewardTiers.slice(1).map((tier, i) => {
+    const from = rewardTiers[i].pointsRequired;
+    const to = tier.pointsRequired;
+    let fillPct = 0;
+    if (displayedPoints >= to) fillPct = 100;
+    else if (displayedPoints > from)
+      fillPct = ((displayedPoints - from) / (to - from)) * 100;
+    return { fillPct, widthPct: 100 / (rewardTiers.length - 1) };
+  });
+
+  const reachedTiers = rewardTiers.filter(
+    (t) => displayedPoints >= t.pointsRequired,
+  );
+  const rewardStatusMessage =
+    reachedTiers.length === 0
+      ? "Todavía no llegaste a tu primer premio. ¡Sumá puntos en cada visita para desbloquearlo!"
+      : `¡Tenés ${
+          reachedTiers[reachedTiers.length - 1].discountType === "percentage"
+            ? `${reachedTiers[reachedTiers.length - 1].discountValue}%`
+            : `$${reachedTiers[reachedTiers.length - 1].discountValue}`
+        } de descuento disponible para tu próximo turno de manicuria!`;
   return (
     <div className="perfil-container" style={{ marginLeft: "-10px" }}>
       <div className="perfil-card">
@@ -302,6 +451,157 @@ const Perfil = () => {
           </p>
         </div>
       </div>
+
+      <div className="perfil-card loyalty-card">
+        <h2>Puntos de fidelidad</h2>
+
+        {rewardTiers.length > 0 ? (
+          <>
+            <p className="loyalty-subtitle">
+              Tenés {loyaltyPoints}{" "}
+              {loyaltyPoints === 1 ? "punto" : "puntos"} — sumás 1 por cada
+              turno de manicuria pagado.
+            </p>
+
+            <div className="reward-ladder">
+              <div className="reward-track-base">
+                {rewardSegments.map((seg, i) => (
+                  <div
+                    key={i}
+                    className="reward-track-segment"
+                    style={{ width: `${seg.widthPct}%` }}
+                  >
+                    <div
+                      className="reward-track-fill"
+                      style={{ width: `${seg.fillPct}%` }}
+                    ></div>
+                  </div>
+                ))}
+              </div>
+
+              <div
+                className="reward-nodes-row"
+                style={{
+                  justifyContent:
+                    rewardNodes.length === 1 ? "center" : "space-between",
+                }}
+              >
+                {rewardNodes.map((node) => (
+                  <div
+                    className="reward-node"
+                    key={node.id}
+                    title={node.description}
+                  >
+                    <div className={`reward-circle ${node.stateClass}`}>
+                      {node.reached ? (
+                        <svg
+                          width="22"
+                          height="22"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <path
+                            d="M5 13l4 4L19 7"
+                            stroke="white"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <rect
+                            x="5"
+                            y="11"
+                            width="14"
+                            height="9"
+                            rx="2"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                          <path
+                            d="M8 11V7a4 4 0 0 1 8 0v4"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <div className={`reward-points-label ${node.stateClass}`}>
+                      {node.pointsLabel}
+                    </div>
+                    <div
+                      className={`reward-discount-label ${node.stateClass}`}
+                    >
+                      {node.discountLabel}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <p className="loyalty-points">{rewardStatusMessage}</p>
+          </>
+        ) : (
+          <div className="loyalty-card-body">
+            <p className="loyalty-count">
+              <span className="loyalty-count-number">{loyaltyPoints}</span>
+              {loyaltyPoints === 1 ? " punto" : " puntos"}
+            </p>
+          </div>
+        )}
+
+        <div className="loyalty-scan-row">
+          <button
+            className="scan-qr-button"
+            disabled={scanning}
+            onClick={() => {
+              setScanMessage(null);
+              setShowScanner(true);
+            }}
+          >
+            <QrCode size={18} />
+            {scanning ? "Procesando..." : "Escanear QR"}
+          </button>
+        </div>
+        {scanMessage && (
+          <p
+            className={
+              scanMessage.type === "success"
+                ? "loyalty-message success"
+                : "loyalty-message error"
+            }
+          >
+            {scanMessage.text}
+          </p>
+        )}
+      </div>
+
+      {showScanner && (
+        <div className="qr-scanner-overlay">
+          <div className="qr-scanner-modal">
+            <div className="qr-scanner-header">
+              <h3>Escaneá el QR del local</h3>
+              <button
+                className="qr-scanner-close"
+                onClick={() => setShowScanner(false)}
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div id="qr-reader-perfil" className="qr-reader-box"></div>
+            <p className="qr-scanner-hint">
+              Apuntá la cámara al código QR que te muestren en el local.
+            </p>
+          </div>
+        </div>
+      )}
 
       <ComentarioForm></ComentarioForm>
       <h2 className="turnos-title">Mis turnos</h2>

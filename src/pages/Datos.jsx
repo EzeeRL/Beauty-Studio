@@ -15,13 +15,15 @@ const Datos = () => {
   const [couponCode, setCouponCode] = useState("");
   const [couponStatus, setCouponStatus] = useState(null);
   const [verifyingCoupon, setVerifyingCoupon] = useState(false);
-  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
-  const [availableRewards, setAvailableRewards] = useState([]);
-  const [selectedRewardId, setSelectedRewardId] = useState("");
+  const [loyaltyDiscount, setLoyaltyDiscount] = useState(null);
+  const [skipLoyaltyDiscount, setSkipLoyaltyDiscount] = useState(false);
 
   const BASE_PRICE = 10000; // Precio normal
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
     useServicioStore();
+  // Zustand persiste "fecha" en localStorage como JSON: al rehidratar vuelve
+  // como string, no como Date, y pierde métodos como toISOString(). Lo normalizamos acá.
+  const fechaDate = fecha ? new Date(fecha) : null;
   console.log("💾 localStorage userId:", localStorage.getItem("userId"));
   const procesarTelefono = (tel) => {
     if (!tel) return "549";
@@ -42,21 +44,31 @@ const Datos = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // 🎁 Traer puntos y premios de fidelidad disponibles (solo si ya conocemos al usuario)
+  // 🎁 Ver si el usuario ya llegó a un premio de fidelidad con sus puntos
+  // (solo si ya lo conocemos, es decir, si volvió a reservar, y solo para
+  // turnos de manicuria: el resto de las categorías no participa del canje)
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (!userId) return;
+    if (servicio?.category?.toLowerCase() !== "manicuria") return;
 
     axios
       .get(`https://eve-back.vercel.app/users/${userId}`)
       .then((res) => {
-        setLoyaltyPoints(res.data.points || 0);
-        setAvailableRewards(res.data.availableRewards || []);
+        const { canRedeem, discountType, discountValue, availableRewards } =
+          res.data;
+        if (canRedeem && availableRewards?.length > 0) {
+          setLoyaltyDiscount({
+            rewardId: availableRewards[0].id,
+            discountType,
+            discountValue,
+          });
+        }
       })
       .catch(() => {
-        // Si falla, simplemente no mostramos opciones de canje
+        // Si falla, simplemente no mostramos el descuento
       });
-  }, []);
+  }, [servicio]);
 
   // 🟡 Función para verificar el cupón en el backend
   const handleVerifyCoupon = async () => {
@@ -92,18 +104,18 @@ const Datos = () => {
     }
   };
 
-  const selectedReward = availableRewards.find(
-    (r) => String(r.id) === String(selectedRewardId),
-  );
+  // El cliente puede optar por no usar el descuento de fidelidad esta vez
+  const applyLoyaltyDiscount = loyaltyDiscount && !skipLoyaltyDiscount;
 
   // 🧮 Calcular el precio final en base al premio de fidelidad o al cupón
-  // (son excluyentes entre sí; el premio de fidelidad tiene prioridad si hay uno seleccionado)
+  // (son excluyentes entre sí; el premio de fidelidad tiene prioridad si el usuario tiene uno)
   let finalPrice = BASE_PRICE;
-  if (selectedReward) {
-    if (selectedReward.discountType === "percentage") {
-      finalPrice = BASE_PRICE - BASE_PRICE * (selectedReward.discountValue / 100);
-    } else if (selectedReward.discountType === "fixed") {
-      finalPrice = BASE_PRICE - selectedReward.discountValue;
+  if (applyLoyaltyDiscount) {
+    if (loyaltyDiscount.discountType === "percentage") {
+      finalPrice =
+        BASE_PRICE - BASE_PRICE * (loyaltyDiscount.discountValue / 100);
+    } else if (loyaltyDiscount.discountType === "fixed") {
+      finalPrice = BASE_PRICE - loyaltyDiscount.discountValue;
     }
   } else if (couponStatus?.valid) {
     if (couponStatus.type === "percentage") {
@@ -197,12 +209,12 @@ const Datos = () => {
           appointmentId,
           appointmentId2,
           expertId: experto.id,
-          appointmentDate: fecha.toISOString(), // objeto Date a string ISO
+          appointmentDate: fechaDate.toISOString(), // objeto Date a string ISO
           tiempo: servicio.duration || 60,
         };
-        // Solo mandamos loyaltyRewardId si el cliente eligió canjear un premio
-        if (selectedReward) {
-          metadata.loyaltyRewardId = selectedReward.id;
+        // Solo mandamos loyaltyRewardId si el cliente tiene un premio disponible y no lo rechazó
+        if (applyLoyaltyDiscount) {
+          metadata.loyaltyRewardId = loyaltyDiscount.rewardId;
         }
 
         const preferenceRes = await axios.post(
@@ -229,8 +241,17 @@ const Datos = () => {
         // 🚨 Mostrar modal con mensaje de backend
         setModalError(error.response.data.error);
       } else {
-        // Error genérico
-        setModalError("Hubo un error al crear tu turno. Intentalo nuevamente.");
+        // Error genérico: incluimos el detalle real para poder debuggear sin devtools
+        const detalle =
+          error.response?.data?.error ||
+          error.message ||
+          "Error desconocido";
+        const status = error.response?.status
+          ? ` (HTTP ${error.response.status})`
+          : "";
+        setModalError(
+          `Hubo un error al crear tu turno. Intentalo nuevamente. [${detalle}${status}]`,
+        );
       }
     } finally {
       setLoading(false);
@@ -305,31 +326,27 @@ const Datos = () => {
           }}
           containerStyle={{ marginBottom: "1rem" }}
         />
-        {/* 🎁 SECCIÓN DE PUNTOS DE FIDELIDAD */}
-        {availableRewards.length > 0 && (
+        {/* 🎁 CARTEL DE DESCUENTO POR PUNTOS DE FIDELIDAD */}
+        {loyaltyDiscount && (
           <div className="loyalty-container">
             <p className="loyalty-points">
-              Tenés {loyaltyPoints} {loyaltyPoints === 1 ? "punto" : "puntos"}{" "}
-              acumulados 🎉
+              🎉 ¡Tenés un descuento de{" "}
+              {loyaltyDiscount.discountType === "percentage"
+                ? `${loyaltyDiscount.discountValue}%`
+                : `$${loyaltyDiscount.discountValue}`}{" "}
+              por tus puntos de fidelidad!{" "}
+              {skipLoyaltyDiscount
+                ? "No se va a aplicar a este turno."
+                : "Se aplica automáticamente a este turno."}
             </p>
-            <select
-              className="input loyalty-select"
-              value={selectedRewardId}
-              disabled={!!couponStatus?.valid}
-              onChange={(e) => setSelectedRewardId(e.target.value)}
-            >
-              <option value="">No canjear ningún premio</option>
-              {availableRewards.map((reward) => (
-                <option key={reward.id} value={reward.id}>
-                  {reward.description}
-                </option>
-              ))}
-            </select>
-            {couponStatus?.valid && (
-              <p className="loyalty-hint">
-                Ya tenés un cupón aplicado, no podés combinarlo con un premio.
-              </p>
-            )}
+            <label className="loyalty-skip-label">
+              <input
+                type="checkbox"
+                checked={skipLoyaltyDiscount}
+                onChange={(e) => setSkipLoyaltyDiscount(e.target.checked)}
+              />
+              No quiero usar mi descuento esta vez
+            </label>
           </div>
         )}
 
@@ -342,24 +359,26 @@ const Datos = () => {
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
               className="input coupon-input"
-              disabled={!!selectedReward}
+              disabled={!!applyLoyaltyDiscount}
             />
             <button
               type="button"
               onClick={handleVerifyCoupon}
-              disabled={verifyingCoupon || !couponCode.trim() || !!selectedReward}
+              disabled={
+                verifyingCoupon || !couponCode.trim() || !!applyLoyaltyDiscount
+              }
               className="verify-button"
             >
               {verifyingCoupon ? "..." : "Aplicar"}
             </button>
           </div>
-          {selectedReward && (
+          {applyLoyaltyDiscount && (
             <p className="coupon-error">
-              Ya elegiste canjear un premio de fidelidad, no podés combinarlo con
-              un cupón.
+              Ya tenés un descuento de fidelidad aplicado, no podés combinarlo
+              con un cupón.
             </p>
           )}
-          {couponStatus && !selectedReward && (
+          {couponStatus && !applyLoyaltyDiscount && (
             <p
               className={couponStatus.valid ? "coupon-success" : "coupon-error"}
             >
@@ -368,7 +387,7 @@ const Datos = () => {
           )}
         </div>
 
-        {(selectedReward || couponStatus?.valid) && (
+        {(applyLoyaltyDiscount || couponStatus?.valid) && (
           <div className="payment-summary">
             <div className="summary-row">
               <span>Subtotal:</span>
@@ -416,7 +435,7 @@ const Datos = () => {
             <div className="info-turno-text">
               <span className="info-turno-label">Fecha</span>
               <span className="info-turno-value">
-                {fecha?.toLocaleString(undefined, {
+                {fechaDate?.toLocaleString(undefined, {
                   dateStyle: "short",
                   timeStyle: "short",
                 })}

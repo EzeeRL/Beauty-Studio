@@ -82,19 +82,28 @@
 }
 
 .loyalty-points {
-  font-size: 0.85rem;
-  color: #584f4f;
-  margin: 0 0 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #8a6d00;
+  background: #fdf6e3;
+  border: 1px solid #f0e2a2;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 0;
 }
 
-.loyalty-select {
-  width: 100%;
-}
-
-.loyalty-hint {
-  color: #d32f2f;
+.loyalty-skip-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
   font-size: 0.8rem;
-  margin-top: 4px;
+  color: #666;
+  cursor: pointer;
+}
+
+.loyalty-skip-label input {
+  cursor: pointer;
 }
 
 /* --- SECCIÓN DE CUPONES --- */
