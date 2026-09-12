@@ -506,12 +506,15 @@ const Perfil = () => {
                     pointSlots.length === 1 ? "center" : "space-between",
                 }}
               >
-                {pointSlots.map((slot) =>
+                {/* --node-i escalona las animaciones de los premios: el brillo
+                    viaja de uno a otro como una ola a lo largo de la escalera */}
+                {pointSlots.map((slot, idx) =>
                   slot.isReward ? (
                     <div
                       className="reward-node"
                       key={slot.points}
                       title={slot.tier.description}
+                      style={{ "--node-i": idx }}
                     >
                       <div className="reward-node-top">
                         {slot.isCurrent && (

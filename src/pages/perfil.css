@@ -213,7 +213,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.6s ease;
+  position: relative;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.6s ease,
+    border-color 0.6s ease,
+    color 0.6s ease,
+    box-shadow 0.6s ease;
 }
 
 .reward-circle.reached {
@@ -232,9 +238,9 @@
 }
 
 .reward-circle.locked {
-  background: #f2ece8;
-  border: 2px solid #e6ddd3;
-  color: #b9b0a8;
+  background: linear-gradient(145deg, #fcf8f0 0%, #efe6d4 100%);
+  border: 2px solid #e3d6bb;
+  color: #b9a26a;
 }
 
 /* Efecto de "subida de nivel" al desbloquear un premio escaneando */
@@ -266,6 +272,112 @@
   }
 }
 
+/* ✨ Efecto "quiero llegar hasta ahí": solo los nodos que son premio
+   respiran, tienen un aura dorada y un destello que los recorre. Los
+   puntitos de relleno quedan tal cual. */
+
+/* Aura dorada que late detrás del premio */
+.reward-circle::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(201, 162, 0, 0.3) 0%,
+    rgba(201, 162, 0, 0) 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  animation: rewardAura 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--node-i, 0) * 0.22s);
+}
+
+/* Destello que barre el círculo cada tanto. El gradiente lo recorta el
+   propio border-radius, así que no hace falta overflow: hidden */
+.reward-circle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.85) 50%,
+    transparent 62%
+  );
+  background-size: 260% 100%;
+  pointer-events: none;
+  animation: rewardShine 3.6s ease-in-out infinite;
+  animation-delay: calc(var(--node-i, 0) * 0.22s);
+}
+
+/* Los premios que todavía no conseguiste "respiran" para llamar la atención */
+.reward-circle.locked,
+.reward-circle.next {
+  animation: rewardBreathe 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--node-i, 0) * 0.22s);
+}
+
+/* El próximo premio es el más tentador: aura más fuerte y más seguido */
+.reward-circle.next::before {
+  inset: -12px;
+  background: radial-gradient(
+    circle,
+    rgba(229, 193, 0, 0.45) 0%,
+    rgba(229, 193, 0, 0) 70%
+  );
+  animation-duration: 2s;
+}
+
+.reward-circle.next::after {
+  animation-duration: 2.6s;
+}
+
+/* Al pasar el dedo/mouse por un premio, salta un poco */
+.reward-node:not(.reward-node-plain):hover .reward-circle {
+  transform: scale(1.16);
+}
+
+.reward-node:not(.reward-node-plain):hover .reward-circle.locked,
+.reward-node:not(.reward-node-plain):hover .reward-circle.next {
+  border-color: #d8bb5a;
+  color: #a8862a;
+  box-shadow: 0 8px 18px rgba(192, 164, 57, 0.35);
+}
+
+@keyframes rewardAura {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes rewardShine {
+  0% {
+    background-position: 170% 0;
+  }
+  45%,
+  100% {
+    background-position: -70% 0;
+  }
+}
+
+@keyframes rewardBreathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
 .reward-points-label {
   font-size: 11px;
   font-weight: 700;
@@ -290,12 +402,42 @@
   color: #b3860a;
 }
 
-.reward-discount-label.next {
+/* El descuento pendiente brilla como oro: el mismo destello que el círculo,
+   pero recortado sobre el texto */
+.reward-discount-label.next,
+.reward-discount-label.locked {
   color: #c9a200;
+  background-image: linear-gradient(
+    100deg,
+    #c4a54a 35%,
+    #fff6d8 50%,
+    #c4a54a 65%
+  );
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rewardShine 3.6s ease-in-out infinite;
+  animation-delay: calc(var(--node-i, 0) * 0.22s);
 }
 
-.reward-discount-label.locked {
-  color: #bbb;
+.reward-discount-label.next {
+  animation-duration: 2.6s;
+}
+
+/* Si el usuario pidió menos movimiento, dejamos todo quieto */
+@media (prefers-reduced-motion: reduce) {
+  .reward-circle,
+  .reward-circle::before,
+  .reward-circle::after,
+  .reward-discount-label,
+  .reward-here-arrow {
+    animation: none !important;
+  }
+
+  .reward-circle::before {
+    opacity: 0.45;
+  }
 }
 
 @keyframes pulseGlow {
