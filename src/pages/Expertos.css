@@ -172,3 +172,31 @@ p {
   justify-content: center;
   text-transform: uppercase;
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .expert-card {
+  background-color: var(--surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .text-especialidad {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .container-option {
+  background: var(--surface);
+  border-color: var(--border-soft);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .title-option {
+  color: var(--text);
+}
+
+body.dark-mode .text-option {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .img-placeholder {
+  background-color: var(--border-soft);
+}

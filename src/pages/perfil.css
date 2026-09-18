@@ -455,3 +455,109 @@
   backdrop-filter: blur(4px);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .perfil-container {
+  color: var(--text);
+}
+
+body.dark-mode .perfil-card,
+body.dark-mode .turno-card {
+  background: var(--surface);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .turno-card {
+  border-color: var(--border-soft);
+}
+
+body.dark-mode .turno-card:hover {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .loyalty-subtitle {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .reward-track-base {
+  background: var(--border-soft);
+}
+
+body.dark-mode .reward-dot.next,
+body.dark-mode .reward-circle.next {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+body.dark-mode .reward-dot.locked,
+body.dark-mode .reward-circle.locked {
+  background: var(--border-soft);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+}
+
+body.dark-mode .reward-here-arrow {
+  border-top-color: var(--accent);
+}
+
+body.dark-mode .reward-points-label.reached,
+body.dark-mode .reward-points-label.next {
+  color: var(--accent);
+}
+
+body.dark-mode .reward-points-label.locked {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .reward-discount-label.reached {
+  color: var(--accent-strong);
+}
+
+body.dark-mode .reward-discount-label.next {
+  color: var(--accent);
+}
+
+body.dark-mode .reward-discount-label.locked {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .loyalty-points {
+  background: rgba(229, 193, 0, 0.12);
+  border-color: rgba(229, 193, 0, 0.35);
+  color: var(--accent);
+}
+
+body.dark-mode .loyalty-message.success {
+  color: #6fcf73;
+}
+
+body.dark-mode .loyalty-message.error {
+  color: #ef5350;
+}
+
+body.dark-mode .qr-scanner-modal {
+  background: var(--surface);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .qr-scanner-header h3 {
+  color: var(--text);
+}
+
+body.dark-mode .qr-scanner-close {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .qr-scanner-hint {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .mensaje-vacio {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .button-editar {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.15);
+}

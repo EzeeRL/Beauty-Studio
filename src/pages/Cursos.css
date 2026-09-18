@@ -156,3 +156,26 @@
         width: 100%;
     }
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .cursos-container {
+    background-color: var(--bg);
+}
+
+body.dark-mode .curso-header {
+    background: var(--surface);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .curso-header-content p {
+    color: var(--text);
+}
+
+body.dark-mode .feature-card {
+    background: var(--surface);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .feature-card p {
+    color: var(--text-secondary);
+}

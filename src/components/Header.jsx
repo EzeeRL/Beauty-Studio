@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import "./Header.css";
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
 const Header = () => {
+  const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // En tu Header.jsx
   // const { servicio, experto, fecha, datosCliente } = useServicioStore();
@@ -126,6 +129,20 @@ const Header = () => {
           >
             Cursos
           </a>
+          <button
+            type="button"
+            className="theme-toggle-item"
+            onClick={toggleTheme}
+            aria-pressed={theme === "dark"}
+          >
+            <span className="theme-toggle-label">
+              {theme === "dark" ? <Moon size={18} /> : <Sun size={18} />}
+              Modo oscuro
+            </span>
+            <span className={`theme-switch ${theme === "dark" ? "on" : ""}`}>
+              <span className="theme-switch-knob"></span>
+            </span>
+          </button>
           {admin == true ? (
             <a
               href="/admin"

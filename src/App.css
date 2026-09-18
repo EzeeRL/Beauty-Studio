@@ -2,11 +2,37 @@ html {
   scroll-behavior: smooth;
 }
 
+/* --- VARIABLES DE TEMA (modo claro por defecto) --- */
+:root {
+  --bg: #f4f4f4;
+  --surface: #ffffff;
+  --text: #333333;
+  --text-secondary: #666666;
+  --border-soft: #eeeeee;
+  --accent: #c9a200;
+  --accent-strong: #c0a439;
+}
+
+/* --- MODO OSCURO --- */
+body.dark-mode {
+  --bg: #16140f;
+  --surface: #221f18;
+  --text: #f1ece1;
+  --text-secondary: #b7b0a1;
+  --border-soft: #3a3527;
+  --accent: #e5c100;
+  --accent-strong: #d4bc5d;
+}
+
 body {
   font-family: inter, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: var(--bg);
+  color: var(--text);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .fixed-circle {

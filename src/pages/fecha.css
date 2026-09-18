@@ -192,3 +192,18 @@ td.today-day > button.rdp-day_button {
     width: 100%;
   }
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .fecha-container,
+body.dark-mode .label,
+body.dark-mode .horario-btn {
+  color: var(--text);
+}
+
+body.dark-mode td.today-day > button.rdp-day_button {
+  color: var(--text);
+}
+
+body.dark-mode .rdp-chevron {
+  fill: var(--text);
+}

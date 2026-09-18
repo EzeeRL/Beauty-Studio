@@ -108,3 +108,20 @@
 .google-login-container div[role="button"]:active {
   transform: translateY(-1px);
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .login-form {
+  background: rgba(34, 31, 24, 0.6);
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .input-form,
+body.dark-mode .button-entrar {
+  background-color: var(--surface);
+  color: var(--text);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .button-entrar:hover {
+  background-color: var(--border-soft);
+}

@@ -97,3 +97,27 @@
     font-size: 0.75rem;
   }
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .reserva-steps-track::before {
+  background: var(--border-soft);
+}
+
+body.dark-mode .reserva-step-circle {
+  background: var(--border-soft);
+  color: var(--text-secondary);
+  border-color: var(--border-soft);
+}
+
+body.dark-mode .reserva-step-circle.activo {
+  background: var(--surface);
+  box-shadow: 0 0 0 4px rgba(228, 197, 77, 0.35);
+}
+
+body.dark-mode .reserva-step-label {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .reserva-step-label.activo {
+  color: var(--text);
+}
