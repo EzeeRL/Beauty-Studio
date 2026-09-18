@@ -214,27 +214,93 @@
   align-items: center;
   justify-content: center;
   transition: all 0.6s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Destello de vidrio: un brillo fino y ocasional que cruza el círculo,
+   recortado a su forma. El resto del tiempo queda quieto. */
+.reward-circle::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 30%;
+  height: 220%;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(15deg);
+  animation: rewardGlassShine 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes rewardGlassShine {
+  0%,
+  55% {
+    left: -60%;
+  }
+  75%,
+  100% {
+    left: 140%;
+  }
 }
 
 .reward-circle.reached {
   background: linear-gradient(135deg, #c0a439 0%, #d4bc5d 100%);
   border: none;
   box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.5),
     0 0 0 4px rgba(192, 164, 57, 0.18),
     0 6px 14px rgba(192, 164, 57, 0.4);
   animation: pulseGlow 2.6s ease-in-out infinite;
 }
 
+/* El premio más próximo: el que más "llama" a ganarlo */
 .reward-circle.next {
-  background: #faf6ec;
-  border: 2px dashed #e5c100;
+  background: linear-gradient(135deg, #fdf6e3 0%, #f5e6b8 100%);
+  border: 2px solid #e5c100;
   color: #c9a200;
+  animation: rewardWantGlow 2s ease-in-out infinite;
 }
 
+@keyframes rewardWantGlow {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 2px 3px rgba(255, 255, 255, 0.5),
+      0 0 6px 1px rgba(229, 193, 0, 0.35);
+  }
+  50% {
+    box-shadow:
+      inset 0 2px 3px rgba(255, 255, 255, 0.5),
+      0 0 14px 5px rgba(229, 193, 0, 0.6);
+  }
+}
+
+/* Premios más lejanos: mismo resplandor, más sutil */
 .reward-circle.locked {
   background: #f2ece8;
   border: 2px solid #e6ddd3;
   color: #b9b0a8;
+  animation: rewardWantGlowFar 3.2s ease-in-out infinite;
+}
+
+@keyframes rewardWantGlowFar {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 2px 3px rgba(255, 255, 255, 0.4),
+      0 0 4px 1px rgba(229, 193, 0, 0.22);
+  }
+  50% {
+    box-shadow:
+      inset 0 2px 3px rgba(255, 255, 255, 0.4),
+      0 0 9px 3px rgba(229, 193, 0, 0.4);
+  }
 }
 
 /* Efecto de "subida de nivel" al desbloquear un premio escaneando */
