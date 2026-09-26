@@ -852,6 +852,7 @@ const CouponManager = () => {
     try {
       const res = await axios.get(`${API_URL}/loyalty/top`);
       setTops(res.data);
+      console.log(res.data);
     } catch (err) {
       console.error("Error al obtener premios", err);
     }
@@ -966,7 +967,17 @@ const CouponManager = () => {
   };
 
   return (
-    <div className="coupon-manager-container">
+    <div
+      className="coupon-manager-container"
+      style={{
+        width: "100%",
+        maxWidth: "100%",
+        boxSizing: "border-box",
+        overflowX: "hidden",
+        marginLeft: 0,
+        marginRight: 0,
+      }}
+    >
       <div className="sub-tab-selector">
         <button
           type="button"
@@ -1472,6 +1483,10 @@ const CouponManager = () => {
             style={{
               marginTop: "42px",
               padding: "28px",
+              width: "100%",
+              maxWidth: "100%",
+              boxSizing: "border-box",
+              overflow: "hidden",
               borderRadius: "24px",
               background: "linear-gradient(145deg, #fffdf9 0%, #f7f1e8 100%)",
               border: "1px solid rgba(195, 147, 125, 0.22)",
@@ -1527,8 +1542,11 @@ const CouponManager = () => {
                       display: "flex",
                       alignItems: "flex-end",
                       justifyContent: "center",
-                      gap: "12px",
+                      gap: "8px",
                       marginBottom: "30px",
+                      width: "100%",
+                      maxWidth: "100%",
+                      boxSizing: "border-box",
                     }}
                   >
                     {tops.slice(0, 3).map((user, index) => {
@@ -1562,7 +1580,9 @@ const CouponManager = () => {
                           style={{
                             flex: "1 1 0",
                             maxWidth: "210px",
-                            minWidth: "95px",
+                            minWidth: 0,
+                            width: 0,
+                            boxSizing: "border-box",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
@@ -1571,6 +1591,8 @@ const CouponManager = () => {
                           <div
                             style={{
                               width: "100%",
+                              maxWidth: "100%",
+                              minWidth: 0,
                               minHeight: "76px",
                               padding: "12px 8px",
                               boxSizing: "border-box",
@@ -1588,7 +1610,8 @@ const CouponManager = () => {
                               style={{
                                 fontWeight: "700",
                                 color: "#5d4037",
-                                fontSize: "0.9rem",
+                                fontSize: "0.82rem",
+                                minWidth: 0,
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 whiteSpace: "nowrap",
@@ -1643,8 +1666,8 @@ const CouponManager = () => {
                     <div
                       style={{
                         display: "grid",
-                        gridTemplateColumns: "70px 1fr 120px",
-                        padding: "13px 18px",
+                        gridTemplateColumns: "52px minmax(0, 1fr) 72px",
+                        padding: "13px 14px",
                         background: "rgba(195, 147, 125, 0.08)",
                         color: "#8e5c49",
                         fontSize: "0.75rem",
@@ -1663,9 +1686,9 @@ const CouponManager = () => {
                         key={user.id}
                         style={{
                           display: "grid",
-                          gridTemplateColumns: "70px 1fr 120px",
+                          gridTemplateColumns: "52px minmax(0, 1fr) 72px",
                           alignItems: "center",
-                          padding: "15px 18px",
+                          padding: "15px 14px",
                           borderTop: "1px solid rgba(195, 147, 125, 0.11)",
                         }}
                       >
