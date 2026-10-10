@@ -273,6 +273,7 @@ body.dark-mode .lg-side {
 
 /* --- Formulario --- */
 .lg-form {
+  min-width: 0;
   padding: 40px 34px;
 }
 
@@ -421,6 +422,7 @@ body.dark-mode .lg-error {
 }
 
 .lg-google {
+  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -452,6 +454,21 @@ body.dark-mode .lg-error {
 
   .lg-form {
     padding: 30px 22px;
+  }
+}
+
+@media (max-width: 400px) {
+  .lg-page {
+    padding: 16px 12px 40px;
+  }
+
+  .lg-side {
+    min-height: 160px;
+    padding: 24px 20px;
+  }
+
+  .lg-form {
+    padding: 26px 16px;
   }
 }
 

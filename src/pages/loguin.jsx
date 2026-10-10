@@ -74,7 +74,7 @@ const Login = () => {
 export default Login;
  */
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
@@ -91,6 +91,24 @@ const Login = () => {
   const { setDatosCliente } = useServicioStore(); // ← Usar setDatosCliente que SÍ existe
 
   const [error, setError] = useState("");
+
+  // El botón de Google solo acepta un ancho fijo en px: lo ajustamos al
+  // ancho disponible para que no se corte en celulares
+  const googleRef = useRef(null);
+  const [googleWidth, setGoogleWidth] = useState(300);
+
+  useEffect(() => {
+    const el = googleRef.current;
+    if (!el) return;
+    const ajustar = () => {
+      const ancho = Math.floor(el.clientWidth);
+      if (ancho > 0) setGoogleWidth(Math.max(200, Math.min(ancho, 360)));
+    };
+    ajustar();
+    const observer = new ResizeObserver(ajustar);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -244,15 +262,16 @@ const Login = () => {
             <div className="lg-sep">o</div>
 
             {/* Botón de Google */}
-            <div className="lg-google">
+            <div className="lg-google" ref={googleRef}>
               <GoogleLogin
+                key={googleWidth}
                 onSuccess={handleGoogleSuccess}
                 onError={handleGoogleError}
                 theme="outline"
                 size="large"
                 text="signin_with"
                 locale="es"
-                width="300"
+                width={String(googleWidth)}
               />
             </div>
           </form>
