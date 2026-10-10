@@ -25,6 +25,7 @@ const Perfil = () => {
   const [scanning, setScanning] = useState(false);
   const [scanMessage, setScanMessage] = useState(null);
   const qrReaderRef = useRef(null);
+  const [copiedField, setCopiedField] = useState(null);
 
   // Estado para edición de fecha/hora dentro del perfil
   const [selectedDate, setSelectedDate] = useState(null);
@@ -405,6 +406,51 @@ const Perfil = () => {
   );
   const ultimos3Turnos = turnosParciales.slice(-3);
 
+  // 👤 Datos calculados para la tarjeta de perfil
+  const iniciales =
+    (userData?.name || "")
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase())
+      .join("") || "?";
+
+  const ahora = new Date();
+  const turnosRealizados = turnosParciales.filter(
+    (appt) => new Date(appt.date) < ahora,
+  ).length;
+
+  const proximoTurno = turnosParciales
+    .filter((appt) => new Date(appt.date) >= ahora)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+
+  const diasParaProximo = proximoTurno
+    ? Math.ceil((new Date(proximoTurno.date) - ahora) / (1000 * 60 * 60 * 24))
+    : null;
+
+  const conteoEspecialistas = {};
+  turnosParciales.forEach((appt) => {
+    const nombre = appt.Expert?.name;
+    if (nombre) conteoEspecialistas[nombre] = (conteoEspecialistas[nombre] || 0) + 1;
+  });
+  const especialistaFavorita = Object.entries(conteoEspecialistas).sort(
+    (a, b) => b[1] - a[1],
+  )[0]?.[0];
+
+  const miembroDesde = userData?.createdAt
+    ? new Date(userData.createdAt).toLocaleDateString("es-AR", {
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+
+  const copiarDato = (campo, valor) => {
+    if (!valor) return;
+    navigator.clipboard?.writeText(valor).catch(() => {});
+    setCopiedField(campo);
+    setTimeout(() => setCopiedField(null), 1400);
+  };
+
   // 🎁 Arma la escalera de puntos, de a uno: un nodo por cada punto entre 1 y
   // el premio más alto configurado. Los que coinciden con un premio se marcan
   // distinto (más grandes, con el descuento) que los puntos "de relleno".
@@ -457,19 +503,115 @@ const Perfil = () => {
         } de descuento disponible para tu próximo turno de manicuria!`;
   return (
     <div className="perfil-container">
-      <div className="perfil-card">
-        <h2>Perfil de usuario</h2>
+      <div className="pf-card">
+        <div className="pf-band">
+          <div className="pf-tier">
+            <img src="/logo.png" alt="" />
+            D´Art · Miembro
+          </div>
+          <img className="pf-watermark" src="/logo.png" alt="" />
+        </div>
 
-        <div className="perfil-datos">
-          <p>
-            <span>Nombre:</span> {userData?.name}
-          </p>
-          <p>
-            <span>Email:</span> {userData?.email}
-          </p>
-          <p>
-            <span>Teléfono:</span> {userData?.phone}
-          </p>
+        <div className="pf-head">
+          <div className="pf-avatar">{iniciales}</div>
+          <div className="pf-who">
+            <h2>{userData?.name}</h2>
+            {miembroDesde && <small>Miembro desde {miembroDesde}</small>}
+          </div>
+          <button
+            type="button"
+            className="pf-edit-btn"
+            onClick={() => navigate("/editar-perfil")}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
+            </svg>
+            Editar perfil
+          </button>
+        </div>
+
+        <div className="pf-contacts">
+          {userData?.email && (
+            <button
+              type="button"
+              className="pf-contact"
+              onClick={() => copiarDato("email", userData.email)}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="M3 7l9 6 9-6" />
+              </svg>
+              <span className="pf-contact-txt">{userData.email}</span>
+              <span className="pf-copy">
+                {copiedField === "email" ? "¡Copiado!" : "Copiar"}
+              </span>
+            </button>
+          )}
+          {userData?.phone && (
+            <button
+              type="button"
+              className="pf-contact"
+              onClick={() => copiarDato("phone", userData.phone)}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" />
+              </svg>
+              <span className="pf-contact-txt">{userData.phone}</span>
+              <span className="pf-copy">
+                {copiedField === "phone" ? "¡Copiado!" : "Copiar"}
+              </span>
+            </button>
+          )}
+        </div>
+
+        {proximoTurno && (
+          <div className="pf-next">
+            <div className="pf-date">
+              <em>
+                {new Date(proximoTurno.date)
+                  .toLocaleDateString("es-AR", { month: "short" })
+                  .replace(".", "")
+                  .toUpperCase()}
+              </em>
+              <b>{new Date(proximoTurno.date).getDate()}</b>
+            </div>
+            <p>
+              <b>Próximo turno · {proximoTurno.Service?.name}</b>
+              <small>
+                {new Date(proximoTurno.date).toLocaleString("es-AR", {
+                  weekday: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}{" "}
+                hs
+                {proximoTurno.Expert?.name && ` · con ${proximoTurno.Expert.name}`}
+              </small>
+            </p>
+            <span className="pf-next-tag">
+              {diasParaProximo <= 0
+                ? "Hoy"
+                : diasParaProximo === 1
+                  ? "Mañana"
+                  : `En ${diasParaProximo} días`}
+            </span>
+          </div>
+        )}
+
+        <div className="pf-stats">
+          <div className="pf-stat">
+            <strong>{turnosRealizados}</strong>
+            <span>Turnos realizados</span>
+          </div>
+          <div className="pf-stat">
+            <strong>{especialistaFavorita || "—"}</strong>
+            <span>Tu especialista</span>
+          </div>
+          <div className="pf-stat">
+            <strong>{loyaltyPoints}</strong>
+            <span>{loyaltyPoints === 1 ? "Punto" : "Puntos"}</span>
+          </div>
         </div>
       </div>
 
@@ -767,24 +909,6 @@ const Perfil = () => {
         ))
       )}
 
-      <div style={{ marginTop: "20px", textAlign: "center" }}>
-        <button
-          onClick={() => navigate("/editar-perfil")}
-          style={{
-            background: "linear-gradient(90deg, #C0A439, #E6C55A)",
-            color: "white",
-            padding: "10px 20px",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontWeight: "bold",
-            boxShadow: "0 3px 8px rgba(192, 164, 57, 0.4)",
-            transition: "all 0.3s ease",
-          }}
-        >
-          Editar Perfil
-        </button>
-      </div>
       <UserCompras></UserCompras>
     </div>
   );

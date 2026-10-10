@@ -175,54 +175,87 @@ const Login = () => {
 
   return (
     <GoogleOAuthProvider clientId="769266762797-t57n1c4qeapv39e5s153unkcokjngh51.apps.googleusercontent.com">
-      <div className="login-container">
-        <h2 className="title-loguin">Iniciar Sesión</h2>
-        <p className="subtitle">Inicia sesión para poder solicitar turnos</p>
+      <div className="lg-page">
+        <div className="lg-card">
+          {/* Panel de marca */}
+          <div className="lg-side">
+            <span className="lg-ring lg-r1"></span>
+            <span className="lg-ring lg-r2"></span>
+            <span className="lg-ring lg-r3"></span>
+            <div className="lg-brand">
+              <img src="/logo.png" alt="Logo D´Art" className="lg-logo" />
+              <span>D´Art</span>
+            </div>
+            <h4 className="lg-tagline">
+              Tu momento
+              <br />
+              de brillar.
+            </h4>
+            <p className="lg-side-text">
+              Reservá tu turno en segundos y sumá puntos con cada visita.
+            </p>
+          </div>
 
-        {/* Formulario tradicional */}
-        <form onSubmit={handleSubmit} className="login-form">
-          <input
-            type="text"
-            name="name"
-            placeholder="Nombre"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="input-form"
-          />
+          {/* Formulario tradicional */}
+          <form onSubmit={handleSubmit} className="lg-form">
+            <h2 className="lg-title">¡Hola de nuevo!</h2>
+            <p className="lg-sub">Iniciá sesión para poder solicitar turnos</p>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo electrónico"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="input-form"
-          />
+            <div className="lg-field">
+              <input
+                type="text"
+                name="name"
+                placeholder="Nombre"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
+              </svg>
+            </div>
 
-          {error && <p className="error">{error}</p>}
+            <div className="lg-field">
+              <input
+                type="email"
+                name="email"
+                placeholder="Correo electrónico"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="M3 7l9 6 9-6" />
+              </svg>
+            </div>
 
-          <button type="submit" className="button-entrar">
-            Entrar
-          </button>
-        </form>
+            {error && <p className="lg-error">{error}</p>}
 
-        {/* Separador */}
-        <div className="separator">
-          <span>o</span>
-        </div>
+            <button type="submit" className="lg-btn">
+              Entrar
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </button>
 
-        {/* Botón de Google */}
-        <div className="google-login-container">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={handleGoogleError}
-            theme="filled_blue"
-            size="large"
-            text="signin_with"
-            locale="es"
-          />
+            {/* Separador */}
+            <div className="lg-sep">o</div>
+
+            {/* Botón de Google */}
+            <div className="lg-google">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                theme="outline"
+                size="large"
+                text="signin_with"
+                locale="es"
+                width="300"
+              />
+            </div>
+          </form>
         </div>
       </div>
     </GoogleOAuthProvider>
