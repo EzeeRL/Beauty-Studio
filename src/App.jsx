@@ -25,6 +25,8 @@ import RutaProtegida from "./utils/RutaProtegida";
 import Cursos from "./pages/Cursos";
 import ComprarProductos from "./pages/ProductosUser";
 import DescargarApp from "./pages/DescargarApp";
+import DesktopHome from "./components/DesktopHome";
+import useMediaQuery from "./hooks/useMediaQuery";
 
 function App() {
   const [services, setServices] = useState({});
@@ -33,6 +35,7 @@ function App() {
   const [openedSections, setOpenedSections] = useState(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const handleSearchChange = (term) => {
     setSearchTerm(term);
@@ -130,6 +133,10 @@ function App() {
 
   const Home = () => {
     if (loading) return <LoadingSkeleton />;
+
+    // En PC se usa el inicio de escritorio; en celular, el de siempre
+    if (isDesktop)
+      return <DesktopHome services={services} categoryOrder={categoryOrder} />;
 
     return (
       <>

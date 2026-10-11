@@ -52,6 +52,51 @@ const Header = () => {
           />
         </div>
 
+        {/* Menú horizontal: solo se ve en PC (ver Header.css) */}
+        <nav className="desktop-nav">
+          <div className="desktop-nav-links">
+            {[
+              ["/", "Inicio"],
+              ["/app", "Nuestra app"],
+              ["/productos", "Productos"],
+              ["/ubicacion", "Dónde estamos"],
+              ["/Cursos", "Cursos"],
+              ...(admin ? [["/admin", "Administración"]] : []),
+            ].map(([href, label]) => (
+              <a
+                key={href}
+                href={href}
+                className={window.location.pathname === href ? "active" : ""}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+          <div className="desktop-nav-actions">
+            <button
+              type="button"
+              className="desktop-theme-btn"
+              onClick={toggleTheme}
+              aria-label="Cambiar modo oscuro"
+              aria-pressed={theme === "dark"}
+            >
+              {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+            <a href={userId ? "/Perfil" : "/login"} className="desktop-profile-btn">
+              {userId ? "Mi perfil" : "Iniciar sesión"}
+            </a>
+            {userId && (
+              <button
+                type="button"
+                className="desktop-logout-btn"
+                onClick={() => setShowLogoutModal(true)}
+              >
+                Salir
+              </button>
+            )}
+          </div>
+        </nav>
+
         <button
           className={`menu-button ${isMenuOpen ? "open" : ""}`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
