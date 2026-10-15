@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 
 const API = "https://eve-back.vercel.app";
 
@@ -109,7 +109,7 @@ export const useWhatsApp = (markReminderSent) => {
     window.open(url, "_blank");
 
     try {
-      await axios.put(`${API}/appointments/${appointmentId}`, {
+      await adminApi.put(`${API}/appointments/${appointmentId}`, {
         reminderStatus: "enviado",
       });
       markReminderSent(appointmentId);

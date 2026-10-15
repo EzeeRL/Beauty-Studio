@@ -1,4 +1,4 @@
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 
 const API = "https://eve-back.vercel.app";
 
@@ -10,7 +10,7 @@ const DeleteModal = ({
 }) => {
   const handleDelete = async () => {
     try {
-      await axios.delete(`${API}/appointments/${appointmentToDelete}`);
+      await adminApi.delete(`${API}/appointments/${appointmentToDelete}`);
       setAppointments((prev) =>
         prev.filter((a) => a.id !== appointmentToDelete),
       );

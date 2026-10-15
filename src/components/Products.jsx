@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AddProductForm.css";
+import { adminFetch } from "../utils/adminApi";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -15,7 +16,7 @@ const AdminProducts = () => {
 
   // Cargar productos
   useEffect(() => {
-    fetch("https://eve-back.vercel.app/products")
+    adminFetch("https://eve-back.vercel.app/products")
       .then((res) => res.json())
       .then(setProducts)
       .catch(console.error);
@@ -23,7 +24,7 @@ const AdminProducts = () => {
 
   // 👇 Cargar ventas
   useEffect(() => {
-    fetch("https://eve-back.vercel.app/products/ventas")
+    adminFetch("https://eve-back.vercel.app/products/ventas")
       .then((res) => res.json())
       .then(setVentas)
       .catch(console.error);
@@ -40,7 +41,7 @@ const AdminProducts = () => {
       ? `https://eve-back.vercel.app/products/${editingId}`
       : "https://eve-back.vercel.app/products";
 
-    const res = await fetch(url, {
+    const res = await adminFetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -71,7 +72,7 @@ const AdminProducts = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("¿Seguro que querés eliminar este producto?")) return;
-    await fetch(`https://eve-back.vercel.app/products/${id}`, {
+    await adminFetch(`https://eve-back.vercel.app/products/${id}`, {
       method: "DELETE",
     });
     setProducts(products.filter((p) => p.id !== id));
