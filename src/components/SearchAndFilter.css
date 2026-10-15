@@ -110,3 +110,30 @@
   background: linear-gradient(45deg, #daba08, #e4c54d, #ecd473);
   color: #fff;
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .search-and-filter-container {
+  background-color: var(--surface);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .search-input {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--border-soft);
+}
+
+body.dark-mode .filter-card {
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--border-soft);
+}
+
+body.dark-mode .filter-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .search-button {
+  background-color: var(--surface);
+  color: var(--text);
+}

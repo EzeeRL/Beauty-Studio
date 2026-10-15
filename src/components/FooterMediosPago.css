@@ -104,3 +104,27 @@
     color: #0ea5e9;
     font-weight: 500;
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .footer-pagos {
+    background-color: var(--surface);
+    border-top-color: var(--border-soft);
+}
+
+body.dark-mode .footer-pagos__title {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .footer-pagos__item {
+    background-color: var(--surface);
+    border-color: var(--border-soft);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .footer-pagos__item:hover {
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .footer-pagos__text {
+    color: var(--text-secondary);
+}

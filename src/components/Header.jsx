@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import "./Header.css";
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
 const Header = () => {
+  const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // En tu Header.jsx
   // const { servicio, experto, fecha, datosCliente } = useServicioStore();
@@ -48,6 +51,51 @@ const Header = () => {
             }}
           />
         </div>
+
+        {/* Menú horizontal: solo se ve en PC (ver Header.css) */}
+        <nav className="desktop-nav">
+          <div className="desktop-nav-links">
+            {[
+              ["/", "Inicio"],
+              ["/app", "Nuestra app"],
+              ["/productos", "Productos"],
+              ["/ubicacion", "Dónde estamos"],
+              ["/Cursos", "Cursos"],
+              ...(admin ? [["/admin", "Administración"]] : []),
+            ].map(([href, label]) => (
+              <a
+                key={href}
+                href={href}
+                className={window.location.pathname === href ? "active" : ""}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+          <div className="desktop-nav-actions">
+            <button
+              type="button"
+              className="desktop-theme-btn"
+              onClick={toggleTheme}
+              aria-label="Cambiar modo oscuro"
+              aria-pressed={theme === "dark"}
+            >
+              {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+            <a href={userId ? "/Perfil" : "/login"} className="desktop-profile-btn">
+              {userId ? "Mi perfil" : "Iniciar sesión"}
+            </a>
+            {userId && (
+              <button
+                type="button"
+                className="desktop-logout-btn"
+                onClick={() => setShowLogoutModal(true)}
+              >
+                Salir
+              </button>
+            )}
+          </div>
+        </nav>
 
         <button
           className={`menu-button ${isMenuOpen ? "open" : ""}`}
@@ -126,6 +174,20 @@ const Header = () => {
           >
             Cursos
           </a>
+          <button
+            type="button"
+            className="theme-toggle-item"
+            onClick={toggleTheme}
+            aria-pressed={theme === "dark"}
+          >
+            <span className="theme-toggle-label">
+              {theme === "dark" ? <Moon size={18} /> : <Sun size={18} />}
+              Modo oscuro
+            </span>
+            <span className={`theme-switch ${theme === "dark" ? "on" : ""}`}>
+              <span className="theme-switch-knob"></span>
+            </span>
+          </button>
           {admin == true ? (
             <a
               href="/admin"

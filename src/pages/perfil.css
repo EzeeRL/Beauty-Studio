@@ -197,10 +197,12 @@
 }
 
 @keyframes bounceArrow {
+
   0%,
   100% {
     transform: translateX(-50%) translateY(0);
   }
+
   50% {
     transform: translateX(-50%) translateY(-3px);
   }
@@ -213,34 +215,102 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: all 0.6s ease;
   position: relative;
-  transition:
-    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.6s ease,
-    border-color 0.6s ease,
-    color 0.6s ease,
-    box-shadow 0.6s ease;
+  overflow: hidden;
+}
+
+/* Destello de vidrio: un brillo fino y ocasional que cruza el círculo,
+   recortado a su forma. El resto del tiempo queda quieto. */
+.reward-circle::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 30%;
+  height: 220%;
+  background: linear-gradient(115deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.45) 50%,
+      rgba(255, 255, 255, 0) 100%);
+  transform: rotate(15deg);
+  animation: rewardGlassShine 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes rewardGlassShine {
+
+  0%,
+  55% {
+    left: -60%;
+  }
+
+  75%,
+  100% {
+    left: 140%;
+  }
+
 }
 
 .reward-circle.reached {
   background: linear-gradient(135deg, #c0a439 0%, #d4bc5d 100%);
   border: none;
   box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.5),
     0 0 0 4px rgba(192, 164, 57, 0.18),
     0 6px 14px rgba(192, 164, 57, 0.4);
   animation: pulseGlow 2.6s ease-in-out infinite;
 }
 
+/* El premio más próximo: el que más "llama" a ganarlo */
 .reward-circle.next {
-  background: #faf6ec;
-  border: 2px dashed #e5c100;
+  background: linear-gradient(135deg, #fdf6e3 0%, #f5e6b8 100%);
+  border: 2px solid #e5c100;
   color: #c9a200;
+  animation: rewardWantGlow 2s ease-in-out infinite;
 }
 
+@keyframes rewardWantGlow {
+
+  0%,
+  100% {
+    box-shadow:
+      inset 0 2px 3px rgba(255, 255, 255, 0.5),
+      0 0 6px 1px rgba(229, 193, 0, 0.35);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 2px 3px rgba(255, 255, 255, 0.5),
+      0 0 14px 5px rgba(229, 193, 0, 0.6);
+  }
+}
+
+/* Premios más lejanos: mismo resplandor, más sutil */
 .reward-circle.locked {
-  background: linear-gradient(145deg, #fcf8f0 0%, #efe6d4 100%);
-  border: 2px solid #e3d6bb;
-  color: #b9a26a;
+
+  background: #f2ece8;
+  border: 2px solid #e6ddd3;
+  color: #b9b0a8;
+  animation: rewardWantGlowFar 3.2s ease-in-out infinite;
+}
+
+@keyframes rewardWantGlowFar {
+
+  0%,
+  100% {
+    box-shadow:
+      inset 0 2px 3px rgba(255, 255, 255, 0.4),
+      0 0 4px 1px rgba(229, 193, 0, 0.22);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 2px 3px rgba(255, 255, 255, 0.4),
+      0 0 9px 3px rgba(229, 193, 0, 0.4);
+  }
+
 }
 
 /* Efecto de "subida de nivel" al desbloquear un premio escaneando */
@@ -258,15 +328,18 @@
   0% {
     transform: scale(1);
   }
+
   35% {
     transform: scale(1.45);
     box-shadow:
       0 0 0 10px rgba(192, 164, 57, 0.3),
       0 10px 22px rgba(192, 164, 57, 0.6);
   }
+
   60% {
     transform: scale(0.92);
   }
+
   100% {
     transform: scale(1);
   }
@@ -441,12 +514,14 @@
 }
 
 @keyframes pulseGlow {
+
   0%,
   100% {
     box-shadow:
       0 0 0 4px rgba(192, 164, 57, 0.18),
       0 6px 14px rgba(192, 164, 57, 0.4);
   }
+
   50% {
     box-shadow:
       0 0 0 6px rgba(192, 164, 57, 0.28),
@@ -596,4 +671,535 @@
   font-weight: bold;
   backdrop-filter: blur(4px);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* --- MODO OSCURO --- */
+body.dark-mode .perfil-container {
+  color: var(--text);
+}
+
+body.dark-mode .perfil-card,
+body.dark-mode .turno-card {
+  background: var(--surface);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .turno-card {
+  border-color: var(--border-soft);
+}
+
+body.dark-mode .turno-card:hover {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .loyalty-subtitle {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .reward-track-base {
+  background: var(--border-soft);
+}
+
+body.dark-mode .reward-dot.next,
+body.dark-mode .reward-circle.next {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+body.dark-mode .reward-dot.locked,
+body.dark-mode .reward-circle.locked {
+  background: var(--border-soft);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+}
+
+body.dark-mode .reward-here-arrow {
+  border-top-color: var(--accent);
+}
+
+body.dark-mode .reward-points-label.reached,
+body.dark-mode .reward-points-label.next {
+  color: var(--accent);
+}
+
+body.dark-mode .reward-points-label.locked {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .reward-discount-label.reached {
+  color: var(--accent-strong);
+}
+
+body.dark-mode .reward-discount-label.next {
+  color: var(--accent);
+}
+
+body.dark-mode .reward-discount-label.locked {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .loyalty-points {
+  background: rgba(229, 193, 0, 0.12);
+  border-color: rgba(229, 193, 0, 0.35);
+  color: var(--accent);
+}
+
+body.dark-mode .loyalty-message.success {
+  color: #6fcf73;
+}
+
+body.dark-mode .loyalty-message.error {
+  color: #ef5350;
+}
+
+body.dark-mode .qr-scanner-modal {
+  background: var(--surface);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .qr-scanner-header h3 {
+  color: var(--text);
+}
+
+body.dark-mode .qr-scanner-close {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .qr-scanner-hint {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .mensaje-vacio {
+  color: var(--text-secondary);
+}
+
+body.dark-mode .button-editar {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* =========================================================
+   TARJETA DE PERFIL · estilo "membresía VIP"
+   ========================================================= */
+.pf-card {
+  --pf-line: #e6ddd3;
+  --pf-soft: #faf6ec;
+  --pf-soft-line: #f0e2a2;
+  --pf-gold: #c0a439;
+  --pf-gold-2: #d4bc5d;
+  --pf-gold-txt: #8a6d00;
+  --pf-shadow: rgba(80, 60, 20, 0.16);
+  --pf-on-gold: #ffffff;
+  position: relative;
+  margin-bottom: 2.5rem;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--pf-line);
+  box-shadow: 0 24px 60px -26px var(--pf-shadow);
+  text-align: left;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin-top: -20px;
+}
+
+body.dark-mode .pf-card {
+  --pf-line: #3a3527;
+  --pf-soft: #2a261d;
+  --pf-soft-line: #3a3527;
+  --pf-gold: #d4bc5d;
+  --pf-gold-2: #e5c100;
+  --pf-gold-txt: #e5c100;
+  --pf-shadow: rgba(0, 0, 0, 0.55);
+  --pf-on-gold: #16140f;
+}
+
+/* --- Franja dorada --- */
+.pf-band {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+  background: linear-gradient(120deg, #c0a439 0%, #d4bc5d 50%, #e6c55a 100%);
+}
+
+body.dark-mode .pf-band {
+  background: linear-gradient(120deg, #3a3018 0%, #6b5a22 55%, #a88a1e 100%);
+}
+
+.pf-band::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 1s ease;
+}
+
+.pf-card:hover .pf-band::after {
+  left: 130%;
+}
+
+.pf-watermark {
+  position: absolute;
+  right: -30px;
+  top: -30px;
+  width: 170px;
+  border-radius: 50%;
+  opacity: 0.22;
+  pointer-events: none;
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pf-card:hover .pf-watermark {
+  transform: rotate(25deg) scale(1.08);
+}
+
+.pf-tier {
+  position: absolute;
+  left: 24px;
+  top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.pf-tier img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+}
+
+/* --- Avatar + nombre --- */
+.pf-head {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: -44px;
+  padding: 0 24px;
+}
+
+.pf-avatar {
+  position: relative;
+  flex: none;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 5px solid var(--surface);
+  background: linear-gradient(135deg, #c0a439, #e6c55a);
+  color: var(--pf-on-gold);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 24px -10px var(--pf-shadow);
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pf-avatar::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 2px dashed var(--pf-gold-2);
+  opacity: 0;
+  transition: opacity 0.4s;
+  animation: pf-spin 10s linear infinite;
+}
+
+.pf-card:hover .pf-avatar {
+  transform: scale(1.05) rotate(-4deg);
+}
+
+.pf-card:hover .pf-avatar::before {
+  opacity: 1;
+}
+
+@keyframes pf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pf-who {
+  flex: 1;
+  min-width: 200px;
+  padding-bottom: 6px;
+}
+
+.pf-who h2 {
+  margin: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pf-who small {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.pf-edit-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--pf-gold);
+  background: transparent;
+  color: var(--pf-gold-txt);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.35s;
+}
+
+.pf-edit-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, #c0a439, #d4bc5d);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.pf-edit-btn:hover {
+  color: var(--pf-on-gold);
+}
+
+.pf-edit-btn:hover::before {
+  transform: scaleX(1);
+}
+
+.pf-edit-btn svg {
+  transition: transform 0.4s;
+}
+
+.pf-edit-btn:hover svg {
+  transform: rotate(-15deg);
+}
+
+/* --- Contacto (clic para copiar) --- */
+.pf-contacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 16px 12px 6px;
+}
+
+.pf-contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.pf-contact svg {
+  flex: none;
+  color: var(--pf-gold);
+}
+
+.pf-contact-txt {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-copy {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--pf-gold-txt);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.25s;
+}
+
+.pf-contact:hover {
+  background: var(--pf-soft);
+  transform: translateX(3px);
+}
+
+.pf-contact:hover .pf-copy,
+.pf-contact:focus-visible .pf-copy {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Próximo turno --- */
+.pf-next {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 16px 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--pf-soft);
+  border: 1px solid var(--pf-soft-line);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.pf-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -14px var(--pf-shadow);
+}
+
+.pf-date {
+  flex: none;
+  width: 54px;
+  overflow: hidden;
+  text-align: center;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--pf-line);
+}
+
+.pf-date em {
+  display: block;
+  padding: 3px 0;
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: linear-gradient(135deg, #c0a439, #d4bc5d);
+}
+
+.pf-date b {
+  display: block;
+  padding: 3px 0 4px;
+  font-size: 22px;
+  color: var(--text);
+}
+
+.pf-next p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.pf-next small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.pf-next-tag {
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pf-gold-txt);
+  background: var(--surface);
+  border: 1px solid var(--pf-soft-line);
+}
+
+/* --- Números --- */
+.pf-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--pf-line);
+}
+
+.pf-stat {
+  min-width: 0;
+  padding: 18px 12px;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.pf-stat+.pf-stat {
+  border-left: 1px solid var(--pf-line);
+}
+
+.pf-stat strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--pf-gold-txt);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pf-stat span {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.pf-stat:hover {
+  background: var(--pf-soft);
+}
+
+.pf-stat:hover strong {
+  transform: translateY(-3px) scale(1.12);
+}
+
+/* --- Celular --- */
+@media (max-width: 600px) {
+  .pf-head {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .pf-who {
+    min-width: 100%;
+  }
+
+  .pf-contacts {
+    grid-template-columns: 1fr;
+  }
+
+  .pf-next-tag {
+    display: none;
+  }
+
+  .pf-stat strong {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .pf-card *,
+  .pf-card *::before,
+  .pf-card *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

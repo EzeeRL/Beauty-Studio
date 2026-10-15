@@ -26,3 +26,8 @@
 .abrir-maps-boton:hover {
   background-color: #bfa52e;
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .mapa-wrapper {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}

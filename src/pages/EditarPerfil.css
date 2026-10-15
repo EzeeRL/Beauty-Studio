@@ -124,3 +124,38 @@
     font-size: 1.1rem;
     color: #555;
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .editar-perfil {
+    background: var(--surface);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .editar-perfil h2,
+body.dark-mode .editar-perfil label {
+    color: var(--text);
+}
+
+body.dark-mode .editar-perfil input {
+    background-color: var(--surface);
+    color: var(--text);
+}
+
+body.dark-mode .editar-perfil button:last-child {
+    background: var(--border-soft);
+    color: var(--text);
+    border-color: var(--border-soft);
+}
+
+body.dark-mode .modal-content {
+    background: var(--surface);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.45);
+}
+
+body.dark-mode .modal-content p {
+    color: var(--text);
+}
+
+body.dark-mode .cargando {
+    color: var(--text-secondary);
+}

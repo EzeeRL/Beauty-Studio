@@ -243,14 +243,19 @@ const ComentarioList = () => {
           padding: 0 20px;
         }
 
+        body.dark-mode .titulo {
+          color: var(--text);
+        }
+
         .carousel-container {
           display: flex;
+          align-items: flex-start; /* evita que todas las cards se estiren a la altura de la más larga */
           overflow-x: auto;
           scroll-snap-type: x mandatory;
           gap: 16px;
           padding: 10px 20px 30px 20px; /* Padding lateral para que la primera card no pegue al borde */
           scroll-behavior: smooth;
-          scrollbar-width: none; 
+          scrollbar-width: none;
         }
         
         .carousel-container::-webkit-scrollbar { display: none; }
@@ -265,7 +270,7 @@ const ComentarioList = () => {
           flex-shrink: 0;
           background: #fff;
           border-radius: 18px;
-          padding: 20px;
+          padding: 14px 18px;
           box-shadow: 0 10px 20px rgba(0,0,0,0.05);
           border: 1px solid #f0f0f0;
           display: flex;
@@ -273,10 +278,16 @@ const ComentarioList = () => {
           box-sizing: border-box;
         }
 
+        body.dark-mode .comentario-card {
+          background: var(--surface);
+          border-color: var(--border-soft);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
         .card-header {
           display: flex;
           align-items: center;
-          margin-bottom: 15px;
+          margin-bottom: 10px;
         }
 
         .avatar {
@@ -298,11 +309,15 @@ const ComentarioList = () => {
           color: #222;
         }
 
+        body.dark-mode .user-info strong {
+          color: var(--text);
+        }
+
         .rating { font-size: 0.7rem; margin-top: 2px; }
 
         .comentario-body {
           width: 100%;
-          margin-bottom: 15px;
+          margin-bottom: 10px;
         }
 
         .comentario-texto {
@@ -311,16 +326,24 @@ const ComentarioList = () => {
           color: #555;
           margin: 0;
           /* ESTO FUERZA EL SALTO DE LÍNEA */
-          white-space: normal; 
+          white-space: normal;
           word-wrap: break-word;
           overflow-wrap: break-word;
           text-align: left;
+        }
+
+        body.dark-mode .comentario-texto {
+          color: var(--text-secondary);
         }
 
         .date {
           font-size: 0.75rem;
           color: #bbb;
           margin-top: auto;
+        }
+
+        body.dark-mode .date {
+          color: var(--text-secondary);
         }
 
         @media (min-width: 768px) {

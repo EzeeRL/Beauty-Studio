@@ -19,3 +19,39 @@
   transition: 0.1s;
   transition-property: box-shadow;
 }
+
+.comentario-form-card {
+  background: #f9f9f9;
+}
+
+.comentario-title {
+  color: #333;
+  margin: 0;
+}
+
+.comentario-label {
+  color: #333;
+}
+
+/* --- MODO OSCURO --- */
+body.dark-mode .input {
+  background-color: var(--surface);
+  border-color: var(--surface);
+  color: var(--text);
+}
+
+body.dark-mode .input:focus {
+  background-color: var(--surface);
+}
+
+body.dark-mode .comentario-form-card {
+  background: var(--surface);
+}
+
+body.dark-mode .comentario-title {
+  color: var(--text);
+}
+
+body.dark-mode .comentario-label {
+  color: var(--text-secondary);
+}

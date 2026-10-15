@@ -43,8 +43,12 @@ const ComentarioForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.form}>
-      <h2>Dejános tu comentario</h2>
+    <form
+      onSubmit={handleSubmit}
+      style={styles.form}
+      className="comentario-form-card"
+    >
+      <h2 className="comentario-title">Dejános tu comentario</h2>
 
       <input
         type="text"
@@ -65,12 +69,13 @@ const ComentarioForm = () => {
         className="input"
       />
 
-      <label>Calificación:</label>
+      <label className="comentario-label">Calificación:</label>
       <select
         name="rating"
         value={formData.rating}
         onChange={handleChange}
         style={styles.select}
+        className="input"
       >
         {[1, 2, 3, 4, 5].map((r) => (
           <option key={r} value={r}>
@@ -97,7 +102,6 @@ const styles = {
     flexDirection: "column",
     gap: "10px",
     padding: "20px",
-    background: "#f9f9f9",
     borderRadius: "10px",
   },
   input: {

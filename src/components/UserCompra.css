@@ -54,3 +54,27 @@
 .user-purchases-loading {
     color: #333;
 }
+
+/* --- MODO OSCURO --- */
+body.dark-mode .user-purchases-container {
+    background: var(--surface);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .user-purchases-table th,
+body.dark-mode .user-purchases-table td {
+    border-bottom-color: var(--border-soft);
+}
+
+body.dark-mode .user-purchases-table th {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+body.dark-mode .user-purchases-empty {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .user-purchases-loading {
+    color: var(--text);
+}
