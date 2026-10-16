@@ -23,6 +23,7 @@ import AdminComentarios from "../components/AdminComentarios";
 import AddProductForm from "../components/Products";
 import CouponManager from "../components/CouponManager";
 import NotificationsSection from "../components/NotificationsSection";
+import AdminPushButton from "../components/AdminPushButton";
 
 const API = "https://eve-back.vercel.app";
 
@@ -127,6 +128,8 @@ const AdminPanel = () => {
       <AdminNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="admin-main-content">
+        {activeTab === "turnos" && <AdminPushButton />}
+
         {activeTab === "turnos" && (
           <TurnosSection
             appointments={appointments}
