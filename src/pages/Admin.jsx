@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 
 import "./AdminPanel.css";
 
@@ -23,6 +23,7 @@ import AdminComentarios from "../components/AdminComentarios";
 import AddProductForm from "../components/Products";
 import CouponManager from "../components/CouponManager";
 import NotificationsSection from "../components/NotificationsSection";
+import AdminPushButton from "../components/AdminPushButton";
 
 const API = "https://eve-back.vercel.app";
 
@@ -72,7 +73,7 @@ const AdminPanel = () => {
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    axios
+    adminApi
       .get(`${API}/experts`)
       .then((res) => setExperts(res.data))
       .catch((err) => console.error("Error al cargar expertos:", err));
@@ -84,7 +85,7 @@ const AdminPanel = () => {
       return;
     }
     try {
-      await axios.post(`${API}/hours`, {
+      await adminApi.post(`${API}/hours`, {
         day: selectedDate,
         openTime: startHour,
         closeTime: endHour,
@@ -127,6 +128,8 @@ const AdminPanel = () => {
       <AdminNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="admin-main-content">
+        {activeTab === "turnos" && <AdminPushButton />}
+
         {activeTab === "turnos" && (
           <TurnosSection
             appointments={appointments}

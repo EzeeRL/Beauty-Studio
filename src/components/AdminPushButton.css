@@ -1,0 +1,55 @@
+/* Aviso / botón de notificaciones push del panel admin */
+.admin-push {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.admin-push svg {
+  flex-shrink: 0;
+}
+
+.admin-push--on {
+  color: var(--accent-strong);
+}
+
+.admin-push-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent-strong);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.admin-push-btn:hover {
+  opacity: 0.9;
+}
+
+.admin-push-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+body.dark-mode .admin-push-btn {
+  color: #16140f;
+}
+
+.admin-push-error {
+  color: #d9534f;
+}

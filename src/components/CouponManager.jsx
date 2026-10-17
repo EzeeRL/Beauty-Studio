@@ -738,7 +738,7 @@ export default CouponManager;
  */
 
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 import QRCode from "react-qr-code";
 import { Ticket, QrCode, Gift } from "lucide-react";
 import "./CouponManager.css";
@@ -811,7 +811,7 @@ const CouponManager = () => {
     setLoadingQr(true);
     setQrError(null);
     try {
-      const res = await axios.get(`${API_URL}/loyalty/qr`);
+      const res = await adminApi.get(`${API_URL}/loyalty/qr`);
       setQrData(res.data);
     } catch (err) {
       console.error("Error al obtener el QR del día", err);
@@ -823,7 +823,7 @@ const CouponManager = () => {
 
   const fetchCoupons = async () => {
     try {
-      const res = await axios.get(`${API_URL}/coupons`);
+      const res = await adminApi.get(`${API_URL}/coupons`);
       setCoupons(res.data);
     } catch (err) {
       console.error("Error al obtener cupones", err);
@@ -832,7 +832,7 @@ const CouponManager = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await axios.get(`${API_URL}/services`);
+      const res = await adminApi.get(`${API_URL}/services`);
       setServices(res.data);
     } catch (err) {
       console.error("Error al obtener servicios", err);
@@ -841,7 +841,7 @@ const CouponManager = () => {
 
   const fetchRewards = async () => {
     try {
-      const res = await axios.get(`${API_URL}/loyalty/rewards`);
+      const res = await adminApi.get(`${API_URL}/loyalty/rewards`);
       setRewards(res.data);
     } catch (err) {
       console.error("Error al obtener premios", err);
@@ -850,7 +850,7 @@ const CouponManager = () => {
 
   const fetchTops = async () => {
     try {
-      const res = await axios.get(`${API_URL}/loyalty/top`);
+      const res = await adminApi.get(`${API_URL}/loyalty/top`);
       setTops(res.data);
       console.log(res.data);
     } catch (err) {
@@ -862,13 +862,13 @@ const CouponManager = () => {
     e.preventDefault();
     try {
       if (editingRewardId) {
-        await axios.put(
+        await adminApi.put(
           `${API_URL}/loyalty/rewards/${editingRewardId}`,
           rewardForm,
         );
         alert("¡Premio actualizado con éxito!");
       } else {
-        await axios.post(`${API_URL}/loyalty/rewards`, rewardForm);
+        await adminApi.post(`${API_URL}/loyalty/rewards`, rewardForm);
         alert("¡Premio creado exitosamente!");
       }
       setRewardForm(initialRewardFormState);
@@ -882,7 +882,7 @@ const CouponManager = () => {
   const handleDeleteReward = async (id) => {
     if (window.confirm("¿Estás seguro de eliminar este premio?")) {
       try {
-        await axios.delete(`${API_URL}/loyalty/rewards/${id}`);
+        await adminApi.delete(`${API_URL}/loyalty/rewards/${id}`);
         fetchRewards();
       } catch (err) {
         alert("Error al eliminar el premio");
@@ -906,10 +906,10 @@ const CouponManager = () => {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`${API_URL}/coupons/${editingId}`, form);
+        await adminApi.put(`${API_URL}/coupons/${editingId}`, form);
         alert("¡Cupón actualizado con éxito!");
       } else {
-        await axios.post(`${API_URL}/coupons`, form);
+        await adminApi.post(`${API_URL}/coupons`, form);
         alert("¡Cupón creado exitosamente!");
       }
       setForm(initialFormState);
@@ -923,7 +923,7 @@ const CouponManager = () => {
   const handleDelete = async (id) => {
     if (window.confirm("¿Estás seguro de eliminar este cupón?")) {
       try {
-        await axios.delete(`${API_URL}/coupons/${id}`);
+        await adminApi.delete(`${API_URL}/coupons/${id}`);
         fetchCoupons();
       } catch (err) {
         alert("Error al eliminar el cupón");

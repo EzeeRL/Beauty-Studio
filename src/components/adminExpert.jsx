@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 
 const ExpertManager = () => {
   const [experts, setExperts] = useState([]);
@@ -25,7 +25,7 @@ const ExpertManager = () => {
 
   const fetchExperts = async () => {
     try {
-      const res = await axios.get("https://eve-back.vercel.app/experts");
+      const res = await adminApi.get("https://eve-back.vercel.app/experts");
       setExperts(res.data);
     } catch (err) {
       console.error("Error al obtener expertos", err);
@@ -41,13 +41,13 @@ const ExpertManager = () => {
     const isEdit = Boolean(editingId);
     try {
       if (isEdit) {
-        await axios.put(
+        await adminApi.put(
           `https://eve-back.vercel.app/experts/${editingId}`,
           newExpert,
         );
         setEditingId(null);
       } else {
-        await axios.post("https://eve-back.vercel.app/experts", newExpert);
+        await adminApi.post("https://eve-back.vercel.app/experts", newExpert);
       }
 
       setNewExpert({
@@ -96,7 +96,7 @@ const ExpertManager = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://eve-back.vercel.app/experts/${toDeleteId}`);
+      await adminApi.delete(`https://eve-back.vercel.app/experts/${toDeleteId}`);
       setToDeleteId(null);
       setShowModal(false);
       fetchExperts();

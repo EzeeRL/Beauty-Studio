@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 
 const ServiceManager = () => {
   const [services, setServices] = useState([]);
@@ -25,7 +25,7 @@ const ServiceManager = () => {
 
   const fetchServices = async () => {
     try {
-      const res = await axios.get("https://eve-back.vercel.app/services");
+      const res = await adminApi.get("https://eve-back.vercel.app/services");
       setServices(res.data);
     } catch (err) {
       console.error("Error al obtener servicios", err);
@@ -41,13 +41,13 @@ const ServiceManager = () => {
     const isEdit = Boolean(editingId);
     try {
       if (isEdit) {
-        await axios.put(
+        await adminApi.put(
           `https://eve-back.vercel.app/services/${editingId}`,
           newService,
         );
         setEditingId(null);
       } else {
-        await axios.post("https://eve-back.vercel.app/services", newService);
+        await adminApi.post("https://eve-back.vercel.app/services", newService);
       }
 
       setNewService({
@@ -97,7 +97,7 @@ const ServiceManager = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://eve-back.vercel.app/services/${toDeleteId}`);
+      await adminApi.delete(`https://eve-back.vercel.app/services/${toDeleteId}`);
       setToDeleteId(null);
       setShowModal(false);
       fetchServices();

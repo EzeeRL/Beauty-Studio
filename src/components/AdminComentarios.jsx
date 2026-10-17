@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 
 const AdminComentarios = () => {
   const [comentarios, setComentarios] = useState([]);
@@ -9,7 +9,7 @@ const AdminComentarios = () => {
   const comentariosMostrados = mostrarTodos ? comentarios : comentarios.slice(0, 3);
 
   useEffect(() => {
-    axios
+    adminApi
       .get("https://eve-back.vercel.app/comments")
       .then((res) => setComentarios(res.data))
       .catch((err) => console.error("Error al cargar comentarios:", err));
@@ -19,7 +19,7 @@ const AdminComentarios = () => {
     if (!comentarioAEliminar) return;
 
     try {
-      await axios.delete(`https://eve-back.vercel.app/comments/${comentarioAEliminar}`);
+      await adminApi.delete(`https://eve-back.vercel.app/comments/${comentarioAEliminar}`);
       setComentarios((prev) => prev.filter((c) => c.id !== comentarioAEliminar));
       setComentarioAEliminar(null);
     } catch (err) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { compareAsc, differenceInHours } from "date-fns";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 
 const API = "https://eve-back.vercel.app";
 
@@ -8,7 +8,7 @@ export const useAppointments = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    axios
+    adminApi
       .get(`${API}/appointments`)
       .then((res) => {
         const onlyPaidOrPartial = res.data.appointments.filter(
@@ -36,7 +36,7 @@ export const useAppointments = () => {
 
   const deleteAppointment = async (appointmentId) => {
     try {
-      await axios.delete(`${API}/appointments/${appointmentId}`);
+      await adminApi.delete(`${API}/appointments/${appointmentId}`);
       setAppointments((prev) => prev.filter((app) => app.id !== appointmentId));
     } catch (err) {
       console.error("❌ Error al eliminar el turno:", err);

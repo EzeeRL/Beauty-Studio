@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 import { format } from "date-fns";
 import "./NotificationsSection.css";
 
@@ -22,7 +22,7 @@ const NotificationsSection = () => {
   const fetchHistory = async () => {
     setLoadingHistory(true);
     try {
-      const res = await axios.get(`${API}/notifications`);
+      const res = await adminApi.get(`${API}/notifications`);
       const sorted = [...res.data].sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
       );
@@ -50,7 +50,7 @@ const NotificationsSection = () => {
 
     setSending(true);
     try {
-      await axios.post(`${API}/notifications/broadcast`, {
+      await adminApi.post(`${API}/notifications/broadcast`, {
         title: title.trim(),
         body: body.trim(),
       });

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import adminApi from "../utils/adminApi";
 import "./horarioManager.css";
 
 const HorarioManager = () => {
@@ -17,7 +17,7 @@ const HorarioManager = () => {
   };
 
   useEffect(() => {
-    axios
+    adminApi
       .get("https://eve-back.vercel.app/experts")
       .then((res) => setExperts(res.data))
       .catch((err) => console.error("Error cargando expertos:", err));
@@ -25,7 +25,7 @@ const HorarioManager = () => {
 
   useEffect(() => {
     if (selectedExpert) {
-      axios
+      adminApi
         .get(`https://eve-back.vercel.app/hours/expert/${selectedExpert}`)
         .then((res) => setHorarios(res.data))
         .catch((err) => {
@@ -42,7 +42,7 @@ const HorarioManager = () => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`https://eve-back.vercel.app/hours/${id}`);
+      await adminApi.delete(`https://eve-back.vercel.app/hours/${id}`);
       setHorarios((prev) => prev.filter((h) => h.id !== id));
       showToast("✅ Horario eliminado.");
     } catch (err) {
@@ -66,7 +66,7 @@ const HorarioManager = () => {
 
   const saveEdit = async () => {
     try {
-      await axios.put(`https://eve-back.vercel.app/hours/${editId}`, editData);
+      await adminApi.put(`https://eve-back.vercel.app/hours/${editId}`, editData);
       setHorarios((prev) =>
         prev.map((h) =>
           h.id === editId
