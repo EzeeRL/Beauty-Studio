@@ -686,6 +686,10 @@ tbody tr.upcoming {
     display: block;
     /* Vuelve a flujo normal en móvil */
     padding-left: 0;
+    /* .main-content centra con flex: sin esto el panel toma el ancho de su
+       contenido y una fila con scroll (ej. pestañas) ensancha toda la página */
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .admin-nav {

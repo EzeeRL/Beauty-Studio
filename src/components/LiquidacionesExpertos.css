@@ -70,6 +70,62 @@
     font-size: 1.1rem;
 }
 
+.liquidaciones-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.liquidaciones-header h2 {
+    margin: 0;
+    font-size: 1.15rem;
+}
+
+.liquidaciones-mes {
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid #d9d7cf;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+
+.liquidaciones-vacio {
+    text-align: center;
+    color: #999;
+    padding: 24px 0;
+}
+
+.liquidacion-acciones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.liquidacion-csv {
+    border: 1px solid #c0a439;
+    background: #fff;
+    color: #8a7320;
+    border-radius: 8px;
+    padding: 4px 9px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.liquidacion-csv.todo {
+    margin-top: 14px;
+    padding: 10px;
+    font-size: 0.9rem;
+    border-color: #8a7320;
+    background: #8a7320;
+    color: #fff;
+}
+
 @media (max-width: 420px) {
     .liquidacion-nombre {
         white-space: normal;

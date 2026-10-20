@@ -1,99 +1,95 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { format } from "date-fns";
 import "./LiquidacionesExpertos.css";
+import {
+  liquidacionMes,
+  descargarCSV,
+  filasLiquidacionCSV,
+  ENCABEZADOS_LIQUIDACION,
+  nombreMesLargo,
+} from "../utils/metricas";
 
 const LiquidacionesExpertos = ({ appointments }) => {
-  const pagosExpertos = useMemo(() => {
-    const pagos = {};
-    const ahora = new Date();
+  const [mes, setMes] = useState(format(new Date(), "yyyy-MM"));
+  const fechaMes = useMemo(() => new Date(`${mes}-01T00:00:00`), [mes]);
 
-    // Inicio del mes actual (ej: 2025-07-01 00:00:00)
-    const inicioMes = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+  const { filas, totalEstudio } = useMemo(
+    () =>
+      liquidacionMes(
+        appointments.filter((a) => a.Expert && a.Service),
+        fechaMes,
+      ),
+    [appointments, fechaMes],
+  );
 
-    // Fin del mes actual (ej: 2025-07-31 23:59:59)
-    const finMes = new Date(
-      ahora.getFullYear(),
-      ahora.getMonth() + 1,
-      0,
-      23,
-      59,
-      59
+  const exportar = (turnos, sufijo) =>
+    descargarCSV(
+      `liquidacion-${mes}${sufijo ? `-${sufijo}` : ""}.csv`,
+      ENCABEZADOS_LIQUIDACION,
+      filasLiquidacionCSV(turnos),
     );
-
-    appointments
-      .filter((appt) => {
-        const fecha = new Date(appt.date);
-        return (
-          (appt.payStatus === "paid" || appt.payStatus === "partial") &&
-          fecha >= inicioMes &&
-          fecha <= finMes
-        );
-      })
-      .forEach((appt) => {
-        // Si falta el Expert o el Service → ignoramos ese turno
-        if (!appt.Expert || !appt.Service) return;
-
-        const { id, name } = appt.Expert;
-
-        // Evita error si price es null o undefined
-        const precio = appt.Service?.price ?? 0;
-
-        if (!pagos[id]) {
-          pagos[id] = { nombre: name, total: 0 };
-        }
-
-        pagos[id].total += precio;
-      });
-
-    return Object.entries(pagos).map(([id, { nombre, total }]) => {
-      const esJefa = nombre.toLowerCase().includes("evelyn duarte");
-      let porcentaje = 0.8;
-
-      if (esJefa) porcentaje = 0;
-      else if (parseInt(id) === 4) porcentaje = 0.7;
-
-      return {
-        experto: nombre,
-        totalGenerado: total,
-        aPagar: total * porcentaje,
-        esJefa,
-      };
-    });
-  }, [appointments]);
-
-  const totalMes = pagosExpertos.reduce((acc, exp) => {
-    // Si es jefa, la empresa gana todo
-    // Si NO es jefa, la empresa gana el otro 50%
-    const gananciaEmpresa = exp.esJefa
-      ? exp.totalGenerado
-      : exp.totalGenerado * 0.2;
-    return acc + gananciaEmpresa;
-  }, 0);
 
   return (
     <div className="liquidaciones-container">
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        💼 Liquidación de expertos
-      </h2>
-      <div className="liquidaciones-list">
-        {pagosExpertos.map(({ experto, totalGenerado, aPagar, esJefa }) => (
-          <div className="liquidacion-row" key={experto}>
-            <div className="liquidacion-info">
-              <span className="liquidacion-nombre">{experto}</span>
-              <span className="liquidacion-generado">
-                Generado: ${totalGenerado.toLocaleString()}
-              </span>
+      <div className="liquidaciones-header">
+        <div>
+          <h2>💼 Liquidación de expertos</h2>
+          <span className="liquidacion-generado">{nombreMesLargo(fechaMes)}</span>
+        </div>
+        <input
+          type="month"
+          className="liquidaciones-mes"
+          value={mes}
+          onChange={(e) => e.target.value && setMes(e.target.value)}
+        />
+      </div>
+
+      {filas.length === 0 ? (
+        <p className="liquidaciones-vacio">No hay turnos pagos en este mes.</p>
+      ) : (
+        <div className="liquidaciones-list">
+          {filas.map((f) => (
+            <div className="liquidacion-row" key={f.id}>
+              <div className="liquidacion-info">
+                <span className="liquidacion-nombre">{f.experto}</span>
+                <span className="liquidacion-generado">
+                  {f.turnos.length} turnos · Generado: $
+                  {f.totalGenerado.toLocaleString("es-AR")}
+                </span>
+              </div>
+              <div className="liquidacion-acciones">
+                <span className={`liquidacion-pagar ${f.esJefa ? "es-jefa" : ""}`}>
+                  {f.esJefa ? "Es jefa" : `$${f.aPagar.toLocaleString("es-AR")}`}
+                </span>
+                <button
+                  type="button"
+                  className="liquidacion-csv"
+                  onClick={() =>
+                    exportar(f.turnos, f.experto.toLowerCase().replace(/\s+/g, "-"))
+                  }
+                >
+                  CSV
+                </button>
+              </div>
             </div>
-            <span className={`liquidacion-pagar ${esJefa ? "es-jefa" : ""}`}>
-              {esJefa ? "Es jefa" : `$${aPagar.toLocaleString()}`}
+          ))}
+
+          <div className="liquidacion-row liquidacion-total">
+            <span className="liquidacion-nombre">Ganancia del estudio</span>
+            <span className="liquidacion-pagar">
+              ${totalEstudio.toLocaleString("es-AR")}
             </span>
           </div>
-        ))}
 
-        <div className="liquidacion-row liquidacion-total">
-          <span className="liquidacion-nombre">Total de ganancias (mes)</span>
-          <span className="liquidacion-pagar">${totalMes.toLocaleString()}</span>
+          <button
+            type="button"
+            className="liquidacion-csv todo"
+            onClick={() => exportar(filas.flatMap((f) => f.turnos))}
+          >
+            ⬇ Exportar mes completo (CSV)
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 };

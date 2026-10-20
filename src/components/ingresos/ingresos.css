@@ -1,0 +1,605 @@
+/* Sección Ingresos: mobile primero, se abre a 2 columnas en desktop */
+
+.ing {
+  --ing-gold: #c0a439;
+  --ing-gold-soft: #f6f0dc;
+  --ing-ink: #1f1f1f;
+  --ing-ink-2: #52514e;
+  --ing-muted: #898781;
+  --ing-line: #ecebe6;
+  --ing-surface: #ffffff;
+  --ing-up: #006300;
+  --ing-down: #c62828;
+  color: var(--ing-ink);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.ing h2 {
+  margin: 0 0 12px;
+  font-size: 1.3rem;
+}
+
+/* AdminPanel.css centra todos los h2/h3 */
+.ing h3,
+.ing .liquidaciones-header h2 {
+  text-align: left;
+}
+
+/* ── Pestañas internas (scroll horizontal en mobile) ── */
+.ing-tabs {
+  /* Que el ancho de las pestañas no cuente para el ancho de la página */
+  contain: inline-size;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 10px;
+  margin: 0 -2px 8px;
+  scrollbar-width: none;
+}
+.ing-tabs::-webkit-scrollbar {
+  display: none;
+}
+.ing-tab {
+  flex-shrink: 0;
+  border: 1px solid var(--ing-line);
+  background: var(--ing-surface);
+  color: var(--ing-ink-2);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+.ing-tab.activo {
+  background: var(--ing-gold);
+  border-color: var(--ing-gold);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Grilla de tarjetas ── */
+.ing-grid {
+  display: grid;
+  gap: 14px;
+}
+@media (min-width: 900px) {
+  .ing-grid.dos {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+  .ing-ancho {
+    grid-column: 1 / -1;
+  }
+}
+
+.ing-card {
+  background: var(--ing-surface);
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  padding: 16px;
+  min-width: 0;
+}
+.ing-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.ing-card-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.ing-card-sub {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--ing-muted);
+}
+.ing-nota {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  color: var(--ing-ink-2);
+  line-height: 1.4;
+}
+.ing-vacio {
+  color: var(--ing-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+}
+
+/* ── KPIs ── */
+.ing-kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (min-width: 900px) {
+  .ing-kpis {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.ing-kpi {
+  background: var(--ing-surface);
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  padding: 12px 14px;
+  min-width: 0;
+}
+.ing-kpi.destacado {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #c0a439, #d8bf62);
+  color: #fff;
+}
+@media (min-width: 900px) {
+  .ing-kpi.destacado {
+    grid-column: auto;
+  }
+}
+.ing-kpi-label {
+  font-size: 0.75rem;
+  color: var(--ing-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.ing-kpi-valor {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ing-kpi.destacado .ing-kpi-label,
+.ing-kpi.destacado .ing-kpi-extra {
+  color: rgba(255, 255, 255, 0.9);
+}
+.ing-kpi.destacado .ing-kpi-valor {
+  font-size: 1.8rem;
+}
+.ing-kpi-extra {
+  font-size: 0.75rem;
+  color: var(--ing-muted);
+  margin-top: 2px;
+}
+.ing-delta {
+  font-weight: 700;
+}
+.ing-delta.up {
+  color: var(--ing-up);
+}
+.ing-delta.down {
+  color: var(--ing-down);
+}
+.ing-kpi.destacado .ing-delta {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+/* ── Barra realizado / reservado ── */
+.ing-split {
+  display: flex;
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--ing-line);
+  gap: 2px;
+}
+.ing-split-realizado {
+  background: var(--ing-gold);
+}
+.ing-split-reservado {
+  background: repeating-linear-gradient(
+    135deg,
+    #e3d499 0 6px,
+    #d6c271 6px 8px
+  );
+}
+.ing-split-leyenda {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+.ing-split-leyenda strong {
+  display: block;
+  font-size: 1rem;
+}
+.ing-split-leyenda .derecha {
+  text-align: right;
+}
+.ing-proximo {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--ing-gold-soft);
+  font-size: 0.85rem;
+}
+
+/* ── Leyenda de series ── */
+.ing-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.78rem;
+  color: var(--ing-ink-2);
+}
+.ing-leyenda li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ing-punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ── Selector segmentado ── */
+.ing-seg {
+  display: inline-flex;
+  background: #f2f1ec;
+  border-radius: 999px;
+  padding: 3px;
+}
+.ing-seg button {
+  border: none;
+  background: transparent;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: var(--ing-ink-2);
+  cursor: pointer;
+}
+.ing-seg button.activo {
+  background: var(--ing-surface);
+  color: var(--ing-ink);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Lista con barras horizontales ── */
+.ing-barras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ing-barra-fila {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  gap: 2px 8px;
+  align-items: center;
+  font-size: 0.85rem;
+}
+.ing-barra-pos {
+  color: var(--ing-muted);
+  font-size: 0.75rem;
+  text-align: right;
+}
+.ing-barra-nombre {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ing-barra-valor {
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ing-barra-track {
+  grid-column: 2 / -1;
+  height: 6px;
+  background: #f2f1ec;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ing-barra-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ing-gold);
+}
+.ing-barra-sub {
+  grid-column: 2 / -1;
+  font-size: 0.72rem;
+  color: var(--ing-muted);
+}
+
+/* ── Tabla ordenable ── */
+.ing-tabla-wrap {
+  overflow-x: auto;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+.ing-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+/* AdminPanel.css convierte todas las tablas en tarjetas en mobile: acá no */
+.ing-tabla {
+  display: table;
+  margin-top: 0;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+.ing-tabla thead {
+  display: table-header-group;
+  background: none;
+}
+.ing-tabla tbody {
+  display: table-row-group;
+}
+.ing-tabla tr {
+  display: table-row;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+}
+.ing-tabla th,
+.ing-tabla td {
+  display: table-cell;
+}
+.ing-tabla td::before {
+  content: none;
+}
+.ing-tabla th {
+  text-align: right;
+  font-weight: 600;
+  color: var(--ing-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  padding: 6px 6px;
+  border-bottom: 1px solid var(--ing-line);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+.ing-tabla th:first-child,
+.ing-tabla td:first-child {
+  text-align: left;
+  padding-left: 0;
+}
+.ing-tabla th.orden {
+  color: var(--ing-gold);
+}
+.ing-tabla td {
+  text-align: right;
+  padding: 9px 6px;
+  border-bottom: 1px solid var(--ing-line);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ing-tabla td:first-child {
+  white-space: normal;
+  min-width: 130px;
+}
+.ing-tabla .chico {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--ing-muted);
+}
+.ing-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: #fdecd3;
+  color: #8a4b00;
+  vertical-align: middle;
+}
+
+/* ── Ocupación ── */
+.ing-ocupacion {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ing-ocu-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+.ing-ocu-nombre {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  min-width: 0;
+}
+.ing-ocu-pct {
+  font-weight: 700;
+  font-size: 1rem;
+}
+.ing-ocu-track {
+  height: 10px;
+  margin-top: 6px;
+  background: #f2f1ec;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ing-ocu-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+.ing-ocu-sub {
+  font-size: 0.75rem;
+  color: var(--ing-muted);
+  margin-top: 4px;
+}
+
+/* ── Mapa de calor ── */
+.ing-calor {
+  display: grid;
+  gap: 3px;
+  font-size: 0.7rem;
+}
+.ing-calor-head {
+  text-align: center;
+  color: var(--ing-muted);
+  font-weight: 600;
+}
+.ing-calor-hora {
+  color: var(--ing-muted);
+  text-align: right;
+  padding-right: 4px;
+  align-self: center;
+  font-variant-numeric: tabular-nums;
+}
+.ing-calor-celda {
+  height: 28px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.ing-calor-escala {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.72rem;
+  color: var(--ing-muted);
+}
+.ing-calor-escala span.grad {
+  flex: 0 0 90px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(192, 164, 57, 0.1), #c0a439);
+}
+
+/* ── Controles ── */
+.ing-controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.ing-input,
+.ing-select {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid #d9d7cf;
+  font-size: 0.85rem;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ing-ink);
+}
+.ing-input.num {
+  width: 64px;
+}
+.ing-filtro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--ing-ink-2);
+  margin-bottom: 12px;
+}
+.ing-btn {
+  border: 1px solid var(--ing-gold);
+  background: #fff;
+  color: #8a7320;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ing-btn.lleno {
+  background: var(--ing-gold);
+  color: #fff;
+}
+.ing-btn.wsp {
+  border-color: #1f9d55;
+  background: #1f9d55;
+  color: #fff;
+  text-decoration: none;
+}
+.ing-btn {
+  text-decoration: none;
+}
+
+/* ── Lista de clientas ── */
+.ing-clientas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ing-clienta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--ing-line);
+}
+.ing-clienta:last-child {
+  border-bottom: none;
+}
+.ing-clienta-info {
+  min-width: 0;
+}
+.ing-clienta-nombre {
+  font-weight: 600;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ing-clienta-sub {
+  font-size: 0.75rem;
+  color: var(--ing-muted);
+}
+
+/* ── Mini-stats en fila ── */
+.ing-mini {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ing-mini div {
+  background: #faf9f5;
+  border-radius: 10px;
+  padding: 8px;
+  text-align: center;
+}
+.ing-mini strong {
+  display: block;
+  font-size: 1.1rem;
+}
+.ing-mini span {
+  font-size: 0.7rem;
+  color: var(--ing-muted);
+}
