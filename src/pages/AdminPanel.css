@@ -250,6 +250,8 @@ tbody tr.upcoming {
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  margin-top: 10px;
 }
 
 .btn-save:hover {

@@ -19,7 +19,7 @@ const HorariosSection = ({
 
   return (
     <section className="schedule-config">
-      <h2>Configurar horario de atención</h2>
+      <h2>Horario de atención</h2>
 
       <div className="inputs-row">
         {/* Fecha */}

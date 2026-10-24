@@ -66,11 +66,19 @@ const HorarioManager = () => {
 
   const saveEdit = async () => {
     try {
-      await adminApi.put(`https://eve-back.vercel.app/hours/${editId}`, editData);
+      await adminApi.put(
+        `https://eve-back.vercel.app/hours/${editId}`,
+        editData,
+      );
       setHorarios((prev) =>
         prev.map((h) =>
           h.id === editId
-            ? { ...h, ...editData, openTime: editData.open, closeTime: editData.close }
+            ? {
+                ...h,
+                ...editData,
+                openTime: editData.open,
+                closeTime: editData.close,
+              }
             : h,
         ),
       );
@@ -88,10 +96,9 @@ const HorarioManager = () => {
 
   return (
     <div className="horario-manager">
-      <h2>🕒 Ver, Editar o Eliminar Horarios</h2>
+      <h2>🕒 Ver Horarios</h2>
 
       <div className="filter-bar">
-        <label htmlFor="filterExpert">Filtrar por experto:</label>
         <select
           id="filterExpert"
           className="input-estilizado"
@@ -108,7 +115,9 @@ const HorarioManager = () => {
       </div>
 
       {!selectedExpert ? (
-        <p className="horario-empty">Seleccioná un experto para ver sus horarios.</p>
+        <p className="horario-empty">
+          Seleccioná un experto para ver sus horarios.
+        </p>
       ) : horarios.length === 0 ? (
         <p className="horario-empty">No hay horarios para mostrar.</p>
       ) : (
@@ -131,7 +140,9 @@ const HorarioManager = () => {
                         <input
                           type="date"
                           value={editData.day}
-                          onChange={(e) => handleEditChange("day", e.target.value)}
+                          onChange={(e) =>
+                            handleEditChange("day", e.target.value)
+                          }
                         />
                       </label>
                       <label>
@@ -139,7 +150,9 @@ const HorarioManager = () => {
                         <input
                           type="time"
                           value={editData.open}
-                          onChange={(e) => handleEditChange("open", e.target.value)}
+                          onChange={(e) =>
+                            handleEditChange("open", e.target.value)
+                          }
                         />
                       </label>
                       <label>
@@ -147,7 +160,9 @@ const HorarioManager = () => {
                         <input
                           type="time"
                           value={editData.close}
-                          onChange={(e) => handleEditChange("close", e.target.value)}
+                          onChange={(e) =>
+                            handleEditChange("close", e.target.value)
+                          }
                         />
                       </label>
                     </div>
@@ -166,16 +181,25 @@ const HorarioManager = () => {
                         <button className="btn save" onClick={saveEdit}>
                           💾 Guardar
                         </button>
-                        <button className="btn cancel" onClick={() => setEditId(null)}>
+                        <button
+                          className="btn cancel"
+                          onClick={() => setEditId(null)}
+                        >
                           Cancelar
                         </button>
                       </>
                     ) : (
                       <>
-                        <button className="btn edit" onClick={() => handleEdit(h)}>
+                        <button
+                          className="btn edit"
+                          onClick={() => handleEdit(h)}
+                        >
                           ✏️ Editar
                         </button>
-                        <button className="btn delete" onClick={() => handleDelete(h.id)}>
+                        <button
+                          className="btn delete"
+                          onClick={() => handleDelete(h.id)}
+                        >
                           🗑️ Eliminar
                         </button>
                       </>
