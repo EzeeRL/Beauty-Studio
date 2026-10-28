@@ -1,0 +1,550 @@
+/* Sección Integraciones: subpestañas (WhatsApp / Notificaciones) y estado del bot */
+
+.int {
+  --int-gold: #c0a439;
+  --int-gold-ink: #6b5a1a;
+  --int-gold-soft: #f6f0dc;
+  --int-ink: #1f1f1f;
+  --int-ink-2: #3d3c39;
+  --int-muted: #6f6d67;
+  --int-line: #ecebe6;
+  --int-green: #1f8a4c;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--int-ink);
+}
+
+.int > h2 {
+  margin: 0;
+}
+
+/* AdminPanel.css centra todos los h3 */
+.int h3 {
+  text-align: left;
+}
+
+/* ── Subpestañas (mismo estilo que Cupones) ── */
+.int-tabs {
+  display: flex;
+  gap: 8px;
+}
+.int-tab {
+  flex: 1;
+  justify-content: center;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fff;
+  color: #555;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.int-tab:hover {
+  border-color: var(--int-gold);
+  color: var(--int-gold);
+}
+.int-tab.activo {
+  background: var(--int-gold);
+  border-color: var(--int-gold);
+  color: #fff;
+}
+.int-tab-punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--int-green);
+}
+
+/* ── Tarjetas ── */
+.int-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.int-card-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.int-card-sub {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  color: var(--int-muted);
+}
+.int-txt {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--int-ink-2);
+}
+.int-aviso {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #fbf8ee;
+  border: 1px solid #efe6c6;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--int-ink-2);
+}
+.int-aviso svg {
+  flex-shrink: 0;
+  color: #8a7320;
+}
+
+/* ── Cabecera de WhatsApp ── */
+.wsp-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wsp-logo {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+.wsp-head-txt {
+  flex: 1;
+  min-width: 0;
+}
+.wsp-head-txt .wsp-estado {
+  margin-top: 6px;
+}
+
+.wsp-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.wsp-estado.idle {
+  background: #f0efec;
+  color: #52514e;
+}
+.wsp-estado.starting,
+.wsp-estado.waiting_code {
+  background: #fdf3d7;
+  color: #7a5600;
+}
+.wsp-estado.linked {
+  background: #e3f4e3;
+  color: #0a5c0a;
+}
+.wsp-estado.error {
+  background: #fbe4e4;
+  color: #a32626;
+}
+.wsp-anillo {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid #898781;
+  box-sizing: border-box;
+}
+
+.wsp-girando {
+  animation: wsp-girar 1s linear infinite;
+}
+@keyframes wsp-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Botones ── */
+.wsp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  border: none;
+  border-radius: 10px;
+  background: var(--int-green);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.wsp-btn:disabled {
+  background: #e4e2db;
+  color: #52514e;
+  cursor: default;
+  opacity: 1;
+}
+.wsp-btn.secundario {
+  background: #fff;
+  color: var(--int-ink-2);
+  border: 1px solid #d9d7cf;
+  min-height: 46px;
+  font-size: 0.9rem;
+}
+
+/* ── Pasos numerados ── */
+.wsp-pasos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wsp-pasos li {
+  display: flex;
+  gap: 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--int-ink-2);
+}
+.wsp-num {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--int-gold-soft);
+  color: var(--int-gold-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Stepper de 3 etapas ── */
+.wsp-stepper {
+  display: flex;
+  align-items: flex-start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.wsp-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--int-muted);
+  text-align: center;
+  position: relative;
+}
+/* Línea que une cada paso con el anterior */
+.wsp-step + .wsp-step::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  right: 50%;
+  width: calc(100% - 28px);
+  margin-right: 14px;
+  height: 2px;
+  background: #e4e2db;
+}
+.wsp-step.hecho + .wsp-step::before {
+  background: var(--int-green);
+}
+.wsp-step-dot {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #f0efec;
+  color: var(--int-muted);
+}
+.wsp-step.hecho .wsp-step-dot {
+  background: var(--int-green);
+  color: #fff;
+}
+.wsp-step.actual .wsp-step-dot {
+  background: var(--int-gold);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--int-gold-soft);
+}
+.wsp-step.actual {
+  color: var(--int-ink);
+  font-weight: 600;
+}
+
+/* ── Prendiendo el bot ── */
+.wsp-esperando {
+  text-align: center;
+  padding: 6px 0 0;
+  color: var(--int-gold);
+}
+.wsp-esperando strong {
+  display: block;
+  margin: 10px 0 4px;
+  font-size: 1rem;
+  color: var(--int-ink);
+}
+.wsp-barra {
+  height: 6px;
+  border-radius: 999px;
+  background: #f0efec;
+  overflow: hidden;
+}
+.wsp-barra-indet {
+  width: 35%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--int-gold);
+  animation: wsp-barrer 1.6s ease-in-out infinite;
+}
+@keyframes wsp-barrer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(290%);
+  }
+}
+
+/* ── Código ── */
+.wsp-codigo {
+  border-radius: 14px;
+  background: #fbf8ee;
+  border: 1px solid #efe6c6;
+  padding: 18px 16px;
+  text-align: center;
+}
+.wsp-codigo-label {
+  font-size: 0.72rem;
+  color: var(--int-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.wsp-codigo-valor {
+  margin: 8px 0 14px;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--int-ink);
+  user-select: all;
+}
+.wsp-copiar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--int-gold);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--int-gold-ink);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.wsp-vence {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #52514e;
+}
+.wsp-vence strong {
+  font-variant-numeric: tabular-nums;
+  color: #8a7320;
+}
+.wsp-vence strong.urgente {
+  color: #b3261e;
+}
+.wsp-vence-barra {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #ece5cc;
+  overflow: hidden;
+}
+.wsp-vence-barra div {
+  height: 100%;
+  border-radius: 999px;
+  background: #8a7320;
+  transition: width 1s linear;
+}
+.wsp-vence-barra div.urgente {
+  background: #b3261e;
+}
+
+/* ── Conectado ── */
+.wsp-ok {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f3faf5;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.wsp-ok svg {
+  flex-shrink: 0;
+  color: var(--int-green);
+}
+
+/* ── Error ── */
+.wsp-error {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 12px;
+  background: #fdf1f1;
+  border: 1px solid #f3cfcf;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #7d1d1d;
+}
+.wsp-error svg {
+  flex-shrink: 0;
+  color: #a32626;
+  margin-top: 1px;
+}
+.wsp-error .int-card-sub {
+  color: #8a5a5a;
+  font-weight: 400;
+}
+.wsp-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wsp-checks li {
+  display: flex;
+  gap: 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--int-ink-2);
+}
+.wsp-checks svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #8a7320;
+}
+
+/* ── Recordatorios ── */
+.wsp-mini {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.wsp-mini div {
+  background: #faf9f5;
+  border-radius: 10px;
+  padding: 10px 6px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--int-muted);
+}
+.wsp-mini strong {
+  display: block;
+  font-size: 1.25rem;
+  color: var(--int-ink);
+}
+.wsp-mini .enviados {
+  color: #0a5c0a;
+}
+.wsp-mini .pendientes {
+  color: #7a5600;
+}
+.wsp-split {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #f0efec;
+}
+.wsp-split .enviados {
+  background: var(--int-green);
+}
+.wsp-split .pendientes {
+  flex: 1;
+  background: #e9c46a;
+}
+.wsp-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.wsp-lista li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--int-line);
+}
+.wsp-lista li:last-child {
+  border-bottom: none;
+}
+.wsp-lista-nombre {
+  font-size: 0.9rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wsp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.wsp-tag.pendiente {
+  background: #fdf3d7;
+  color: #7a5600;
+}
+.wsp-tag.enviado {
+  background: #e3f4e3;
+  color: #0a5c0a;
+}
+.wsp-link {
+  align-self: center;
+  border: none;
+  background: none;
+  padding: 8px 12px;
+  color: #8a7320;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}

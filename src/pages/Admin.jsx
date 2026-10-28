@@ -22,7 +22,7 @@ import ExpertManager from "../components/adminExpert";
 import AdminComentarios from "../components/AdminComentarios";
 import AddProductForm from "../components/Products";
 import CouponManager from "../components/CouponManager";
-import NotificationsSection from "../components/NotificationsSection";
+import IntegracionesSection from "../components/integraciones/IntegracionesSection";
 import AdminPushButton from "../components/AdminPushButton";
 
 const API = "https://eve-back.vercel.app";
@@ -173,7 +173,12 @@ const AdminPanel = () => {
 
         {activeTab === "cupones" && <CouponManager />}
 
-        {activeTab === "notificaciones" && <NotificationsSection />}
+        {activeTab === "notificaciones" && (
+          <IntegracionesSection
+            appointments={appointments}
+            onVerTurnos={() => setActiveTab("turnos")}
+          />
+        )}
       </main>
 
       {/* Modales y notificaciones globales */}

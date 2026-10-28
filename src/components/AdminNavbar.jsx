@@ -6,7 +6,7 @@ import {
   MessageCircle,
   ShoppingBag,
   Ticket,
-  Bell,
+  Plug,
 } from "lucide-react";
 
 const TABS = [
@@ -17,7 +17,7 @@ const TABS = [
   { key: "coment", icon: MessageCircle, title: "Comentarios" },
   { key: "products", icon: ShoppingBag, title: "Productos" },
   { key: "cupones", icon: Ticket, title: "Cupones" },
-  { key: "notificaciones", icon: Bell, title: "Notificaciones" },
+  { key: "notificaciones", icon: Plug, title: "Integraciones" },
 ];
 
 const AdminNavbar = ({ activeTab, setActiveTab }) => (
