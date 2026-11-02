@@ -431,7 +431,8 @@ const Perfil = () => {
   const conteoEspecialistas = {};
   turnosParciales.forEach((appt) => {
     const nombre = appt.Expert?.name;
-    if (nombre) conteoEspecialistas[nombre] = (conteoEspecialistas[nombre] || 0) + 1;
+    if (nombre)
+      conteoEspecialistas[nombre] = (conteoEspecialistas[nombre] || 0) + 1;
   });
   const especialistaFavorita = Object.entries(conteoEspecialistas).sort(
     (a, b) => b[1] - a[1],
@@ -442,6 +443,13 @@ const Perfil = () => {
         month: "long",
         year: "numeric",
       })
+    : null;
+
+  const linkReferido = userData?.referralCode
+    ? "https://wa.me/?text=" +
+      encodeURIComponent(
+        `Reservá en D´Art con mi código ${userData.referralCode}`,
+      )
     : null;
 
   const copiarDato = (campo, valor) => {
@@ -523,7 +531,16 @@ const Perfil = () => {
             className="pf-edit-btn"
             onClick={() => navigate("/editar-perfil")}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M12 20h9" />
               <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
             </svg>
@@ -538,7 +555,16 @@ const Perfil = () => {
               className="pf-contact"
               onClick={() => copiarDato("email", userData.email)}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <rect x="3" y="5" width="18" height="14" rx="2" />
                 <path d="M3 7l9 6 9-6" />
               </svg>
@@ -554,7 +580,16 @@ const Perfil = () => {
               className="pf-contact"
               onClick={() => copiarDato("phone", userData.phone)}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" />
               </svg>
               <span className="pf-contact-txt">{userData.phone}</span>
@@ -562,6 +597,50 @@ const Perfil = () => {
                 {copiedField === "phone" ? "¡Copiado!" : "Copiar"}
               </span>
             </button>
+          )}
+          {userData?.referralCode && (
+            <div className="pf-referral">
+              <button
+                type="button"
+                className="pf-contact"
+                onClick={() => copiarDato("referral", userData.referralCode)}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="3" y="8" width="18" height="13" rx="2" />
+                  <path d="M12 8v13M3 12h18" />
+                  <path d="M12 8c-2-4-6-4-6-1.5S9 8 12 8c3 0 6-1 6-3.5S14 4 12 8z" />
+                </svg>
+                <span className="pf-contact-txt">
+                  {copiedField === "referral" ? (
+                    "¡Código copiado!"
+                  ) : (
+                    <>
+                      Tu código: <b>{userData.referralCode}</b>
+                    </>
+                  )}
+                </span>
+                <span className="pf-copy">
+                  {copiedField === "referral" ? "¡Copiado!" : "Copiar"}
+                </span>
+              </button>
+              <a
+                className="pf-share-btn"
+                href={linkReferido}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Compartir
+              </a>
+            </div>
           )}
         </div>
 
@@ -586,7 +665,8 @@ const Perfil = () => {
                   minute: "2-digit",
                 })}{" "}
                 hs
-                {proximoTurno.Expert?.name && ` · con ${proximoTurno.Expert.name}`}
+                {proximoTurno.Expert?.name &&
+                  ` · con ${proximoTurno.Expert.name}`}
               </small>
             </p>
             <span className="pf-next-tag">

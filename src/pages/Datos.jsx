@@ -17,6 +17,9 @@ const Datos = () => {
   const [verifyingCoupon, setVerifyingCoupon] = useState(false);
   const [loyaltyDiscount, setLoyaltyDiscount] = useState(null);
   const [skipLoyaltyDiscount, setSkipLoyaltyDiscount] = useState(false);
+  const [referralCode, setReferralCode] = useState("");
+  const [referralStatus, setReferralStatus] = useState(null);
+  const [verifyingReferral, setVerifyingReferral] = useState(false);
 
   const BASE_PRICE = 10000; // Precio normal
   const { servicio, experto, fecha, setDatosCliente, datosCliente } =
@@ -101,6 +104,35 @@ const Datos = () => {
       });
     } finally {
       setVerifyingCoupon(false);
+    }
+  };
+
+  // 🤝 Valida el código de la amiga que la recomendó. El back ignora
+  // mayúsculas y espacios, y si es válido devuelve el código normalizado.
+  const handleVerifyReferral = async () => {
+    const code = referralCode.trim();
+    if (!code || verifyingReferral || referralStatus) return;
+    setVerifyingReferral(true);
+
+    try {
+      const res = await axios.get(
+        `https://eve-back.vercel.app/users/referral/${encodeURIComponent(code)}`,
+      );
+      setReferralStatus({
+        valid: true,
+        code: res.data.code,
+        message: `✓ Código de ${res.data.name}`,
+      });
+    } catch (error) {
+      setReferralStatus({
+        valid: false,
+        message:
+          error.response?.status === 404
+            ? "Código inválido"
+            : "No se pudo validar el código, intentá de nuevo",
+      });
+    } finally {
+      setVerifyingReferral(false);
     }
   };
 
@@ -220,6 +252,10 @@ const Datos = () => {
         // Solo mandamos loyaltyRewardId si el cliente tiene un premio disponible y no lo rechazó
         if (applyLoyaltyDiscount) {
           metadata.loyaltyRewardId = loyaltyDiscount.rewardId;
+        }
+        // Si la recomendó una amiga, el webhook le suma un punto a la dueña del código
+        if (referralStatus?.valid) {
+          metadata.referralCode = referralStatus.code;
         }
 
         const preferenceRes = await axios.post(
@@ -360,7 +396,7 @@ const Datos = () => {
           <div className="coupon-input-group">
             <input
               type="text"
-              placeholder="¿Tenés un código de descuento?"
+              placeholder="Código de descuento"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
               className="input coupon-input"
@@ -388,6 +424,42 @@ const Datos = () => {
               className={couponStatus.valid ? "coupon-success" : "coupon-error"}
             >
               {couponStatus.message}
+            </p>
+          )}
+        </div>
+
+        {/* 🤝 CÓDIGO DE REFERIDO (va aparte del cupón: se pueden usar los dos) */}
+        <div className="coupon-container">
+          <div className="coupon-input-group">
+            <input
+              type="text"
+              placeholder="Código de referido"
+              value={referralCode}
+              onChange={(e) => {
+                setReferralCode(e.target.value.toUpperCase());
+                setReferralStatus(null); // si cambia el código, hay que validarlo de nuevo
+              }}
+              onBlur={handleVerifyReferral}
+              className="input coupon-input"
+            />
+            <button
+              type="button"
+              onClick={handleVerifyReferral}
+              disabled={
+                verifyingReferral || !referralCode.trim() || !!referralStatus
+              }
+              className="verify-button"
+            >
+              {verifyingReferral ? "..." : "Validar"}
+            </button>
+          </div>
+          {referralStatus && (
+            <p
+              className={
+                referralStatus.valid ? "coupon-success" : "coupon-error"
+              }
+            >
+              {referralStatus.message}
             </p>
           )}
         </div>

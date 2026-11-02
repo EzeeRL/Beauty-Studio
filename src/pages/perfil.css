@@ -1057,6 +1057,41 @@ body.dark-mode .pf-band {
   transform: none;
 }
 
+/* --- Código de referido --- */
+.pf-referral {
+  grid-column: 1 / -1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pf-referral .pf-contact {
+  flex: 1;
+}
+
+.pf-referral b {
+  color: var(--pf-gold-txt);
+  letter-spacing: 0.5px;
+}
+
+.pf-share-btn {
+  flex: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #25d366; /* verde de WhatsApp */
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: filter 0.25s;
+}
+
+.pf-share-btn:hover {
+  filter: brightness(1.08);
+}
+
 /* --- Próximo turno --- */
 .pf-next {
   display: flex;
@@ -1183,6 +1218,19 @@ body.dark-mode .pf-band {
 
   .pf-contacts {
     grid-template-columns: 1fr;
+  }
+
+  /* Sin hover en el celu, el "Copiar" invisible solo roba espacio al botón verde */
+  .pf-referral .pf-copy {
+    display: none;
+  }
+
+  .pf-referral .pf-contact {
+    padding: 10px 8px;
+  }
+
+  .pf-share-btn {
+    padding: 8px 12px;
   }
 
   .pf-next-tag {
